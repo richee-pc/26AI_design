@@ -156,6 +156,37 @@ ol.steps li { margin-bottom: 0.45rem; }
 .check input { margin-top: 0.3rem; width: 1.05rem; height: 1.05rem; accent-color: var(--accent); flex-shrink: 0; }
 pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-size: 0.86rem; margin: 0.5rem 0; overflow-x: auto; }
 
+/* 아이디어 분류 */
+.chip.cat.active { background: linear-gradient(135deg, #fb923c, #f472b6); color: white; border-color: transparent; }
+.idea .tag { display: inline-block; font-size: 0.72rem; font-weight: 800; color: #0369a1; background: #e0f2fe; border-radius: 999px; padding: 0.1rem 0.55rem; margin-bottom: 0.3rem; }
+.idea .feat { font-size: 0.82rem; color: #374151; margin-bottom: 0.6rem; }
+
+/* 방식 선택 */
+.mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.mode { display: flex; gap: 0.6rem; align-items: flex-start; border: 1.5px solid #fed7aa; border-radius: 14px; padding: 0.75rem 0.9rem; cursor: pointer; background: #fffdfb; }
+.mode input { margin-top: 0.3rem; accent-color: var(--accent); flex-shrink: 0; }
+.mode small { display: block; color: var(--muted); font-weight: 500; font-size: 0.82rem; }
+.mode:has(input:checked) { border-color: var(--accent); background: #fff7ed; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12); }
+.muted-sm { color: var(--muted); font-size: 0.85rem; }
+
+/* 파일 첨부 */
+.drop { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; text-align: center; border: 2px dashed #fdba74; border-radius: 16px; padding: 1.3rem 1rem; background: #fffaf5; cursor: pointer; transition: all 0.2s; }
+.drop:hover, .drop.over { background: #ffedd5; border-color: var(--accent); }
+.drop input { display: none; }
+.drop-ico { font-size: 2rem; line-height: 1; }
+.drop small { color: var(--muted); }
+.fitem { border: 1px solid #fde7d3; border-radius: 14px; padding: 0.7rem 0.9rem; margin-top: 0.6rem; background: white; }
+.fhead { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.fname { font-weight: 800; word-break: break-all; flex: 1; min-width: 10rem; }
+.fstat { font-size: 0.8rem; font-weight: 700; border-radius: 999px; padding: 0.1rem 0.6rem; background: #f1f5f9; color: #475569; }
+.fstat.ok { background: #dcfce7; color: #166534; } .fstat.err { background: #fee2e2; color: #991b1b; } .fstat.img { background: #e0f2fe; color: #075985; }
+.fitem .mini { border: 1px solid var(--border); background: white; border-radius: 8px; padding: 0.2rem 0.6rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
+.fitem .mini:hover { border-color: var(--border-glow); }
+.fitem textarea { width: 100%; margin-top: 0.5rem; border: 1px solid #fed7aa; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.82rem; font-family: var(--font-body); background: #fffdfb; }
+.fitem img { max-height: 90px; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 0.5rem; }
+.fitem .note { font-size: 0.8rem; color: var(--muted); margin-top: 0.35rem; }
+@media (max-width: 600px) { .mode-row { grid-template-columns: 1fr; } }
+
 #qrBox { display: flex; justify-content: center; padding: 1rem; background: white; border-radius: 16px; border: 1px dashed var(--border-glow); min-height: 120px; align-items: center; color: var(--muted); }
 #toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translate(-50%, 160%); background: #1f2937; color: white; padding: 0.7rem 1.3rem; border-radius: 999px; font-weight: 700; transition: transform 0.3s; z-index: 100; }
 #toast.show { transform: translate(-50%, 0); }
@@ -247,14 +278,30 @@ pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-
     <!-- 2. 아이디어 -->
     <section class="panel" id="t2">
         <div class="now"><div class="ico">💡</div><b>지금 할 일: 다음 주 수업에 쓸 웹페이지 하나 고르기 <span class="time-chip">5분</span></b><p>카드의 <b>[이걸로 만들기]</b>를 누르면 3번 프롬프트 탭에 내용이 자동으로 채워집니다.</p></div>
+        <div class="chips" id="catChips" style="margin-bottom:0.9rem"></div>
         <div class="grid g3" id="ideaGrid"></div>
-        <div class="tip">💡 처음에는 <b>퀴즈</b>나 <b>개념 카드</b>처럼 내용이 분명한 것이 가장 잘 만들어집니다. 시뮬레이션은 2~3번 고칠 각오로!</div>
+        <div class="tip">💡 처음에는 <b>퀴즈</b>나 <b>개념 카드</b>처럼 내용이 분명한 것이 가장 잘 만들어집니다. 시뮬레이션·가상 실험실은 2~3번 고칠 각오로!</div>
+
+        <div class="card" style="margin-top:1rem">
+            <h3>🔎 내 교과 맞춤 아이디어를 더 받고 싶다면</h3>
+            <div class="grid g2" style="align-items:end">
+                <div class="field"><label>교과 · 단원</label><input id="idea-topic" placeholder="예) 중2 사회 · 인권과 헌법"></div>
+                <div><button class="btn btn-main" onclick="buildIdeaPrompt()">💡 아이디어 요청문 만들기</button></div>
+            </div>
+            <div id="ideaOut" style="display:none"><div class="prompt"><span class="lb">Gemini에 붙여 넣으면 아이디어 10개를 추천해 줘요</span><button class="copy">복사</button><span id="ideaPrompt"></span></div></div>
+        </div>
     </section>
 
     <!-- 3. 프롬프트 -->
     <section class="panel" id="t3">
-        <div class="now"><div class="ico">🧾</div><b>지금 할 일: 빈칸을 채우고 부탁문 만들기 <span class="time-chip">3분</span></b><p>[부탁문 만들기]를 누르고 <b>복사</b>하세요. 학습 내용(문제·용어)을 직접 적어 넣으면 정확도가 훨씬 올라갑니다.</p></div>
+        <div class="now"><div class="ico">🧾</div><b>지금 할 일: 빈칸을 채우고 자료를 첨부해 부탁문 만들기 <span class="time-chip">3분</span></b><p>교과서·학습지 파일을 첨부하면 글자를 읽어 부탁문에 넣어 줍니다. [부탁문 만들기]를 누르고 <b>복사</b>하세요.</p></div>
         <div class="card">
+            <div class="field" style="margin-bottom:1rem"><label>부탁문 방식</label>
+                <div class="mode-row">
+                    <label class="mode"><input type="radio" name="mode" value="arch" checked><span><b>🏗️ 프롬프트 아키텍트 (추천)</b><small>Gemini가 먼저 '최고의 실행용 프롬프트'를 설계해 줘요 → 그 프롬프트를 Canvas에 붙여 넣기</small></span></label>
+                    <label class="mode"><input type="radio" name="mode" value="direct"><span><b>⚡ 바로 Canvas 부탁문</b><small>한 번에 Canvas에서 웹페이지 만들기 (시간이 부족할 때)</small></span></label>
+                </div>
+            </div>
             <div class="grid g2">
                 <div class="field"><label>교과 · 학년</label><input id="f-subject" placeholder="예) 과학 · 중학교 2학년"></div>
                 <div class="field"><label>단원 · 주제</label><input id="f-unit" placeholder="예) 물질의 구성 - 원소와 원자"></div>
@@ -264,13 +311,25 @@ pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-
                 <div class="field full"><label>학생이 할 일 · 핵심 기능</label><textarea id="f-features" rows="3" placeholder="예) 객관식 10문항, 정답 즉시 피드백과 해설, 점수와 다시 풀기"></textarea></div>
                 <div class="field full"><label>꼭 넣을 학습 내용 <small>(선택 · 교과서 용어, 문제, 정답 등을 붙여 넣으면 가장 정확해요)</small></label><textarea id="f-content" rows="3" placeholder="예) 원소: 물질을 이루는 기본 성분 / 원자: 물질을 이루는 기본 입자 / 원소 기호: H, O, C, N ..."></textarea></div>
             </div>
+
+            <div class="field" style="margin-top:1rem"><label>📎 참고 자료 첨부 <small>(PDF · 한글 HWP/HWPX · 엑셀 XLSX/XLS/CSV · 워드 DOCX · 파워포인트 PPTX · 텍스트 · 이미지)</small></label></div>
+            <label class="drop" id="drop">
+                <input type="file" id="fileInput" multiple accept=".pdf,.hwp,.hwpx,.xlsx,.xls,.csv,.docx,.pptx,.txt,.md,.json,image/*">
+                <span class="drop-ico">📂</span>
+                <b>여기를 눌러 파일을 고르거나, 파일을 끌어다 놓으세요</b>
+                <small>여러 개 가능 · 파일은 <u>이 브라우저 안에서만</u> 읽고 어디에도 업로드되지 않아요</small>
+            </label>
+            <div id="fileList"></div>
+            <div class="warn" style="margin-top:0.6rem">🔒 학생 이름·성적·상담 기록처럼 <b>개인정보가 담긴 파일은 첨부하지 마세요.</b> 뽑아낸 글자는 부탁문에 그대로 들어가 AI에게 전달됩니다.</div>
+
             <div class="btn-row" style="margin-top:1rem">
                 <button class="btn btn-main" onclick="buildPrompt()">✨ 부탁문 만들기</button>
                 <button class="btn btn-sub" onclick="resetForm()">↺ 비우기</button>
             </div>
             <div id="outWrap" style="display:none">
-                <div class="prompt"><span class="lb">A. 수업용 웹페이지 부탁문 · 4번 탭에서 사용</span><button class="copy">복사</button><span id="outPrompt"></span></div>
-                <p class="ok">✅ 복사했으면 → 위쪽 「4. 화면 만들기」 탭으로!</p>
+                <div class="prompt"><span class="lb" id="outLabel">부탁문</span><button class="copy">복사</button><span id="outPrompt"></span></div>
+                <p class="muted-sm" id="outInfo"></p>
+                <div id="outNext"></div>
             </div>
         </div>
     </section>
@@ -281,12 +340,17 @@ pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-
         <div class="grid g2">
             <div class="card">
                 <h3>🎨 Canvas로 만들기</h3>
+                <p style="margin:0 0 0.4rem;font-weight:800;color:#c2410c">🏗️ 프롬프트 아키텍트 방식이라면 (2단계)</p>
                 <ol class="steps">
-                    <li><a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>에 학교 계정으로 로그인</li>
-                    <li>입력창 아래 <b>도구 → Canvas</b>를 켠다 (또는 부탁문 앞에 "Canvas에서" 라고 쓰기)</li>
-                    <li>3번 탭에서 복사한 <b>부탁문 A</b>를 붙여 넣고 보내기</li>
-                    <li>오른쪽 작업대에 코드가 써지면 <b>미리보기</b>를 눌러 직접 눌러 보기</li>
+                    <li><a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>에 로그인 → 3번 탭 부탁문을 붙여 넣고 보내기</li>
+                    <li>답변의 <b>[🇰🇷 한국어 프롬프트]</b> 회색 박스를 복사</li>
+                    <li><b>새 채팅</b>에서 입력창 아래 <b>도구 → Canvas</b>를 켜고 붙여 넣기<br><small class="muted-sm">(이미지 자료가 있으면 이때 함께 첨부)</small></li>
+                    <li>코드가 써지면 <b>미리보기</b>를 눌러 직접 눌러 보기</li>
                     <li>이상한 곳은 아래 <b>고치기 부탁문</b>으로 2~3번 수정</li>
+                </ol>
+                <p style="margin:0.8rem 0 0.4rem;font-weight:800;color:#0369a1">⚡ 바로 Canvas 방식이라면</p>
+                <ol class="steps">
+                    <li>Gemini에서 <b>도구 → Canvas</b>를 켜고 3번 탭 부탁문을 바로 붙여 넣기 → 미리보기</li>
                 </ol>
                 <p class="ok">✅ 이 단계가 끝나면: 미리보기에서 잘 동작하는 수업용 웹페이지 완성</p>
             </div>
@@ -416,23 +480,130 @@ pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-
     </section>
 
 </div>
+<!-- 프롬프트 아키텍트 원문: 부탁문(아키텍트 방식) 맨 앞에 그대로 들어갑니다 -->
+<script type="text/plain" id="architectText">
+## **1. 당신의 정체성 (Your Identity)**
+
+*   당신은 세계 최고의 AI 프롬프트 설계자, **'프롬프트 아키텍트(Prompt Architect)'**입니다.
+*   당신의 유일한 임무는 사용자가 제시하는 단순하고 모호한 '요청'을 분석하여, LLM의 성능을 100% 끌어낼 수 있는 명확하고 구조적인 **[실행용 프롬프트]**를 설계하고 생성하는 것입니다.
+*   **[가장 중요한 원칙]**: 당신은 요청받은 과업을 **직접 수행하지 않습니다.** 예를 들어, 사용자가 '블로그 글을 써달라'고 요청하면, 당신은 블로그 글을 쓰는 것이 아니라, '최고의 블로그 글을 생성할 수 있는 완벽한 프롬프트'를 만들어야 합니다.
+
+*   **[핵심 작동 원리: '최소 입력, 최대 결과' 어시스턴트 설계]**:
+    *   **트리거 조건:** 사용자가 "내 블로그가 구글 상위노출이 되게 하고 싶어" 또는 "언제나 맘에 드는 이미지를 생성하고 싶어"와 같이, **반복적으로 달성하고 싶은 목표나 지속적인 역량**을 요청하는 경우, 당신의 임무는 '지능형 어시스턴트' 역할을 수행할 궁극의 프롬프트를 설계하는 것입니다.
+    *   **핵심 임무:** 당신이 설계할 프롬프트는, 사용자의 개입을 극단적으로 최소화해야 합니다. 사용자가 단 하나의 **핵심 정보(키워드, 주제 등)**만 제공하면, 나머지는 AI가 **자동으로 최상의 옵션들을 총동원하여** 최종 결과물을 생성하도록 만들어야 합니다. 사용자를 번거롭게 하는 여러 단계의 질문이나 복잡한 선택 과정은 절대 포함되어서는 안 됩니다.
+    *   **설계 명세:**
+        1.  **자동화된 전문가 지식 내장 (Automated Expert Knowledge):** 당신이 만들 프롬프트 안에는, 해당 분야(SEO, 이미지 생성, 카피라이팅 등)의 성공을 위한 최고 수준의 전략, 프레임워크, 고급 키워드 등이 완벽하게 내장되어 있어야 합니다. **이 모든 고급 옵션들은 사용자의 질문 없이 자동으로 적용되어야 합니다.**
+        2.  **제로-퀘스천 원칙 (Zero-Question Principle):** 사용자의 번거로움을 원천적으로 차단하기 위해, AI가 사용자에게 추가 질문을 하지 않는 것을 원칙으로 합니다. AI는 사용자가 제공한 단일 정보만으로 모든 맥락을 추론하여 결과물을 완성해야 합니다.
+        3.  **최종 결과물 지향 (Final Output Oriented):** 이 프롬프트가 실행되면, 그 즉시 사용자가 바로 복사해서 사용할 수 있는 **완성된 최종 결과물(예: SEO 최적화된 블로그 글 전체, 고품질 이미지 생성용 상세 프롬프트)**이 생성되어야 합니다.
+
+*   당신의 결과물은 언제나 **'프롬프트'** 그 자체여야 합니다.
+
+## **2. 당신의 작업 프로세스 (Your Workflow)**
+사용자가 `내용:` 또는 이와 유사한 형식으로 요청을 입력하면, 당신은 다음 4단계를 엄격하게 준수하여 사고하고 결과물을 생성합니다.
+
+###  **1단계: 요청 분석 및 의도 구체화**
+    *   사용자의 짧은 요청에서 아래 5가지 핵심 요소를 추론하고 정의합니다.
+        1.  **궁극적 목표(Goal):** 이 결과물로 무엇을 하려 하는가? (예: 보고, 설득, 학습, 창작)
+        2.  **대상(Audience):** 이 결과물을 누가 보는가? (예: 초보자, 전문가, 상사, 고객)
+        3.  **핵심 톤앤매너(Tone):** 어떤 분위기를 원하는가? (예: 전문적, 친근함, 긴급함, 유머러스함)
+        4.  **결과물 형식(Format):** 어떤 형태로 결과물을 받고 싶어 하는가? (예: 서술형 글, 글머리 기호 목록, 표, JSON, 코드)
+        5.  **숨겨진 요구사항(Implicit Needs):** 사용자가 명시적으로 말하지 않았지만, 결과물의 품질을 위해 반드시 필요한 요소는 무엇인가?
+
+### *   **2단계: 프롬프트 구성요소 설계**
+    *   1단계 분석을 바탕으로, 아래 6가지 강력한 구성요소를 최적으로 조합하여 [실행용 프롬프트]의 청사진을 그립니다.
+        1.  **[역할 부여 (Persona)]**: LLM에게 특정 전문가 역할을 부여합니다.
+        2.  **[상황 설명 (Context)]**: 작업의 배경과 맥락을 제공합니다.
+        3.  **[명확한 과업 (Task)]**: 수행해야 할 핵심 임무를 명료하게 정의합니다.
+        4.  **[단계별 지침 (Instructions)]**: 과업 수행 절차를 구체적이고 논리적인 순서로 나열합니다.
+        5.  **[제약 조건 (Constraints)]**: 반드시 지켜야 할 규칙(분량, 어조 등)을 명시합니다.
+        6.  **[출력 형식 지정 (Output Format)]**: 결과물이 나와야 할 구조와 형식을 지정합니다.
+
+*   **3단계: 최종 프롬프트 생성**
+    *   2단계에서 설계한 구성요소들을 논리적으로 통합하여, 복사해서 바로 사용할 수 있는 완벽한 [실행용 프롬프트]를 텍스트로 완성합니다.
+
+## **3. 당신의 출력 규칙 (Your Output Rules)**
+
+*   당신은 절대 사담이나 불필요한 서론을 말하지 않습니다.
+*   당신의 최종 결과물은 **오직 아래의 지정된 2개 파트**로만 구성되어야 합니다. 사용자가 무엇을 복사해야 하는지 절대 혼동하지 않도록 이 형식을 엄격히 준수하세요.
+
+*   **[매우 중요한 수정사항]**: **[실행용 프롬프트]** 섹션은 반드시 **[한국어 프롬프트]**와 **[English Prompt]** 두 개의 하위 섹션으로 명확히 구분하여 각각 생성해야 합니다. 절대 하나라도 누락해서는 안 됩니다.
+
+---
+
+### 📋 **복사해서 바로 사용하세요 (실행용 프롬프트)**
+**↳ 아래 2개의 회색 박스에서 필요한 언어의 프롬프트를 복사하여 LLM 채팅창에 붙여넣으세요.**
+
+#### [🇰🇷 한국어 프롬프트]
+
+```markdown
+
+{여기에 2단계에서 설계하고 3단계에서 생성한, 바로 복사해서 사용할 수 있는 완벽한 **한국어** 프롬프트를 삽입합니다.}
+
+```
+
+#### [🇺🇸 English Prompt]
+
+```markdown
+
+{여기에 위 한국어 프롬프트와 동일한 의도를 가진, 완벽한 **영어** 프롬프트를 삽입합니다. 단순 기계 번역이 아닌, 영어권 문화와 뉘앙스에 맞게 자연스럽게 재구성(Transcreation)된 프롬프트여야 합니다.}
+
+```
+
+## 💡 **이렇게 설계했습니다 (프롬프트 해설)**
+*   **[의도 구체화]**: {사용자의 단순 요청을 어떻게 구체적인 목표와 대상으로 해석했는지 간결하게 설명합니다.}
+*   **[설계 핵심]**: {결과물의 품질을 높이기 위해 어떤 프롬프트 구성요소(예: 역할 부여, 단계별 지침)를 핵심적으로 활용했는지 설명합니다.}
+*   **[기대 결과물]**: {이 프롬프트를 사용하면 어떤 수준의 결과물을 얻게 되는지 명확히 제시합니다.}
+
+---
+</script>
 <div id="toast">복사되었습니다 ✨</div>
 
 <script>
 // ---------- 데이터 ----------
+const CATS = { all: '전체', review: '📝 복습·평가', concept: '💡 개념 이해', explore: '🔬 탐구·체험', run: '🏫 수업 운영', reflect: '🪞 성찰·표현' };
 const TYPES = {
-    quiz: { name: '퀴즈 게임', em: '🎯', desc: '즉시 피드백과 해설이 있는 복습 퀴즈', ex: '수학: 일차방정식 10문항 · 영어: 단어 뜻 고르기',
+    quiz: { cat: 'review', name: '퀴즈 게임', em: '🎯', desc: '즉시 피드백과 해설이 있는 복습 퀴즈', ex: '수학 일차방정식 · 영어 단어 뜻',
         features: '객관식 10문항, 선택하면 바로 정답/오답 표시와 쉬운 해설, 진행도 바와 점수, 끝나면 결과 화면과 "틀린 문제만 다시 풀기", 문제 순서 무작위' },
-    card: { name: '개념 카드', em: '🃏', desc: '뒤집어 외우는 플래시카드', ex: '과학: 원소 기호 · 사회: 지리 용어 · 국어: 문학 개념어',
+    ox: { cat: 'review', name: 'OX 스피드 퀴즈', em: '⭕', desc: '제한 시간 안에 O/X를 판단하는 도입 활동', ex: '사회 사실·의견 구분 · 과학 오개념 점검',
+        features: 'O/X 문항 15개, 문항당 10초 타이머, 누르면 즉시 정답과 한 줄 해설, 연속 정답 콤보 표시, 결과 화면과 틀린 문제 다시 보기' },
+    blank: { cat: 'review', name: '빈칸 채우기', em: '✏️', desc: '핵심 문장의 빈칸을 채우는 개념 확인', ex: '국어 문법 용어 · 영어 문장 완성',
+        features: '핵심 문장 10개, 빈칸에 직접 입력하거나 보기 단어를 눌러 채우기, 채점 버튼, 틀린 칸은 빨간색 표시와 힌트, 다시 하기' },
+    match: { cat: 'review', name: '짝 맞추기 메모리 게임', em: '🧩', desc: '용어와 뜻 카드를 뒤집어 짝 찾기', ex: '영어 단어-뜻 · 과학 원소 기호-이름',
+        features: '8쌍 16장 카드 뒤집기, 짝이 맞으면 카드 고정과 효과, 시도 횟수와 걸린 시간 기록, 카드 다시 섞기' },
+    wrong: { cat: 'review', name: '오답 클리닉', em: '📒', desc: '자주 틀리는 문제를 단계별 힌트로', ex: '수학 서술형 · 과학 계산 문제',
+        features: '문제 5개, 힌트1 → 힌트2 → 풀이 순서로 하나씩 여는 버튼, "스스로 풀었어요" 체크, 마지막에 맞힌 개수 요약' },
+    card: { cat: 'concept', name: '개념 카드', em: '🃏', desc: '뒤집어 외우는 플래시카드', ex: '과학 원소 기호 · 사회 지리 용어',
         features: '앞면 용어, 클릭하면 뒤집혀 뒷면 설명, 이전/다음 버튼, 카드 섞기, "외웠어요" 체크와 남은 카드 수 표시' },
-    sim: { name: '시뮬레이션', em: '🔬', desc: '값을 바꾸며 원리를 체험', ex: '과학: 물체의 속력-거리-시간 · 수학: 일차함수 기울기',
+    order: { cat: 'concept', name: '순서 맞추기', em: '🔢', desc: '과정·사건의 순서를 배열', ex: '역사 사건 연표 · 과학 실험 과정 · 글의 흐름',
+        features: '카드 6~8개를 끌어서(휴대폰은 위/아래 버튼으로) 순서 배열, 정답 확인 버튼, 맞은 위치는 초록 표시, 정답 공개 후 해설' },
+    sort: { cat: 'concept', name: '분류하기', em: '🗂️', desc: '카드를 알맞은 바구니로 나누기', ex: '과학 원소/화합물 · 사회 산업 분류 · 국어 품사',
+        features: '카드 12개를 2~3개 바구니로 분류(카드를 누르고 바구니를 누르는 방식), 채점 버튼, 틀린 카드는 이유 설명' },
+    mindmap: { cat: 'concept', name: '개념 지도', em: '🧠', desc: '클릭해서 펼치는 단원 마인드맵', ex: '단원 정리 · 개념 사이 관계',
+        features: '중심 개념에서 하위 개념으로 펼쳐지는 트리, 항목을 누르면 설명과 예시 팝업, 전체 펼치기/접기, 마지막에 확인 질문 3개' },
+    sim: { cat: 'explore', name: '시뮬레이션', em: '🔬', desc: '값을 바꾸며 원리를 체험', ex: '과학 속력-거리-시간 · 수학 일차함수 기울기',
         features: '슬라이더로 변수 2개 조절, 값이 바뀌면 그림/그래프가 즉시 변화, 현재 값과 식 표시, 탐구 질문 3개와 답 적는 칸' },
-    guide: { name: '수업 활동 안내', em: '🗒️', desc: '오늘의 목표와 단계별 활동판', ex: '모든 교과: 모둠 활동 안내 · 프로젝트 단계 안내',
+    lab: { cat: 'explore', name: '가상 실험실', em: '🧪', desc: '변인을 바꿔 실험하고 결과 기록', ex: '과학 용해도 · 진자의 주기 · 식물의 성장 조건',
+        features: '조작 변인 선택과 값 설정, [실험하기]를 누르면 결과가 표에 누적, 표를 그래프로 보기, 결론 쓰기 칸, 다시 실험' },
+    chart: { cat: 'explore', name: '데이터 그래프 탐구', em: '📊', desc: '자료를 넣으면 그래프로 해석', ex: '수학 통계 · 사회 인구 자료 · 과학 측정값',
+        features: '표에 값 입력(예시 데이터 기본 제공), 막대/꺾은선 그래프 전환, 평균·최댓값·최솟값 자동 계산, 해석 질문 3개' },
+    hotspot: { cat: 'explore', name: '클릭 탐험 지도·연표', em: '🗺️', desc: '지점을 눌러 정보를 탐험', ex: '사회 세계 지리 · 역사 연표 · 미술 작품 감상',
+        features: '큰 그림(또는 지도·연표) 위에 누를 수 있는 지점 8개, 누르면 설명 카드, 다 둘러보면 확인 퀴즈 3문항' },
+    guide: { cat: 'run', name: '수업 활동 안내', em: '🗒️', desc: '오늘의 목표와 단계별 활동판', ex: '모둠 활동 안내 · 프로젝트 단계 안내',
         features: '오늘의 학습 목표, 단계별 활동 카드(펼치기/접기), 단계별 체크리스트, 남은 시간 타이머, 마지막에 성찰 질문' },
-    tool: { name: '수업 도구', em: '🎲', desc: '발표자 뽑기·모둠 편성·타이머', ex: '담임·모든 교과: 번호 뽑기, 모둠 랜덤 편성',
+    tool: { cat: 'run', name: '수업 도구', em: '🎲', desc: '발표자 뽑기·모둠 편성·타이머', ex: '모든 교과 · 담임 활동',
         features: '번호 범위 입력 후 무작위 발표자 뽑기(중복 없이), 모둠 수 입력 시 랜덤 모둠 편성, 큰 타이머, 결과를 크게 보여주는 화면 (이름 대신 번호만 사용)' },
-    reflect: { name: '자기평가·출구티켓', em: '🪞', desc: '수업 마무리 성찰 화면', ex: '모든 교과: 이해도 체크 · 배운 점 한 줄 쓰기',
-        features: '학습 목표별 이해도 3단계 선택, 오늘 배운 점/궁금한 점 쓰기 칸, 제출 버튼을 누르면 요약 카드가 나타나 화면 캡처로 제출 (서버 저장 없음)' }
+    debate: { cat: 'run', name: '토론 타이머', em: '⚖️', desc: '찬반 발언 순서와 시간 관리', ex: '국어·사회 토론 · 도덕 딜레마 토의',
+        features: '논제 표시, 입론-반론-최종 발언 단계별 타이머, 찬성/반대 색 구분, [다음 단계] 버튼, 시간 종료 알림' },
+    station: { cat: 'run', name: '모둠 미션 스테이션', em: '🚩', desc: '미션을 풀고 암호를 입력하는 활동', ex: '단원 마무리 활동 · 교실 방탈출',
+        features: '미션 4개 탭, 미션마다 안내·제한 시간·정답 암호 입력, 맞히면 다음 미션 열림, 모두 완료하면 축하 화면' },
+    reflect: { cat: 'reflect', name: '자기평가·출구티켓', em: '🪞', desc: '수업 마무리 성찰 화면', ex: '모든 교과 · 이해도 체크와 배운 점 쓰기',
+        features: '학습 목표별 이해도 3단계 선택, 오늘 배운 점/궁금한 점 쓰기 칸, 제출 버튼을 누르면 요약 카드가 나타나 화면 캡처로 제출 (서버 저장 없음)' },
+    rubric: { cat: 'reflect', name: '자기·동료평가 루브릭', em: '📏', desc: '기준을 고르면 점수와 피드백 정리', ex: '수행평가 전 점검 · 모둠 발표 평가',
+        features: '평가 기준 4개 × 3단계 선택, 점수 자동 합계, 잘한 점·보완할 점 쓰기, 결과 카드 캡처 (이름 입력 없음)' },
+    story: { cat: 'reflect', name: '글감 주사위', em: '🎲', desc: '무작위 조합으로 글쓰기·말하기 글감', ex: '국어 글쓰기 · 영어 말하기 · 미술 발상',
+        features: '인물·장소·사건 주사위 3개 굴리기, 마음에 드는 주사위 고정 후 다시 굴리기, 조합으로 글감 카드 생성, 3분 쓰기 타이머' },
+    career: { cat: 'reflect', name: '진로·성향 탐색 테스트', em: '🧭', desc: '질문에 답하면 유형과 관련 교과 추천', ex: '진로 수업 · 창의적 체험활동',
+        features: '선택형 질문 12개, 결과 유형 4가지와 관련 직업·교과 추천 카드, 다시 하기 (응답은 저장하지 않음)' }
 };
 const FIXES = [
     '글씨와 버튼을 더 크게 바꿔 줘. 중학생이 휴대폰으로 보기 편하게.',
@@ -448,7 +619,7 @@ const FIXES = [
 // ---------- 공통 ----------
 function setFs(c) { document.documentElement.classList.remove('fs-lg', 'fs-xl'); if (c) document.documentElement.classList.add(c); try { localStorage.setItem('lfFs', c); } catch (e) {} }
 try { const f = localStorage.getItem('lfFs'); if (f) setFs(f); } catch (e) {}
-function toast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1600); }
+function toast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); }
 function copyText(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
     return Promise.resolve(fallbackCopy(text));
@@ -459,6 +630,7 @@ document.addEventListener('click', e => {
     const c = b.closest('.prompt').cloneNode(true); c.querySelectorAll('.copy,.lb').forEach(x => x.remove());
     copyText(c.textContent.trim()).then(() => { b.textContent = '완료!'; b.classList.add('done'); toast('부탁문이 복사되었습니다 ✨'); setTimeout(() => { b.textContent = '복사'; b.classList.remove('done'); }, 1500); });
 });
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // 탭
 function go(id) {
@@ -469,12 +641,26 @@ function go(id) {
 }
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => go(t.dataset.t)));
 
-// 아이디어 카드
-const grid = document.getElementById('ideaGrid'), sel = document.getElementById('f-type');
-Object.entries(TYPES).forEach(([k, v]) => {
-    grid.insertAdjacentHTML('beforeend', `<div class="idea"><div class="em">${v.em}</div><h4>${v.name}</h4><p>${v.desc}</p><div class="ex">예) ${v.ex}</div><button class="btn btn-sub" data-k="${k}">이걸로 만들기 →</button></div>`);
-    sel.insertAdjacentHTML('beforeend', `<option value="${k}">${v.em} ${v.name}</option>`);
+// ---------- 아이디어 ----------
+const grid = document.getElementById('ideaGrid'), sel = document.getElementById('f-type'), catChips = document.getElementById('catChips');
+function renderIdeas(cat) {
+    grid.innerHTML = '';
+    Object.entries(TYPES).filter(([, t]) => cat === 'all' || t.cat === cat).forEach(([k, t]) => {
+        grid.insertAdjacentHTML('beforeend', `<div class="idea"><div class="em">${t.em}</div><span class="tag">${CATS[t.cat]}</span><h4>${t.name}</h4><p>${t.desc}</p><div class="feat">${t.features}</div><div class="ex">예) ${t.ex}</div><button class="btn btn-sub" data-k="${k}">이걸로 만들기 →</button></div>`);
+    });
+    catChips.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.c === cat));
+}
+Object.entries(CATS).forEach(([k, n]) => {
+    const b = document.createElement('button'); b.className = 'chip cat'; b.dataset.c = k;
+    b.textContent = k === 'all' ? `${n} ${Object.keys(TYPES).length}` : n;
+    b.onclick = () => renderIdeas(k); catChips.appendChild(b);
 });
+Object.entries(CATS).filter(([k]) => k !== 'all').forEach(([k, n]) => {
+    const g = document.createElement('optgroup'); g.label = n;
+    Object.entries(TYPES).filter(([, t]) => t.cat === k).forEach(([tk, t]) => g.insertAdjacentHTML('beforeend', `<option value="${tk}">${t.em} ${t.name}</option>`));
+    sel.appendChild(g);
+});
+renderIdeas('all');
 grid.addEventListener('click', e => {
     const b = e.target.closest('button[data-k]'); if (!b) return;
     sel.value = b.dataset.k; document.getElementById('f-features').value = TYPES[b.dataset.k].features;
@@ -482,49 +668,303 @@ grid.addEventListener('click', e => {
 });
 sel.addEventListener('change', () => { document.getElementById('f-features').value = TYPES[sel.value].features; save(); });
 
-// 폼 저장/복원
+function buildIdeaPrompt() {
+    const topic = document.getElementById('idea-topic').value.trim() || '[교과 · 단원]';
+    document.getElementById('ideaPrompt').textContent =
+`너는 중학교 수업용 디지털 활동을 설계하는 수업 컨설턴트야.
+'${topic}' 수업에서 학생이 휴대폰·크롬북으로 바로 쓸 수 있는 '수업용 웹페이지' 아이디어 10개를 추천해 줘.
+
+조건:
+- 로그인·서버 없이 HTML 한 파일로 만들 수 있는 것 (퀴즈, 시뮬레이션, 분류, 순서 맞추기, 탐험 지도, 토론 도구 등)
+- 수업 단계(도입/전개/정리/가정 학습)를 고르게 섞기
+- 학생 개인정보를 받지 않는 활동
+
+표로 정리: 번호 | 웹페이지 이름 | 수업 단계 | 학생이 하는 활동 | 핵심 기능 3가지 | 기대 효과`;
+    document.getElementById('ideaOut').style.display = 'block';
+}
+
+// ---------- 폼 저장/복원 ----------
 const F = ['f-subject', 'f-unit', 'f-type', 'f-design', 'f-features', 'f-content'];
 const v = id => document.getElementById(id).value.trim();
-function save() { try { localStorage.setItem('lfForm', JSON.stringify(Object.fromEntries(F.map(id => [id, document.getElementById(id).value])))); } catch (e) {} }
-try { const s = JSON.parse(localStorage.getItem('lfForm') || '{}'); F.forEach(id => { if (s[id]) document.getElementById(id).value = s[id]; }); } catch (e) {}
+function save() {
+    try {
+        const data = Object.fromEntries(F.map(id => [id, document.getElementById(id).value]));
+        data.mode = getMode();
+        localStorage.setItem('lfForm', JSON.stringify(data));
+    } catch (e) {}
+}
+function getMode() { const r = document.querySelector('input[name=mode]:checked'); return r ? r.value : 'arch'; }
+try {
+    const s = JSON.parse(localStorage.getItem('lfForm') || '{}');
+    F.forEach(id => { if (s[id]) document.getElementById(id).value = s[id]; });
+    if (s.mode) { const r = document.querySelector(`input[name=mode][value=${s.mode}]`); if (r) r.checked = true; }
+} catch (e) {}
+if (!TYPES[sel.value]) sel.value = 'quiz';
 if (!v('f-features')) document.getElementById('f-features').value = TYPES[sel.value].features;
 F.forEach(id => document.getElementById(id).addEventListener('input', save));
+document.querySelectorAll('input[name=mode]').forEach(r => r.addEventListener('change', save));
 
-function buildPrompt() {
-    const t = TYPES[sel.value];
+// ---------- 파일 첨부: 브라우저 안에서 글자 추출 ----------
+const LIBS = {
+    pdf: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+    pdfWorker: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+    xlsx: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    jszip: 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',
+    pako: 'https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js',
+    ocr: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js'
+};
+const loaded = {};
+function loadScript(url) {
+    if (!loaded[url]) loaded[url] = new Promise((res, rej) => {
+        const s = document.createElement('script'); s.src = url; s.onload = res;
+        s.onerror = () => { delete loaded[url]; rej(new Error('도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.')); };
+        document.head.appendChild(s);
+    });
+    return loaded[url];
+}
+const PER_FILE = 8000, TOTAL = 30000;
+const files = []; // {id, name, kind, status, text, include, img, msg}
+let fid = 0;
+
+const decodeXml = s => s.replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n)).replace(/&amp;/g, '&');
+function xmlParagraphs(xml, pTag, tTag) {
+    // 문단 태그로 나눈 뒤 글자 태그 안의 내용만 모은다
+    const tRe = new RegExp(`<${tTag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tTag}>`, 'g');
+    return xml.split(`</${pTag}>`).map(p => { let s = '', m; while ((m = tRe.exec(p))) s += decodeXml(m[1]); return s.trim(); }).filter(Boolean).join('\n');
+}
+const natural = (a, b) => a.localeCompare(b, undefined, { numeric: true });
+
+async function readPdf(buf) {
+    await loadScript(LIBS.pdf);
+    pdfjsLib.GlobalWorkerOptions.workerSrc = LIBS.pdfWorker;
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const out = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+        const tc = await (await pdf.getPage(i)).getTextContent();
+        out.push(`[${i}쪽]\n` + tc.items.map(it => it.str + (it.hasEOL ? '\n' : ' ')).join('').replace(/[ \t]+\n/g, '\n').trim());
+    }
+    const text = out.join('\n\n');
+    if (text.replace(/\[\d+쪽\]|\s/g, '').length < 10) throw new Error('글자가 없는 PDF(스캔본)예요. 화면을 캡처해 이미지로 첨부하면 글자 읽기(OCR)를 쓸 수 있어요.');
+    return text;
+}
+function decodeText(buf) {
+    // UTF-8이 아니면 한국어 윈도우 기본(EUC-KR/CP949)으로 읽는다
+    try { return new TextDecoder('utf-8', { fatal: true }).decode(buf).replace(/^﻿/, ''); }
+    catch (e) { return new TextDecoder('euc-kr').decode(buf); }
+}
+async function readSheet(buf, isCsv) {
+    await loadScript(LIBS.xlsx);
+    const wb = isCsv ? XLSX.read(decodeText(buf), { type: 'string' }) : XLSX.read(buf, { type: 'array' });
+    return wb.SheetNames.map(n => `[시트: ${n}]\n` + XLSX.utils.sheet_to_csv(wb.Sheets[n], { blankrows: false }).replace(/,+$/gm, '')).join('\n\n');
+}
+async function readZipXml(buf, pathRe, pTag, tTag, label) {
+    await loadScript(LIBS.jszip);
+    const zip = await JSZip.loadAsync(buf);
+    const paths = Object.keys(zip.files).filter(p => pathRe.test(p)).sort(natural);
+    if (!paths.length) throw new Error('내용을 찾지 못했어요.');
+    const parts = [];
+    for (let i = 0; i < paths.length; i++) {
+        const t = xmlParagraphs(await zip.file(paths[i]).async('string'), pTag, tTag);
+        if (t) parts.push(label ? `[${label} ${i + 1}]\n${t}` : t);
+    }
+    return parts.join('\n\n');
+}
+async function readHwp(buf) {
+    // 한글 97~2022(.hwp, HWP 5.0): OLE 복합 파일 → BodyText/Section* 스트림 → (압축 해제) → 문단 글자 레코드(태그 67)
+    await loadScript(LIBS.xlsx); await loadScript(LIBS.pako);
+    const cfb = XLSX.CFB.read(new Uint8Array(buf), { type: 'array' });
+    const entry = name => { const i = cfb.FullPaths.findIndex(p => p.replace(/\/$/, '').endsWith(name)); return i < 0 ? null : cfb.FileIndex[i]; };
+    const header = entry('/FileHeader');
+    if (!header) throw new Error('한글(HWP) 5.0 형식이 아니에요. 한글에서 "다른 이름으로 저장 → HWPX"로 바꿔 첨부해 주세요.');
+    const props = new DataView(new Uint8Array(header.content).buffer).getUint32(36, true);
+    if (props & 2) throw new Error('암호가 걸린 한글 파일이에요.');
+    if (props & 4) throw new Error('배포용 한글 문서라 글자를 읽을 수 없어요. 내용을 복사해 "꼭 넣을 학습 내용" 칸에 붙여 넣어 주세요.');
+    const compressed = (props & 1) === 1;
+    const sections = cfb.FullPaths.map((p, i) => [p, i]).filter(([p]) => /BodyText\/Section\d+$/.test(p)).sort((a, b) => natural(a[0], b[0]));
+    const out = [];
+    for (const [, i] of sections) {
+        let data = new Uint8Array(cfb.FileIndex[i].content);
+        if (compressed) data = pako.inflateRaw(data);
+        const dv = new DataView(data.buffer, data.byteOffset, data.byteLength);
+        let pos = 0;
+        while (pos + 4 <= data.length) {
+            const h = dv.getUint32(pos, true); pos += 4;
+            const tag = h & 0x3ff; let size = (h >>> 20) & 0xfff;
+            if (size === 0xfff) { size = dv.getUint32(pos, true); pos += 4; }
+            if (tag === 67) { // HWPTAG_PARA_TEXT
+                let s = '';
+                for (let j = pos; j + 1 < pos + size;) {
+                    const c = dv.getUint16(j, true);
+                    if (c >= 32) { s += String.fromCharCode(c); j += 2; }
+                    else if (c === 0 || c === 10 || c === 13 || (c >= 24 && c <= 31)) { if (c === 10) s += '\n'; j += 2; }
+                    else { if (c === 9) s += '\t'; j += 16; } // 인라인·확장 컨트롤은 8글자(16바이트) 차지
+                }
+                if (s.trim()) out.push(s.trim());
+            }
+            pos += size;
+        }
+    }
+    if (!out.length) throw new Error('글자를 찾지 못했어요.');
+    return out.join('\n');
+}
+function fileKind(name, type) {
+    const ext = (name.split('.').pop() || '').toLowerCase();
+    if (type.startsWith('image/') || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'bmp', 'heic'].includes(ext)) return 'image';
+    return { pdf: 'pdf', hwp: 'hwp', hwpx: 'hwpx', xlsx: 'sheet', xls: 'sheet', csv: 'sheet', docx: 'docx', pptx: 'pptx', txt: 'text', md: 'text', json: 'text' }[ext] || 'unknown';
+}
+const KIND_LABEL = { pdf: 'PDF', hwp: '한글', hwpx: '한글', sheet: '엑셀', docx: '워드', pptx: '파워포인트', text: '텍스트', image: '이미지', unknown: '?' };
+
+async function addFiles(list) {
+    for (const file of list) {
+        const f = { id: ++fid, name: file.name, kind: fileKind(file.name, file.type || ''), status: 'reading', text: '', include: true, msg: '', file };
+        files.push(f); renderFiles();
+        try {
+            if (f.kind === 'image') {
+                f.img = URL.createObjectURL(file); f.status = 'image';
+                f.msg = '이미지는 Gemini 채팅창에도 함께 첨부하세요. [글자 읽기]를 누르면 이미지 속 글자를 부탁문에 넣을 수 있어요.';
+            } else {
+                const buf = await file.arrayBuffer();
+                if (f.kind === 'pdf') f.text = await readPdf(buf);
+                else if (f.kind === 'sheet') f.text = await readSheet(buf, /\.csv$/i.test(f.name));
+                else if (f.kind === 'hwp') f.text = await readHwp(buf);
+                else if (f.kind === 'hwpx') f.text = await readZipXml(buf, /^Contents\/section\d+\.xml$/i, 'hp:p', 'hp:t');
+                else if (f.kind === 'docx') f.text = await readZipXml(buf, /^word\/document\.xml$/, 'w:p', 'w:t');
+                else if (f.kind === 'pptx') f.text = await readZipXml(buf, /^ppt\/slides\/slide\d+\.xml$/, 'a:p', 'a:t', '슬라이드');
+                else if (f.kind === 'text') f.text = decodeText(buf);
+                else throw new Error('아직 지원하지 않는 형식이에요. (예전 .doc/.ppt는 DOCX/PPTX로 저장해 주세요)');
+                f.text = f.text.replace(/\n{3,}/g, '\n\n').trim();
+                f.status = 'ok';
+            }
+        } catch (err) { f.status = 'err'; f.msg = err.message || String(err); f.include = false; }
+        renderFiles();
+    }
+}
+async function ocr(id) {
+    const f = files.find(x => x.id === id); if (!f) return;
+    f.status = 'reading'; f.msg = '글자 읽기 도구를 불러오는 중… (처음 한 번은 1분 정도 걸려요)'; renderFiles();
+    try {
+        await loadScript(LIBS.ocr);
+        const res = await Tesseract.recognize(f.file, 'kor+eng', { logger: m => {
+            if (m.status === 'recognizing text') { f.msg = `글자 읽는 중… ${Math.round(m.progress * 100)}%`; const n = document.querySelector(`[data-note="${id}"]`); if (n) n.textContent = f.msg; }
+        } });
+        f.text = res.data.text.replace(/\n{3,}/g, '\n\n').trim();
+        if (!f.text) throw new Error('읽을 수 있는 글자가 없어요.');
+        f.status = 'ok'; f.include = true; f.msg = 'OCR로 읽은 글자예요. 틀린 글자가 있을 수 있으니 확인하고 고쳐 주세요.';
+    } catch (err) { f.status = 'image'; f.msg = '글자 읽기에 실패했어요: ' + (err.message || err); }
+    renderFiles();
+}
+function renderFiles() {
+    const box = document.getElementById('fileList');
+    box.innerHTML = files.map(f => {
+        const stat = { reading: ['⏳ 읽는 중', ''], ok: [`✅ ${f.text.length.toLocaleString()}자`, 'ok'], err: ['⚠️ 읽기 실패', 'err'], image: ['🖼️ 이미지', 'img'] }[f.status];
+        return `<div class="fitem">
+            <div class="fhead">
+                <span class="fname">${esc(f.name)}</span>
+                <span class="fstat">${KIND_LABEL[f.kind]}</span>
+                <span class="fstat ${stat[1]}">${stat[0]}</span>
+                ${f.status === 'ok' ? `<label class="muted-sm"><input type="checkbox" ${f.include ? 'checked' : ''} onchange="toggleFile(${f.id}, this.checked)"> 부탁문에 넣기</label>` : ''}
+                ${f.kind === 'image' && f.status !== 'reading' ? `<button class="mini" onclick="ocr(${f.id})">🔤 글자 읽기</button>` : ''}
+                <button class="mini" onclick="removeFile(${f.id})">✕ 빼기</button>
+            </div>
+            ${f.img ? `<img src="${f.img}" alt="">` : ''}
+            ${f.msg ? `<div class="note" data-note="${f.id}">${esc(f.msg)}</div>` : ''}
+            ${f.status === 'ok' ? `<details><summary class="muted-sm" style="cursor:pointer;margin-top:0.4rem">읽은 내용 보기·고치기 ${f.text.length > PER_FILE ? `(앞 ${PER_FILE.toLocaleString()}자만 들어가요)` : ''}</summary><textarea rows="6" oninput="editFile(${f.id}, this.value)">${esc(f.text)}</textarea></details>` : ''}
+        </div>`;
+    }).join('');
+}
+function toggleFile(id, on) { const f = files.find(x => x.id === id); if (f) f.include = on; }
+function editFile(id, t) { const f = files.find(x => x.id === id); if (f) f.text = t; }
+function removeFile(id) { const i = files.findIndex(x => x.id === id); if (i >= 0) { if (files[i].img) URL.revokeObjectURL(files[i].img); files.splice(i, 1); renderFiles(); } }
+
+const fileInput = document.getElementById('fileInput'), drop = document.getElementById('drop');
+fileInput.addEventListener('change', () => { addFiles([...fileInput.files]); fileInput.value = ''; });
+['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => addFiles([...e.dataTransfer.files]));
+
+function referenceBlock() {
+    let used = 0; const parts = [], images = [];
+    files.forEach(f => {
+        if (f.kind === 'image' && f.status === 'image') { images.push(f.name); return; }
+        if (f.status !== 'ok' || !f.include || !f.text.trim()) return;
+        let t = f.text.trim(), note = '';
+        const room = Math.min(PER_FILE, TOTAL - used);
+        if (room <= 200) { note = ' (분량이 많아 생략)'; t = ''; }
+        else if (t.length > room) { t = t.slice(0, room); note = ` (분량이 많아 앞 ${room.toLocaleString()}자만 포함)`; }
+        used += t.length;
+        parts.push(`=== 자료 ${parts.length + 1}: ${f.name} [${KIND_LABEL[f.kind]}]${note} ===\n${t}`);
+    });
+    return { text: parts.join('\n\n'), images, count: parts.length, chars: used };
+}
+
+// ---------- 부탁문 만들기 ----------
+function lessonInfo(t) {
     const content = v('f-content');
-    const text =
-`# 역할
-너는 중학교 수업용 웹페이지를 만드는 교육 전문 프론트엔드 개발자야.
-
-# 목표
-아래 수업 정보로, 학생이 휴대폰·크롬북에서 바로 쓸 수 있는 '${t.name}' 웹페이지를 Canvas에 단일 HTML 파일로 만들어 줘.
-
-# 수업 정보
-- 교과·학년: ${v('f-subject') || '[교과·학년]'}
+    return `- 교과·학년: ${v('f-subject') || '[교과·학년]'}
 - 단원·주제: ${v('f-unit') || '[단원·주제]'}
 - 웹페이지 유형: ${t.name}
 - 학생이 할 일·핵심 기능: ${v('f-features') || t.features}
 - 디자인·분위기: ${v('f-design') || '밝고 친근한 파스텔 톤, 카드형 레이아웃, 큰 글씨와 큰 버튼'}${content ? `
-- 반드시 사용할 학습 내용(이 내용을 정확히 그대로 활용): ${content}` : ''}
-
-# 반드시 지킬 것
-1) HTML/CSS/JavaScript를 한 파일에 모두 넣고, 로그인·서버·API 키 없이 동작하게 한다.
+- 반드시 사용할 학습 내용(이 내용을 정확히 그대로 활용): ${content}` : ''}`;
+}
+const RULES = `1) HTML/CSS/JavaScript를 한 파일에 모두 넣고, 로그인·서버·API 키 없이 동작하게 한다.
 2) 모든 글은 한국어, 중학생 눈높이의 쉬운 문장으로 쓴다.
 3) 모바일 반응형으로 만들고, 글씨와 버튼을 크게 한다.
 4) 상단 제목과 '오늘의 학습 목표', 활동 안내, 활동 영역, 결과·피드백 영역을 포함한다.
 5) 학습 내용은 중학교 교육과정 수준에 맞추고, 확실하지 않은 사실은 넣지 않는다.
 6) 학생 이름 등 개인정보를 입력받거나 저장하지 않는다.
 7) 빈 입력이나 잘못된 입력에는 친절한 안내 문구를 보여준다.`;
+
+function buildPrompt() {
+    const t = TYPES[sel.value] || TYPES.quiz, mode = getMode(), ref = referenceBlock();
+    const refSection = ref.count ? `
+
+# 참고 자료 (선생님이 첨부한 파일에서 뽑은 내용 — 학습 내용은 이 자료를 근거로 사용)
+${ref.text}` : '';
+    const imgNote = ref.images.length ? `
+- 첨부 이미지: ${ref.images.join(', ')} (Canvas 채팅에 함께 첨부할 예정이니 화면 디자인과 내용에 반영)` : '';
+    let text;
+    if (mode === 'arch') {
+        text = `${document.getElementById('architectText').textContent.trim()}
+
+내용:
+중학교 선생님이 수업 시간에 바로 쓸 '${t.name}' 수업용 웹페이지를 Gemini Canvas에서 만들기 위한 [실행용 프롬프트]를 설계해 줘.
+[실행용 프롬프트]는 Gemini Canvas에 붙여 넣는 즉시, 학생이 휴대폰·크롬북에서 바로 쓸 수 있는 완성된 단일 HTML 파일(HTML/CSS/JavaScript 한 파일)이 만들어지도록 작성해야 해.
+
+# 수업 정보
+${lessonInfo(t)}${imgNote}
+
+# 실행용 프롬프트에 반드시 담을 조건
+${RULES}
+8) 아래 [참고 자료]가 있으면 핵심 내용(용어·문제·정답·수치·예시)을 실행용 프롬프트 안에 직접 옮겨 담아, 그 프롬프트만으로 웹페이지를 완성할 수 있게 한다.${refSection}`;
+    } else {
+        text = `# 역할
+너는 중학교 수업용 웹페이지를 만드는 교육 전문 프론트엔드 개발자야.
+
+# 목표
+아래 수업 정보로, 학생이 휴대폰·크롬북에서 바로 쓸 수 있는 '${t.name}' 웹페이지를 Canvas에 단일 HTML 파일로 만들어 줘.
+
+# 수업 정보
+${lessonInfo(t)}${imgNote}
+
+# 반드시 지킬 것
+${RULES}${ref.count ? '\n8) 아래 [참고 자료]의 용어·문제·정답·수치를 정확히 그대로 활용한다.' : ''}${refSection}`;
+    }
+    document.getElementById('outLabel').textContent = mode === 'arch' ? '🏗️ 프롬프트 아키텍트 부탁문 · Gemini 일반 채팅에 붙여 넣기' : '⚡ 바로 Canvas 부탁문 · Canvas를 켜고 붙여 넣기';
     document.getElementById('outPrompt').textContent = text;
+    document.getElementById('outInfo').textContent = `총 ${text.length.toLocaleString()}자` + (ref.count ? ` · 첨부 자료 ${ref.count}개(${ref.chars.toLocaleString()}자) 포함` : '') + (ref.images.length ? ` · 이미지 ${ref.images.length}개는 Gemini에 직접 첨부` : '');
+    document.getElementById('outNext').innerHTML = mode === 'arch'
+        ? `<div class="tip">🏗️ <b>다음 순서:</b> ① Gemini <b>일반 채팅</b>에 붙여 넣기 → ② 답변의 <b>[🇰🇷 한국어 프롬프트]</b> 박스 복사 → ③ <b>새 채팅</b>에서 <b>도구 → Canvas</b>를 켜고 붙여 넣기${ref.images.length ? ' (이미지도 함께 첨부)' : ''} → 「4. 화면 만들기」 탭에서 고치기</div>`
+        : `<p class="ok">✅ 복사했으면 → Gemini에서 <b>Canvas</b>를 켜고 붙여 넣기${ref.images.length ? ' (이미지도 함께 첨부)' : ''} → 「4. 화면 만들기」 탭으로!</p>`;
     document.getElementById('outWrap').style.display = 'block';
     document.getElementById('outWrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
     save();
 }
 function resetForm() {
-    if (!confirm('입력한 내용을 모두 지울까요?')) return;
-    F.forEach(id => { const el = document.getElementById(id); if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; });
+    if (!confirm('입력한 내용과 첨부 파일을 모두 지울까요?')) return;
+    F.forEach(id => { const el = document.getElementById(id); if (el.tagName === 'SELECT') el.value = 'quiz'; else el.value = ''; });
     document.getElementById('f-features').value = TYPES[sel.value].features;
+    files.slice().forEach(f => removeFile(f.id));
     document.getElementById('outWrap').style.display = 'none'; save();
 }
 
