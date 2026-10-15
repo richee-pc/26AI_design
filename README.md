@@ -1,7 +1,7 @@
 # ✨ LINKFORGE for Teachers — Gemini로 수업용 웹페이지 만들기
 
 2026학년도 AI중점학교 교원역량 강화 연수(조선대학교부속중학교, 2026.10.19.) 실습용 웹 자료입니다.
-학생 웹앱 수업 자료([webapp](https://github.com/richee-pc/webapp))를 교사 연수용(35분 내외)으로 재구성했습니다.
+Gemini Canvas로 수업용 웹페이지를 만들고 링크로 공유하는 35분 내외 실습 연수입니다.
 
 👉 **공개 주소 (GitHub Pages):** https://richee-pc.github.io/26AI_design/
 
