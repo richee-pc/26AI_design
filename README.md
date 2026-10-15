@@ -31,3 +31,14 @@ Gemini Canvas로 수업용 웹페이지를 만들고 링크로 공유하는 35�
 pip install -r requirements.txt
 streamlit run app.py
 ```
+
+## 작품 갤러리 연결 (Google Sheets + Apps Script)
+
+6번 탭 "작품 갤러리"는 구글 시트에 작품 목록을 저장합니다. 연결 전에는 "준비 중"으로 표시됩니다.
+
+1. [sheet.new](https://sheet.new)로 새 구글 시트 만들기
+2. **확장 프로그램 → Apps Script** → `materials/gallery_apps_script.gs` 내용을 붙여 넣고 저장
+3. **배포 → 새 배포 → 웹 앱** (실행: 나 / 액세스: 모든 사용자) → 권한 승인 → 웹 앱 URL(`…/exec`) 복사
+4. `htmls/index.html`의 `const GALLERY_API = '';`에 URL을 넣고 커밋
+
+관리: 시트의 `숨김` 열에 `x`를 적으면 그 작품이 갤러리에서 숨겨집니다.
