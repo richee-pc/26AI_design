@@ -1158,7 +1158,7 @@ function openLink() { const u = document.getElementById('qrUrl').value.trim(); i
 
 // ---------- 작품 갤러리 (Google Apps Script 웹 앱에 저장) ----------
 // materials/gallery_apps_script.gs 를 배포한 뒤 웹 앱 URL(…/exec)을 아래에 넣으세요.
-const GALLERY_API = '';
+const GALLERY_API = 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec';
 let gItems = [], gSubject = '전체';
 const typeName = k => (TYPES[k] ? `${TYPES[k].em} ${TYPES[k].name}` : (k || '수업용 웹페이지'));
 const gType = document.getElementById('g-type');

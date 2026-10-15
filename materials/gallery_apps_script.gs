@@ -74,7 +74,7 @@ function doPost(e) {
     if (!String(d.title || '').trim()) return out_({ ok: false, error: '작품 제목을 적어 주세요.' });
     if (d.website) return out_({ ok: true, id: 'skip' }); // 자동 등록 봇 차단용 빈칸
 
-    const id = Utilities.getUuid().slice(0, 8);
+    const id = 'g' + Utilities.getUuid().slice(0, 8); // 숫자로 바뀌지 않도록 글자로 시작
     const key = clean_(d.key, 40);
     sh.appendRow([
       id, new Date(),
