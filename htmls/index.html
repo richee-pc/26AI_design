@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>생성형 AI 수업 설계: 중학교 선생님 실습 가이드</title>
+    <script src="https://cdn.tailwindcss.com/3.4.5"></script>
+    <script src="https://unpkg.com/lucide@0.453.0/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;800&family=Jua&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --spring-blue: #3b82f6;
+            --spring-sky: #e0f2fe;
+            --spring-pink: #fce7f3;
+            --spring-pink-accent: #f472b6;
+            --base-font-size: 16px;
+        }
+        html { font-size: var(--base-font-size); scroll-behavior: smooth; scroll-padding-top: 5rem; }
+        html.font-lg { --base-font-size: 18px; }
+        html.font-xl { --base-font-size: 20px; }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fdf2f8 100%);
+            background-attachment: fixed;
+            color: #1e293b;
+            overflow-x: hidden;
+            line-height: 1.7;
+            word-break: keep-all;
+        }
+        h1, h2, h3, h4, .jua { font-family: 'Jua', sans-serif; font-weight: normal; }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.7);
+        }
+        .content-card {
+            background: white;
+            border-radius: 2rem;
+            border: 1px solid rgba(226, 232, 240, 0.7);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.03);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px -10px rgba(59, 130, 246, 0.12);
+            border-color: var(--spring-sky);
+        }
+        .card-header {
+            padding: 1.25rem 2rem;
+            border-bottom: 2px dashed #f1f5f9;
+            background: linear-gradient(to right, #f8fafc, #ffffff);
+        }
+        .card-body { padding: 1.75rem 2rem; }
+        @media (max-width: 640px) {
+            .card-header, .card-body { padding: 1.1rem 1.1rem; }
+        }
+
+        .prompt-block {
+            background-color: #1e293b;
+            color: #f1f5f9;
+            border-radius: 1.25rem;
+            padding: 3.4rem 1.25rem 1.25rem;
+            font-family: 'D2Coding', 'Consolas', 'Noto Sans KR', monospace;
+            position: relative;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border: 1px solid #334155;
+            font-size: 14px;
+        }
+        .prompt-block .label {
+            position: absolute; top: 1rem; left: 1.25rem;
+            color: #93c5fd; font-family: 'Jua', sans-serif; font-size: 0.9rem;
+        }
+        .copy-button {
+            position: absolute; top: 0.8rem; right: 0.8rem;
+            background-color: #475569; color: white;
+            padding: 0.4rem 0.9rem; border-radius: 0.7rem;
+            font-size: 0.85rem; font-family: 'Jua', sans-serif;
+            transition: all 0.2s;
+        }
+        .copy-button:hover { background-color: var(--spring-blue); transform: scale(1.05); }
+        .copy-button.done { background-color: #10b981; }
+
+        .section-title {
+            color: #1e40af;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2.5rem;
+            font-size: 2.1rem;
+            z-index: 0;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute; bottom: -4px; left: 0;
+            width: 100%; height: 10px;
+            background: linear-gradient(to right, var(--spring-sky), var(--spring-pink));
+            z-index: -1; border-radius: 99px;
+        }
+        .pro-tip {
+            background-color: #fffbeb;
+            border-left: 6px solid #fbbf24;
+            color: #92400e;
+            padding: 1.1rem 1.25rem;
+            border-radius: 1.25rem;
+            font-size: 0.95rem;
+        }
+        .step-badge {
+            background: linear-gradient(135deg, var(--spring-blue), var(--spring-pink-accent));
+            color: white; padding: 3px 12px; border-radius: 99px;
+            font-weight: bold; font-size: 0.75rem; white-space: nowrap;
+        }
+        .nav-link { padding: 0.35rem 0.8rem; border-radius: 99px; transition: all 0.2s; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { background: var(--spring-sky); color: #1e40af; }
+
+        .level-card { border-radius: 1.5rem; padding: 1.25rem; border: 2px solid; height: 100%; }
+        .tab-btn { padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid #e2e8f0; background: white; font-family: 'Jua', sans-serif; transition: all 0.2s; }
+        .tab-btn.active { background: linear-gradient(135deg, var(--spring-blue), var(--spring-pink-accent)); color: white; border-color: transparent; }
+
+        .canvas-field label { font-family: 'Jua', sans-serif; color: #1e40af; display: block; margin-bottom: 0.3rem; }
+        .canvas-field input, .canvas-field textarea, .canvas-field select {
+            width: 100%; border: 1.5px solid #e2e8f0; border-radius: 0.9rem;
+            padding: 0.6rem 0.9rem; font-size: 0.95rem; background: #f8fafc;
+        }
+        .canvas-field input:focus, .canvas-field textarea:focus, .canvas-field select:focus {
+            outline: none; border-color: #93c5fd; background: white; box-shadow: 0 0 0 3px #e0f2fe;
+        }
+        .check-item { display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.8rem 1rem; border-radius: 1rem; background: #f8fafc; cursor: pointer; }
+        .check-item input { margin-top: 0.35rem; width: 1.1rem; height: 1.1rem; accent-color: #3b82f6; flex-shrink: 0; }
+
+        #toast {
+            position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(150%);
+            background: #1e293b; color: white; padding: 0.7rem 1.4rem; border-radius: 99px;
+            font-family: 'Jua', sans-serif; transition: transform 0.3s; z-index: 100;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
+
+        @media print {
+            nav, .no-print, .copy-button { display: none !important; }
+            body { background: white; }
+            .content-card { break-inside: avoid; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 상단 내비게이션 -->
+<nav class="glass fixed top-0 inset-x-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center gap-3">
+        <a href="#top" class="jua text-lg text-blue-800 flex items-center gap-2 shrink-0">🌸 <span class="hidden sm:inline">생성형 AI 수업 설계</span></a>
+        <div class="flex-1 overflow-x-auto">
+            <div class="flex gap-1 text-sm text-slate-600 justify-end min-w-max" id="navLinks">
+                <a class="nav-link" href="#roadmap">로드맵</a>
+                <a class="nav-link" href="#why">왜?</a>
+                <a class="nav-link" href="#model">설계 5단계</a>
+                <a class="nav-link" href="#lab1">실습①</a>
+                <a class="nav-link" href="#cases">교과 사례</a>
+                <a class="nav-link" href="#lab2">실습②</a>
+                <a class="nav-link" href="#safety">안전·평가</a>
+            </div>
+        </div>
+        <div class="flex gap-1 shrink-0 no-print" title="글자 크기">
+            <button class="w-8 h-8 rounded-full bg-white border text-xs" onclick="setFont('')">가</button>
+            <button class="w-8 h-8 rounded-full bg-white border text-sm" onclick="setFont('font-lg')">가</button>
+            <button class="w-8 h-8 rounded-full bg-white border text-base" onclick="setFont('font-xl')">가</button>
+        </div>
+    </div>
+</nav>
+
+<main id="top" class="max-w-6xl mx-auto px-4 pt-24 pb-16">
+
+    <!-- 히어로 -->
+    <header class="text-center py-10 md:py-16">
+        <p class="inline-block bg-white/80 border border-blue-100 text-blue-700 rounded-full px-4 py-1 text-sm mb-6">2026학년도 AI중점학교 교원역량 강화 연수</p>
+        <h1 class="text-4xl md:text-6xl text-blue-900 leading-tight mb-6">
+            생성형 AI <span class="text-pink-500">수업 설계</span><br class="hidden md:block"> 실습 가이드
+        </h1>
+        <p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-8">
+            "AI를 쓰는 수업"이 아니라 <b class="text-blue-800">"AI로 더 깊이 생각하는 수업"</b>을 함께 설계해 봅니다.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3 text-sm">
+            <span class="bg-white rounded-full px-4 py-2 border shadow-sm">📅 2026. 10. 19.(월) 15:30~16:30</span>
+            <span class="bg-white rounded-full px-4 py-2 border shadow-sm">📍 조선대학교부속중학교 1층 온나누리실</span>
+            <span class="bg-white rounded-full px-4 py-2 border shadow-sm">👩‍🏫 강사: 조선대학교부속고등학교 김다은</span>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-4 mt-12 text-left">
+            <div class="content-card !mb-0 p-6">
+                <div class="text-3xl mb-2">🎯</div>
+                <h3 class="font-bold text-blue-800 mb-2 text-lg">오늘의 목표 ①</h3>
+                <p class="text-slate-600 text-sm">생성형 AI를 수업에 넣을 때의 <b>원칙과 활용 수준</b>을 이해합니다.</p>
+            </div>
+            <div class="content-card !mb-0 p-6">
+                <div class="text-3xl mb-2">🛠️</div>
+                <h3 class="font-bold text-pink-800 mb-2 text-lg">오늘의 목표 ②</h3>
+                <p class="text-slate-600 text-sm">프롬프트로 <b>지도안·학습지·루브릭·AI 튜터</b>를 직접 만들어 봅니다.</p>
+            </div>
+            <div class="content-card !mb-0 p-6">
+                <div class="text-3xl mb-2">📝</div>
+                <h3 class="font-bold text-emerald-800 mb-2 text-lg">오늘의 목표 ③</h3>
+                <p class="text-slate-600 text-sm">내 교과 <b>1차시 AI 수업 설계 캔버스</b>를 완성해 갑니다.</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- 로드맵 -->
+    <section id="roadmap" class="py-12">
+        <h2 class="section-title">🗺️ 60분 강의 로드맵</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="content-card !mb-0 p-5 border-t-4 !border-t-blue-400">
+                <span class="step-badge">15:30 · 5분</span>
+                <h3 class="text-xl text-blue-900 mt-3 mb-1">① 왜 지금, 수업 설계인가</h3>
+                <p class="text-sm text-slate-600">학생은 이미 AI를 씁니다. 교사의 설계가 차이를 만듭니다.</p>
+            </div>
+            <div class="content-card !mb-0 p-5 border-t-4 !border-t-pink-400">
+                <span class="step-badge">15:35 · 10분</span>
+                <h3 class="text-xl text-blue-900 mt-3 mb-1">② AI 수업 설계 5단계</h3>
+                <p class="text-sm text-slate-600">목표 → 활동 → AI 역할 → 검증 → 성찰, 활용 수준 신호등</p>
+            </div>
+            <div class="content-card !mb-0 p-5 border-t-4 !border-t-emerald-400">
+                <span class="step-badge">15:45 · 20분</span>
+                <h3 class="text-xl text-blue-900 mt-3 mb-1">③ 실습① 프롬프트로 설계하기</h3>
+                <p class="text-sm text-slate-600">지도안·수준별 학습지·루브릭·학생용 AI 튜터(Gem)</p>
+            </div>
+            <div class="content-card !mb-0 p-5 border-t-4 !border-t-purple-400">
+                <span class="step-badge">16:05 · 25분</span>
+                <h3 class="text-xl text-blue-900 mt-3 mb-1">④ 사례 → 실습② → 마무리</h3>
+                <p class="text-sm text-slate-600">교과별 사례(7분), 내 수업 캔버스(13분), 안전·평가·Q&A(5분)</p>
+            </div>
+        </div>
+        <div class="pro-tip mt-6">💡 <b>준비물:</b> 노트북(또는 태블릿) · 학교 Google 계정(Gemini, NotebookLM) · 다음 주에 가르칠 단원의 성취기준 1개</div>
+    </section>
+
+    <!-- 왜 -->
+    <section id="why" class="py-12">
+        <h2 class="section-title">🤔 왜 지금, '생성형 AI 수업 설계'인가?</h2>
+        <div class="grid md:grid-cols-3 gap-5">
+            <div class="content-card !mb-0">
+                <div class="card-header"><h3 class="text-xl text-blue-900">📱 학생은 이미 쓰고 있다</h3></div>
+                <div class="card-body text-slate-600 text-[0.95rem]">숙제, 검색, 글쓰기에 AI를 쓰는 학생이 많습니다. 금지만으로는 막기 어렵고, <b>"어떻게 잘 쓰는가"</b>를 수업에서 배워야 합니다.</div>
+            </div>
+            <div class="content-card !mb-0">
+                <div class="card-header"><h3 class="text-xl text-pink-900">📚 교육과정의 요구</h3></div>
+                <div class="card-body text-slate-600 text-[0.95rem]">2022 개정 교육과정은 <b>디지털 소양</b>을 언어·수리 소양과 함께 기초 소양으로 강조합니다. 모든 교과에서 다룰 수 있습니다.</div>
+            </div>
+            <div class="content-card !mb-0">
+                <div class="card-header"><h3 class="text-xl text-emerald-900">🧠 생각을 대신 vs 생각을 깊게</h3></div>
+                <div class="card-body text-slate-600 text-[0.95rem]">설계 없이 쓰면 AI가 <b>생각을 대신</b>합니다. 잘 설계하면 AI가 질문·반례·피드백을 주어 <b>생각을 깊게</b> 만듭니다.</div>
+            </div>
+        </div>
+
+        <div class="content-card mt-8">
+            <div class="card-header"><h3 class="text-xl text-blue-900">🔀 생성형 AI가 수업에 들어오는 세 가지 길</h3></div>
+            <div class="card-body grid md:grid-cols-3 gap-4">
+                <div class="rounded-2xl bg-blue-50 p-5">
+                    <p class="jua text-blue-800 text-lg">1. 교사가 AI로 <u>준비</u></p>
+                    <p class="text-sm text-slate-600 mt-1">지도안 초안, 수준별 학습지, 평가 문항, 루브릭, 예시 자료 제작</p>
+                    <p class="text-xs text-blue-600 mt-2">→ 가장 쉽고 안전한 출발점</p>
+                </div>
+                <div class="rounded-2xl bg-pink-50 p-5">
+                    <p class="jua text-pink-800 text-lg">2. 학생이 AI와 <u>함께 학습</u></p>
+                    <p class="text-sm text-slate-600 mt-1">AI 튜터, 토론 상대, 글 피드백, 역할극 인터뷰, 아이디어 확장</p>
+                    <p class="text-xs text-pink-600 mt-2">→ 교사의 안내·검증 활동이 꼭 필요</p>
+                </div>
+                <div class="rounded-2xl bg-emerald-50 p-5">
+                    <p class="jua text-emerald-800 text-lg">3. AI <u>에 대해</u> 배우기</p>
+                    <p class="text-sm text-slate-600 mt-1">AI 답의 오류 찾기, 편향 토론, 출처 확인, 저작권·윤리</p>
+                    <p class="text-xs text-emerald-600 mt-2">→ 모든 교과에서 짧게 녹일 수 있음</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 설계 5단계 -->
+    <section id="model" class="py-12">
+        <h2 class="section-title">🧩 AI 수업 설계 5단계</h2>
+        <p class="text-slate-600 -mt-6 mb-8">도구가 먼저가 아니라 <b>학습 목표가 먼저</b>입니다. AI는 3단계에서야 등장합니다.</p>
+
+        <div class="grid md:grid-cols-5 gap-3 mb-10">
+            <div class="content-card !mb-0 p-5 text-center"><div class="text-3xl">🎯</div><p class="jua text-blue-800 text-lg mt-2">1. 목표</p><p class="text-xs text-slate-500 mt-1">성취기준에서 학생이 할 수 있어야 할 것</p></div>
+            <div class="content-card !mb-0 p-5 text-center"><div class="text-3xl">🏃</div><p class="jua text-blue-800 text-lg mt-2">2. 활동</p><p class="text-xs text-slate-500 mt-1">학생이 실제로 생각하고 표현하는 활동</p></div>
+            <div class="content-card !mb-0 p-5 text-center ring-2 ring-pink-200"><div class="text-3xl">🤖</div><p class="jua text-pink-600 text-lg mt-2">3. AI 역할</p><p class="text-xs text-slate-500 mt-1">AI가 '무엇을 대신하지 않고' 돕는가</p></div>
+            <div class="content-card !mb-0 p-5 text-center"><div class="text-3xl">🔍</div><p class="jua text-blue-800 text-lg mt-2">4. 검증</p><p class="text-xs text-slate-500 mt-1">AI 결과를 학생이 확인·비판하는 장치</p></div>
+            <div class="content-card !mb-0 p-5 text-center"><div class="text-3xl">🪞</div><p class="jua text-blue-800 text-lg mt-2">5. 성찰</p><p class="text-xs text-slate-500 mt-1">무엇을 배웠고 AI는 어떻게 도왔나</p></div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-header"><h3 class="text-xl text-blue-900">🤖 3단계: AI에게 줄 수 있는 6가지 역할</h3></div>
+            <div class="card-body grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-[0.95rem]">
+                <div class="rounded-2xl border p-4"><b class="text-blue-800">🧑‍🏫 소크라테스 튜터</b><p class="text-slate-600 text-sm mt-1">정답 대신 힌트 질문으로 스스로 풀게 돕기</p></div>
+                <div class="rounded-2xl border p-4"><b class="text-blue-800">🗣️ 토론 상대</b><p class="text-slate-600 text-sm mt-1">반대 입장·반례를 제시해 주장을 단단하게</p></div>
+                <div class="rounded-2xl border p-4"><b class="text-blue-800">✍️ 피드백 도우미</b><p class="text-slate-600 text-sm mt-1">루브릭 기준으로 초안에 대한 개선 의견 제시</p></div>
+                <div class="rounded-2xl border p-4"><b class="text-blue-800">🎭 역할극 인물</b><p class="text-slate-600 text-sm mt-1">역사 인물·과학자·작품 속 인물 인터뷰</p></div>
+                <div class="rounded-2xl border p-4"><b class="text-blue-800">💡 아이디어 확장기</b><p class="text-sm text-slate-600 mt-1">모둠 아이디어를 넓히고 분류·비교</p></div>
+                <div class="rounded-2xl border p-4"><b class="text-pink-700">🐞 오류 찾기 대상</b><p class="text-slate-600 text-sm mt-1">AI 답 속의 틀린 점을 찾는 '팩트체커' 활동</p></div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-header"><h3 class="text-xl text-blue-900">🚦 AI 활용 수준 신호등 — 수업마다 학생에게 먼저 알려 주세요</h3></div>
+            <div class="card-body grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="level-card border-slate-200 bg-slate-50"><p class="jua text-lg text-slate-700">⚪ 0단계 · AI 없이</p><p class="text-sm text-slate-600 mt-1">스스로 생각하는 힘을 기르는 활동. 지필·서술 평가 등</p></div>
+                <div class="level-card border-emerald-200 bg-emerald-50"><p class="jua text-lg text-emerald-700">🟢 1단계 · 교사 준비</p><p class="text-sm text-slate-600 mt-1">교사가 AI로 자료를 만들고 학생은 AI를 직접 쓰지 않음</p></div>
+                <div class="level-card border-amber-200 bg-amber-50"><p class="jua text-lg text-amber-700">🟡 2단계 · 함께 보기</p><p class="text-sm text-slate-600 mt-1">교사가 화면으로 AI를 시연하고 학생과 결과를 검토</p></div>
+                <div class="level-card border-pink-200 bg-pink-50"><p class="jua text-lg text-pink-700">🔴 3단계 · 학생 활용</p><p class="text-sm text-slate-600 mt-1">학생이 직접(모둠) 사용. 사용 기록·검증·성찰 필수</p></div>
+            </div>
+            <div class="px-8 pb-6"><div class="pro-tip">💡 중학생은 서비스별 <b>이용 연령·약관</b>을 먼저 확인해야 합니다. 3단계가 어렵다면 <b>2단계(교사 시연)</b>만으로도 충분히 좋은 AI 수업이 됩니다.</div></div>
+        </div>
+    </section>
+
+    <!-- 실습 1 -->
+    <section id="lab1" class="py-12">
+        <h2 class="section-title">🛠️ 실습① 프롬프트로 수업 설계하기</h2>
+        <p class="text-slate-600 -mt-6 mb-6">[대괄호] 부분만 내 수업에 맞게 바꾸고 <b>Gemini</b>(또는 ChatGPT)에 붙여 넣으세요.</p>
+
+        <div class="content-card">
+            <div class="card-header"><h3 class="text-xl text-blue-900 flex flex-wrap items-center gap-2">📐 좋은 수업 설계 프롬프트의 4요소</h3></div>
+            <div class="card-body grid sm:grid-cols-4 gap-3 text-center text-sm">
+                <div class="rounded-2xl bg-blue-50 p-4"><p class="jua text-blue-800 text-lg">역할</p><p class="text-slate-600">"중학교 과학 수업 설계 전문가"</p></div>
+                <div class="rounded-2xl bg-pink-50 p-4"><p class="jua text-pink-800 text-lg">맥락</p><p class="text-slate-600">학년·단원·성취기준·학생 특성</p></div>
+                <div class="rounded-2xl bg-emerald-50 p-4"><p class="jua text-emerald-800 text-lg">조건</p><p class="text-slate-600">45분, 모둠 4명, AI 활용 수준</p></div>
+                <div class="rounded-2xl bg-purple-50 p-4"><p class="jua text-purple-800 text-lg">형식</p><p class="text-slate-600">표, 번호 목록, 분량 지정</p></div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-5 no-print" id="labTabs">
+            <button class="tab-btn active" data-tab="t1">① 지도안 초안</button>
+            <button class="tab-btn" data-tab="t2">② 수준별 학습지</button>
+            <button class="tab-btn" data-tab="t3">③ 루브릭</button>
+            <button class="tab-btn" data-tab="t4">④ 학생용 AI 튜터(Gem)</button>
+            <button class="tab-btn" data-tab="t5">⑤ NotebookLM 단원 분석</button>
+            <button class="tab-btn" data-tab="t6">⑥ AI 팩트체커 자료</button>
+        </div>
+
+        <div class="tab-panel content-card" id="t1">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">Gemini</span><h3 class="text-xl text-blue-900">① 1차시 수업 지도안 초안 만들기</h3></div>
+            <div class="card-body">
+<div class="prompt-block"><span class="label">PROMPT</span><button class="copy-button">복사</button>너는 중학교 [교과] 수업 설계 전문가야.
+아래 조건으로 1차시(45분) 수업 지도안 초안을 만들어 줘.
+
+- 학년/단원: 중학교 [학년] [단원명]
+- 성취기준: [성취기준 코드와 내용]
+- 학생 특성: [예: 발표를 어려워함, 학생 간 수준 차이가 큼]
+- 생성형 AI 활용 수준: [1단계 교사 준비 / 2단계 교사 시연 / 3단계 학생 모둠 사용]
+
+출력 형식:
+1) 학습 목표 2개 (학생이 '~할 수 있다' 형태)
+2) 도입-전개-정리 표 (시간 | 교사 활동 | 학생 활동 | AI의 역할)
+3) 학생이 AI 결과를 검증하는 활동 1개
+4) 과정 중심 평가 관찰 포인트 3개
+AI가 학생의 생각을 대신하지 않도록 설계해 줘.</div>
+                <div class="pro-tip mt-4">💡 결과가 마음에 들지 않으면 처음부터 다시 쓰지 말고 <b>"전개 활동을 모둠 토의 중심으로 바꿔 줘"</b>처럼 이어서 고쳐 달라고 하세요.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel content-card hidden" id="t2">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">Gemini</span><h3 class="text-xl text-blue-900">② 수준별(3단계) 학습지 만들기</h3></div>
+            <div class="card-body">
+<div class="prompt-block"><span class="label">PROMPT</span><button class="copy-button">복사</button>중학교 [학년] [교과] '[학습 주제]' 수업용 학습지를 3가지 수준으로 만들어 줘.
+
+- 기본(★): 핵심 개념 확인, 빈칸 채우기와 짧은 답
+- 보통(★★): 개념을 적용하는 문제, 이유 쓰기
+- 도전(★★★): 실생활 상황에 적용하거나 스스로 질문 만들기
+
+조건:
+- 수준별 문항 4개씩, 학생용 문장은 중학생 눈높이로
+- 마지막 문항은 공통으로 "오늘 배운 내용을 한 문장으로 정리하기"
+- 정답과 채점 기준은 맨 아래에 따로 정리
+- 한글(HWP)에 붙여 넣기 좋게 표 없이 번호 목록으로</div>
+                <div class="pro-tip mt-4">💡 같은 학습 목표를 유지하면서 <b>접근 방법만 다르게</b> 해 달라고 하면, 느린 학습자도 같은 목표에 도달하도록 도울 수 있습니다.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel content-card hidden" id="t3">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">Gemini</span><h3 class="text-xl text-blue-900">③ 과정 중심 평가 루브릭 만들기</h3></div>
+            <div class="card-body">
+<div class="prompt-block"><span class="label">PROMPT</span><button class="copy-button">복사</button>중학교 [교과] 수행평가 '[과제명]'의 채점 루브릭을 표로 만들어 줘.
+
+- 평가 요소 4개: [예: 내용 이해, 근거 활용, 표현, AI 활용의 적절성]
+- 수준 3단계: 잘함 / 보통 / 노력 필요
+- 각 칸에는 관찰 가능한 행동으로 1~2문장
+- 'AI 활용의 적절성'에는 AI 결과를 검증했는지, 사용 사실을 밝혔는지,
+  자신의 생각을 덧붙였는지를 포함해 줘.
+- 표 아래에 학생에게 안내할 쉬운 말 버전 체크리스트(5개)도 만들어 줘.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel content-card hidden" id="t4">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">Gemini · Gems</span><h3 class="text-xl text-blue-900">④ 정답을 바로 알려주지 않는 '생각 코치' 만들기</h3></div>
+            <div class="card-body">
+                <ol class="list-decimal pl-6 text-slate-700 mb-4 space-y-1 text-[0.95rem]">
+                    <li>Gemini 왼쪽 메뉴 <b>Gem 관리자 → 새 Gem</b></li>
+                    <li>이름: 예) <b>"수학 생각 코치"</b>, 아래 지침을 <b>요청 사항(안내)</b> 칸에 붙여 넣기</li>
+                    <li>오른쪽 미리보기에서 학생처럼 질문해 보며 테스트 → 저장</li>
+                </ol>
+<div class="prompt-block"><span class="label">GEM 지침</span><button class="copy-button">복사</button>너는 중학교 [교과] '생각 코치'야. 오늘 수업 주제는 [주제]야.
+
+- 학생이 질문하면 정답을 바로 알려주지 말고, 힌트가 되는 질문을 한 번에 1개씩 해.
+- 학생 답에서 맞은 부분을 먼저 구체적으로 칭찬하고, 틀린 부분은 스스로 찾도록 유도해.
+- 학생이 3번 시도해도 어려워하면 풀이의 첫 단계만 보여 줘.
+- 중학생 눈높이의 쉬운 말로, 한 번에 3문장 이내로 답해.
+- 이름, 학번, 연락처 등 개인정보는 묻지도 받지도 마.
+- 수업 주제와 관계없는 질문에는 "그건 선생님께 여쭤보자!"라고 안내해.
+- 대화 마지막에는 "오늘 새로 알게 된 것 한 가지"를 학생에게 물어봐.</div>
+                <div class="pro-tip mt-4">💡 학생에게 공유하기 전, <b>학교 계정 정책과 학생 이용 연령</b>을 확인하세요. 어렵다면 교사가 화면에 띄워 학급 전체가 함께 대화하는 <b>2단계 방식</b>으로 활용해도 효과가 좋습니다.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel content-card hidden" id="t5">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">NotebookLM</span><h3 class="text-xl text-blue-900">⑤ 교과서·성취기준 기반 단원 분석</h3></div>
+            <div class="card-body">
+                <p class="text-slate-700 mb-4 text-[0.95rem]"><b>소스 추가:</b> 교과서 단원 PDF, 교육과정 성취기준 해설, 내가 만든 지난 학습지 → 근거가 있는 답변을 받을 수 있어 <b>환각(거짓 정보)이 줄어듭니다.</b></p>
+<div class="prompt-block"><span class="label">PROMPT</span><button class="copy-button">복사</button>업로드한 소스를 바탕으로 이 단원을 분석해 줘.
+
+1) 학생이 꼭 알아야 할 핵심 개념 5개 (소스 위치 표시)
+2) 중학생이 이 단원에서 흔히 가지는 오개념 3개와 바로잡는 질문
+3) 성취기준과 연결되는 탐구 질문 3개
+4) 생성형 AI를 활용하면 좋은 활동 1개와, AI 없이 하는 것이 좋은 활동 1개
+소스에 없는 내용은 '소스에 없음'이라고 표시해 줘.</div>
+                <div class="pro-tip mt-4">💡 NotebookLM의 <b>오디오 개요·마인드맵</b> 기능으로 단원 도입 자료를 만들 수도 있습니다. 학생에게 쓰기 전에 반드시 한 번 들어 보고 확인하세요.</div>
+            </div>
+        </div>
+
+        <div class="tab-panel content-card hidden" id="t6">
+            <div class="card-header flex flex-wrap items-center gap-3"><span class="step-badge">Gemini</span><h3 class="text-xl text-blue-900">⑥ 'AI 팩트체커' 활동지 만들기</h3></div>
+            <div class="card-body">
+<div class="prompt-block"><span class="label">PROMPT</span><button class="copy-button">복사</button>중학교 [학년] [교과] '[주제]'에 대한 설명문을 300자 정도로 써 줘.
+단, 중학생이 교과서를 보고 찾을 수 있는 오류를 일부러 3개 넣어 줘.
+(사실 오류 1개, 개념 혼동 1개, 근거 없는 일반화 1개)
+
+출력:
+[학생용] 설명문만
+[교사용] 오류 3개의 위치, 왜 틀렸는지, 바른 내용</div>
+                <div class="pro-tip mt-4">💡 학생 활동: "AI도 틀린다" → 모둠별로 오류를 찾고 <b>교과서·자료로 근거를 대서</b> 고쳐 쓰기. 비판적 사고와 AI 리터러시를 동시에 기릅니다.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 교과별 사례 -->
+    <section id="cases" class="py-12">
+        <h2 class="section-title">🏫 교과별 생성형 AI 수업 아이디어</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">📖 국어</h3></div><div class="card-body text-sm text-slate-600"><p><b>AI가 쓴 주장하는 글 평가하기</b></p><p class="mt-1">AI 글의 근거가 타당한지 모둠별로 따져 보고, 더 설득력 있게 고쳐 쓰기</p><p class="mt-3 text-xs"><span class="bg-amber-100 text-amber-700 rounded-full px-2 py-0.5">🟡 2단계</span> AI 역할: 오류 찾기 대상</p></div></div>
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">➗ 수학</h3></div><div class="card-body text-sm text-slate-600"><p><b>AI 풀이의 오류 찾기 / 생각 코치</b></p><p class="mt-1">AI가 틀리게 푼 풀이를 찾아 고치고, 생각 코치 Gem과 힌트 대화로 풀어 보기</p><p class="mt-3 text-xs"><span class="bg-pink-100 text-pink-700 rounded-full px-2 py-0.5">🔴 3단계</span> AI 역할: 소크라테스 튜터</p></div></div>
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">🔬 과학</h3></div><div class="card-body text-sm text-slate-600"><p><b>AI 예측 vs 실제 실험</b></p><p class="mt-1">실험 전 AI에게 결과를 예측하게 하고, 실제 결과와 비교해 차이의 이유 탐구</p><p class="mt-3 text-xs"><span class="bg-amber-100 text-amber-700 rounded-full px-2 py-0.5">🟡 2단계</span> AI 역할: 토론 상대</p></div></div>
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">🌏 사회·역사</h3></div><div class="card-body text-sm text-slate-600"><p><b>역사 인물 인터뷰 + 사료 검증</b></p><p class="mt-1">AI가 연기하는 인물에게 질문하고, 대답이 사료와 맞는지 확인해 '사실/추측' 분류</p><p class="mt-3 text-xs"><span class="bg-amber-100 text-amber-700 rounded-full px-2 py-0.5">🟡 2단계</span> AI 역할: 역할극 인물</p></div></div>
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">🗽 영어</h3></div><div class="card-body text-sm text-slate-600"><p><b>상황별 롤플레이 대화</b></p><p class="mt-1">식당·길 찾기 상황에서 AI와 대화 연습 후, 표현 피드백을 받아 다시 말하기</p><p class="mt-3 text-xs"><span class="bg-pink-100 text-pink-700 rounded-full px-2 py-0.5">🔴 3단계</span> AI 역할: 역할극·피드백</p></div></div>
+            <div class="content-card !mb-0"><div class="card-header"><h3 class="text-xl text-blue-900">🎨 예체능·기술가정</h3></div><div class="card-body text-sm text-slate-600"><p><b>AI 디자인 시안 → 저작권 토론</b></p><p class="mt-1">이미지 생성 결과를 참고 시안으로만 쓰고 직접 제작. "AI 그림의 주인은 누구?" 토론</p><p class="mt-3 text-xs"><span class="bg-emerald-100 text-emerald-700 rounded-full px-2 py-0.5">🟢 1~2단계</span> AI 역할: 아이디어 확장기</p></div></div>
+        </div>
+    </section>
+
+    <!-- 실습 2: 캔버스 -->
+    <section id="lab2" class="py-12">
+        <h2 class="section-title">📝 실습② 내 수업 설계 캔버스</h2>
+        <p class="text-slate-600 -mt-6 mb-6">칸을 채우고 <b>[프롬프트 만들기]</b>를 누르면 Gemini에 바로 붙여 넣을 수 있는 설계 프롬프트가 완성됩니다. 입력 내용은 이 브라우저에만 저장됩니다.</p>
+
+        <div class="content-card">
+            <div class="card-body grid md:grid-cols-2 gap-5" id="canvas">
+                <div class="canvas-field"><label>교과 · 학년</label><input id="c-subject" placeholder="예) 과학 · 중학교 2학년"></div>
+                <div class="canvas-field"><label>단원 · 차시 주제</label><input id="c-unit" placeholder="예) 물질의 구성 - 원소와 원자"></div>
+                <div class="canvas-field md:col-span-2"><label>🎯 1. 목표 (성취기준)</label><textarea id="c-goal" rows="2" placeholder="예) [9과05-01] 물질을 구성하는 기본 성분인 원소의 개념을 설명할 수 있다."></textarea></div>
+                <div class="canvas-field md:col-span-2"><label>🏃 2. 핵심 학생 활동</label><textarea id="c-activity" rows="2" placeholder="예) 모둠별로 생활 속 물질을 원소/화합물로 분류하고 근거 발표"></textarea></div>
+                <div class="canvas-field"><label>🤖 3. AI 역할</label>
+                    <select id="c-role">
+                        <option>소크라테스 튜터</option><option>토론 상대</option><option>피드백 도우미</option>
+                        <option>역할극 인물</option><option>아이디어 확장기</option><option>오류 찾기 대상(팩트체커)</option>
+                    </select></div>
+                <div class="canvas-field"><label>🚦 AI 활용 수준</label>
+                    <select id="c-level">
+                        <option>1단계 · 교사 준비</option><option selected>2단계 · 교사 시연(함께 보기)</option><option>3단계 · 학생 모둠 활용</option>
+                    </select></div>
+                <div class="canvas-field"><label>🔍 4. 검증 장치</label><textarea id="c-check" rows="2" placeholder="예) 교과서 p.○○와 비교해 AI 분류 결과의 오류 찾기"></textarea></div>
+                <div class="canvas-field"><label>🪞 5. 성찰 질문</label><textarea id="c-reflect" rows="2" placeholder="예) AI의 답 중 믿을 수 없었던 부분은? 그 이유는?"></textarea></div>
+                <div class="md:col-span-2 flex flex-wrap gap-2 no-print">
+                    <button onclick="buildPrompt()" class="jua px-5 py-2.5 rounded-full text-white bg-gradient-to-r from-blue-500 to-pink-400 hover:scale-105 transition">✨ 프롬프트 만들기</button>
+                    <button onclick="window.print()" class="jua px-5 py-2.5 rounded-full bg-white border hover:bg-slate-50">🖨️ 인쇄 / PDF 저장</button>
+                    <button onclick="resetCanvas()" class="jua px-5 py-2.5 rounded-full bg-white border hover:bg-slate-50 text-slate-500">↺ 초기화</button>
+                </div>
+                <div class="md:col-span-2 hidden" id="genWrap">
+<div class="prompt-block"><span class="label">내 수업 설계 프롬프트</span><button class="copy-button">복사</button><span id="genPrompt"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pro-tip">💡 <b>짝 피드백 (3분):</b> 옆 선생님의 캔버스를 보고 "AI가 학생의 생각을 <u>대신</u>하는 부분은 없는가?" 한 가지만 질문해 주세요.</div>
+    </section>
+
+    <!-- 안전·평가 -->
+    <section id="safety" class="py-12">
+        <h2 class="section-title">🛡️ 안전·윤리·평가 체크리스트</h2>
+        <div class="grid md:grid-cols-2 gap-5">
+            <div class="content-card !mb-0">
+                <div class="card-header"><h3 class="text-xl text-blue-900">✅ 수업 전 체크</h3></div>
+                <div class="card-body space-y-2 text-[0.95rem]">
+                    <label class="check-item"><input type="checkbox"><span>서비스 <b>이용 연령·약관</b>, 학교 계정 정책을 확인했다 (만 14세 미만 개인정보는 보호자 동의 필요)</span></label>
+                    <label class="check-item"><input type="checkbox"><span>학생 <b>이름·성적·상담 내용 등 개인정보</b>를 AI에 입력하지 않도록 안내했다</span></label>
+                    <label class="check-item"><input type="checkbox"><span>오늘의 <b>AI 활용 수준(신호등)</b>을 학생에게 미리 알렸다</span></label>
+                    <label class="check-item"><input type="checkbox"><span>접속 오류에 대비한 <b>대안 활동(인쇄 자료)</b>을 준비했다</span></label>
+                    <label class="check-item"><input type="checkbox"><span>교사가 먼저 프롬프트를 실행해 <b>결과를 검토</b>했다</span></label>
+                </div>
+            </div>
+            <div class="content-card !mb-0">
+                <div class="card-header"><h3 class="text-xl text-pink-900">📊 AI 시대의 평가</h3></div>
+                <div class="card-body text-[0.95rem] text-slate-700 space-y-3">
+                    <p><b class="text-pink-700">결과보다 과정</b> — 최종 산출물보다 질문 기록, 수정 이력, 검증 메모를 평가</p>
+                    <p><b class="text-pink-700">AI 사용 표기</b> — "어떤 AI에게, 무엇을 물었고, 무엇을 고쳤는지" 한 줄 기록</p>
+                    <p><b class="text-pink-700">수업 중 수행</b> — 핵심 평가는 수업 시간 안에, 교사가 관찰 가능한 방식으로</p>
+                    <p><b class="text-pink-700">AI 없는 단계 병행</b> — 0단계 활동으로 학생 고유의 생각을 확인</p>
+                    <div class="rounded-2xl bg-slate-50 p-4 text-sm">
+                        <p class="jua text-slate-700">📌 AI 사용 기록 예시</p>
+                        <p class="text-slate-600">"Gemini에게 '광합성 조건'을 물었고, 답의 '빛이 없어도 된다'는 부분이 틀려 교과서 p.112로 고쳤다."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 마무리 -->
+    <section class="py-12">
+        <div class="rounded-[2rem] bg-gradient-to-br from-blue-900 to-blue-700 text-white p-8 md:p-12 text-center relative overflow-hidden">
+            <h3 class="text-3xl md:text-4xl mb-6 text-blue-100">AI는 수업의 주인공이 아니라, 생각을 깨우는 조연입니다</h3>
+            <div class="grid md:grid-cols-3 gap-4 text-left max-w-4xl mx-auto">
+                <div class="bg-white/10 rounded-2xl p-5"><p class="jua text-xl text-pink-200">1. 목표가 먼저</p><p class="text-sm text-blue-100 mt-1">도구가 아니라 성취기준에서 출발하기</p></div>
+                <div class="bg-white/10 rounded-2xl p-5"><p class="jua text-xl text-pink-200">2. 검증은 필수</p><p class="text-sm text-blue-100 mt-1">AI의 답은 '정답'이 아니라 '검토할 자료'</p></div>
+                <div class="bg-white/10 rounded-2xl p-5"><p class="jua text-xl text-pink-200">3. 작게 시작</p><p class="text-sm text-blue-100 mt-1">다음 주 1차시, 1단계(교사 준비)부터</p></div>
+            </div>
+            <p class="mt-8 text-blue-200 text-sm">질문과 나눔 환영합니다 🌸 · 조선대학교부속고등학교 정보 교사 김다은</p>
+        </div>
+    </section>
+
+    <!-- 용어 -->
+    <section class="py-8">
+        <h2 class="section-title">📖 알아 두면 좋은 용어</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-blue-800 mb-1">생성형 AI</h3><p class="text-slate-600">글·그림·소리 등 새로운 결과물을 만들어 내는 AI (Gemini, ChatGPT 등)</p></div>
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-pink-800 mb-1">프롬프트</h3><p class="text-slate-600">AI에게 주는 지시문. 역할·맥락·조건·형식을 담을수록 결과가 좋아짐</p></div>
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-emerald-800 mb-1">환각 (Hallucination)</h3><p class="text-slate-600">AI가 그럴듯하지만 사실이 아닌 내용을 만들어 내는 현상</p></div>
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-purple-800 mb-1">NotebookLM</h3><p class="text-slate-600">내가 올린 자료(소스)만 근거로 답하는 Google의 AI 노트</p></div>
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-amber-800 mb-1">Gems</h3><p class="text-slate-600">지침을 미리 넣어 둔 나만의 맞춤 Gemini (예: 생각 코치)</p></div>
+            <div class="content-card !mb-0 p-5"><h3 class="font-bold text-slate-800 mb-1">AI 리터러시</h3><p class="text-slate-600">AI를 이해하고, 비판적으로 평가하며, 책임 있게 활용하는 능력</p></div>
+        </div>
+    </section>
+</main>
+
+<footer class="text-center text-xs text-slate-400 pb-10">2026학년도 AI중점학교 교원역량 강화 연수 · 생성형 AI 수업 설계</footer>
+<div id="toast">복사되었습니다 ✨</div>
+
+<script>
+    if (window.lucide) lucide.createIcons();
+
+    // 글자 크기
+    function setFont(cls) {
+        document.documentElement.classList.remove('font-lg', 'font-xl');
+        if (cls) document.documentElement.classList.add(cls);
+        try { localStorage.setItem('aiDesignFont', cls); } catch (e) {}
+    }
+    try { const f = localStorage.getItem('aiDesignFont'); if (f) setFont(f); } catch (e) {}
+
+    // 복사
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 1600);
+    }
+    function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); ta.remove();
+        return Promise.resolve();
+    }
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('.copy-button');
+        if (!btn) return;
+        const block = btn.closest('.prompt-block');
+        const clone = block.cloneNode(true);
+        clone.querySelectorAll('.copy-button, .label').forEach(el => el.remove());
+        copyText(clone.textContent.trim()).then(() => {
+            btn.textContent = '완료!'; btn.classList.add('done');
+            showToast('프롬프트가 복사되었습니다 ✨');
+            setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('done'); }, 1500);
+        });
+    });
+
+    // 실습 탭
+    document.querySelectorAll('#labTabs .tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#labTabs .tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(btn.dataset.tab).classList.remove('hidden');
+        });
+    });
+
+    // 캔버스 저장/복원
+    const fields = ['c-subject', 'c-unit', 'c-goal', 'c-activity', 'c-role', 'c-level', 'c-check', 'c-reflect'];
+    const val = id => document.getElementById(id).value.trim();
+    function saveCanvas() {
+        try { localStorage.setItem('aiDesignCanvas', JSON.stringify(Object.fromEntries(fields.map(id => [id, document.getElementById(id).value])))); } catch (e) {}
+    }
+    try {
+        const saved = JSON.parse(localStorage.getItem('aiDesignCanvas') || '{}');
+        fields.forEach(id => { if (saved[id]) document.getElementById(id).value = saved[id]; });
+    } catch (e) {}
+    fields.forEach(id => document.getElementById(id).addEventListener('input', saveCanvas));
+
+    function buildPrompt() {
+        const or = (v, d) => v || d;
+        const text =
+`너는 중학교 수업 설계 전문가야. 아래 '수업 설계 캔버스'를 바탕으로 45분 1차시 수업 지도안을 만들어 줘.
+
+- 교과·학년: ${or(val('c-subject'), '[교과·학년]')}
+- 단원·주제: ${or(val('c-unit'), '[단원·주제]')}
+- 목표(성취기준): ${or(val('c-goal'), '[성취기준]')}
+- 핵심 학생 활동: ${or(val('c-activity'), '[학생 활동]')}
+- AI 역할: ${val('c-role')}
+- AI 활용 수준: ${val('c-level')}
+- 검증 장치: ${or(val('c-check'), '[검증 활동]')}
+- 성찰 질문: ${or(val('c-reflect'), '[성찰 질문]')}
+
+출력 형식:
+1) 학습 목표 2개
+2) 도입-전개-정리 표 (시간 | 교사 활동 | 학생 활동 | AI의 역할)
+3) AI 활용 시 학생 안내 문구 (개인정보 입력 금지, 사용 기록 방법 포함)
+4) 과정 중심 평가 관찰 포인트 3개
+AI가 학생의 생각을 대신하지 않도록, 학생이 먼저 생각한 뒤 AI를 쓰는 순서로 설계해 줘.`;
+        document.getElementById('genPrompt').textContent = text;
+        document.getElementById('genWrap').classList.remove('hidden');
+        document.getElementById('genWrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        saveCanvas();
+    }
+    function resetCanvas() {
+        if (!confirm('입력한 내용을 모두 지울까요?')) return;
+        fields.forEach(id => { const el = document.getElementById(id); el.tagName === 'SELECT' ? el.selectedIndex = (id === 'c-level' ? 1 : 0) : el.value = ''; });
+        document.getElementById('genWrap').classList.add('hidden');
+        saveCanvas();
+    }
+
+    // 현재 섹션 하이라이트
+    const links = [...document.querySelectorAll('#navLinks a')];
+    const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (en.isIntersecting) links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + en.target.id));
+        });
+    }, { rootMargin: '-40% 0px -55% 0px' });
+    links.forEach(l => { const s = document.querySelector(l.getAttribute('href')); if (s) io.observe(s); });
+</script>
+</body>
+</html>
