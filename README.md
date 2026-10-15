@@ -20,6 +20,8 @@ Gemini Canvas로 수업용 웹페이지를 만들고 링크로 공유하는 35�
 |------|------|
 | `app.py` | Streamlit 실행 파일 (`htmls/index.html`을 화면에 표시) |
 | `htmls/index.html` | 실습 웹페이지 (탭 1~6 + 심화) |
+| `materials/AI_lesson_slides.pdf` | 발표 슬라이드 (16:9, 8장) |
+| `materials/slides_src.html`, `materials/build_slides.py` | 슬라이드 원본과 PDF 생성 스크립트 |
 | `materials/AI_lesson_design_script.pdf` | 강의 원고 (A4 8쪽, 강의 멘트 포함) |
 | `materials/lecture_print.html` | 강의 원고 PDF 원본 |
 
