@@ -1,23 +1,29 @@
-# 생성형 AI 수업 설계 — 중학교 선생님 실습 가이드
+# ✨ LINKFORGE for Teachers — Gemini로 수업용 웹페이지 만들기
 
-2026학년도 AI중점학교 교원역량 강화 연수 (조선대학교부속중학교, 2026.10.19.) 실습용 웹 자료입니다.
+2026학년도 AI중점학교 교원역량 강화 연수(조선대학교부속중학교, 2026.10.19.) 실습용 웹 자료입니다.
+학생 웹앱 수업 자료([webapp](https://github.com/richee-pc/webapp))를 교사 연수용(35분 내외)으로 재구성했습니다.
+
+## 연수 흐름 (35분)
+
+1. 오늘 할 일 — 완성 예시, 왜 수업용 웹페이지인가 (5분)
+2. 아이디어 — 퀴즈·개념 카드·시뮬레이션·활동 안내·수업 도구·출구티켓 (5분)
+3. 프롬프트 — 빈칸을 채우면 부탁문 자동 완성 (3분)
+4. 화면 만들기 — Gemini Canvas로 생성, 고치기 부탁문으로 수정 (14분)
+5. 공유하기 — Canvas 공유 링크 → QR 만들기 (3분)
+6. 수업 적용·주의사항, 심화(GitHub + Streamlit 배포) 안내 (5분)
 
 ## 구성
 
 | 경로 | 설명 |
 |------|------|
 | `app.py` | Streamlit 실행 파일 (`htmls/index.html`을 화면에 표시) |
-| `htmls/index.html` | 실습 웹페이지 (설계 5단계, 프롬프트 복사, 교과별 사례, 수업 설계 캔버스) |
+| `htmls/index.html` | 실습 웹페이지 (탭 1~6 + 심화) |
 | `materials/AI_lesson_design_script.pdf` | 강의 원고 (A4 8쪽, 강의 멘트 포함) |
 | `materials/lecture_print.html` | 강의 원고 PDF 원본 |
 
 ## 실행
 
 ```bash
-pip install streamlit
+pip install -r requirements.txt
 streamlit run app.py
 ```
-
-## 강의 원고 PDF 재생성
-
-Chrome에서 `materials/lecture_print.html`을 열고 인쇄 → PDF로 저장(여백 없음, 배경 그래픽 켜기)하거나 headless Chrome의 `--print-to-pdf`를 사용합니다.

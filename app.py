@@ -4,8 +4,8 @@ import os
 
 # 1. 페이지 기본 설정 (브라우저 탭 이름, 아이콘, 레이아웃)
 st.set_page_config(
-    page_title="생성형 AI 수업 설계: 중학교 선생님 실습 가이드",
-    page_icon="🌸",
+    page_title="LINKFORGE for Teachers — Gemini로 수업용 웹페이지 만들기",
+    page_icon="✨",
     layout="wide"
 )
 
