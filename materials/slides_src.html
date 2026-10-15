@@ -9,30 +9,30 @@
     @page { size: 1280px 720px; margin: 0; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-        --or: #f97316; --or-d: #c2410c; --or-l: #fff7ed; --or-b: #fed7aa;
-        --sky-d: #0369a1; --sky-l: #f0f9ff; --sky-b: #bae6fd;
-        --mint-d: #047857; --mint-l: #ecfdf5; --mint-b: #a7f3d0;
-        --pink: #db2777; --pink-l: #fdf2f8; --pink-b: #fbcfe8;
-        --ink: #1f2937; --muted: #6b7280;
+        /* 감 주황 */  --or: #d9622b; --or-d: #b04c1d; --or-l: #fbebe0; --or-b: #f0d3bf;
+        /* 솔잎 초록 */ --sky-d: #4f7f5f; --sky-l: #e8f0e6; --sky-b: #cddfc8;
+        /* 머스터드 */  --mint-d: #9a6b0f; --mint-l: #fbf1d9; --mint-b: #f0dcaa;
+        /* 벽돌 */      --pink: #a8432f; --pink-l: #f8e6e0; --pink-b: #ebc8bd;
+        --ink: #2f2a25; --muted: #7a6f64; --line: #ece1d1; --bg: #fbf6ee;
     }
     body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; color: var(--ink); word-break: keep-all; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .slide { width: 1280px; height: 720px; position: relative; overflow: hidden; page-break-after: always; padding: 64px 76px 56px;
-        background: radial-gradient(ellipse 55% 45% at 0% 0%, rgba(253,186,116,.30), transparent 60%), radial-gradient(ellipse 45% 40% at 100% 0%, rgba(125,211,252,.28), transparent 55%), radial-gradient(ellipse 40% 35% at 50% 110%, rgba(167,243,208,.22), transparent 60%), #fffdfb; }
+        background: var(--bg); }
     .slide:last-child { page-break-after: auto; }
-    .slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #fb923c, #f472b6, #38bdf8); }
+    .slide::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: var(--or); }
     .brand { position: absolute; top: 28px; left: 76px; font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: .18em; font-size: 15px; color: var(--or); }
-    .pno { position: absolute; bottom: 24px; right: 76px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; color: #9ca3af; }
-    .pfoot { position: absolute; bottom: 24px; left: 76px; font-size: 14px; color: #9ca3af; }
+    .pno { position: absolute; bottom: 24px; right: 76px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; color: #a89c8f; }
+    .pfoot { position: absolute; bottom: 24px; left: 76px; font-size: 14px; color: #a89c8f; }
 
-    .kicker { display: inline-block; font-size: 17px; font-weight: 800; color: var(--sky-d); background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: 99px; padding: 5px 16px; margin-bottom: 14px; }
+    .kicker { display: inline-block; font-size: 17px; font-weight: 800; color: var(--sky-d); background: #e8f0e6; border: 1px solid #a9c7a6; border-radius: 99px; padding: 5px 16px; margin-bottom: 14px; }
     h2 { font-size: 44px; font-weight: 800; letter-spacing: -.02em; line-height: 1.25; margin-bottom: 8px; }
     h2 .no { font-family: 'Outfit', sans-serif; color: var(--or); margin-right: 12px; }
     .sub { font-size: 21px; color: var(--muted); margin-bottom: 30px; }
-    .acc { color: #ea580c; }
+    .acc { color: #d9622b; }
 
     .grid { display: grid; gap: 18px; }
     .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); } .g5 { grid-template-columns: repeat(5, 1fr); }
-    .box { background: white; border: 1.5px solid var(--or-b); border-radius: 22px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(249,115,22,.07); }
+    .box { background: white; border: 1.5px solid var(--or-b); border-radius: 22px; padding: 22px 24px; box-shadow: 0 10px 28px rgba(74,52,30,.05); }
     .box .t { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
     .box p { font-size: 18px; color: var(--muted); line-height: 1.5; }
     .c-or { background: var(--or-l); } .c-or .t { color: var(--or-d); }
@@ -42,7 +42,7 @@
     .center { text-align: center; }
     .em { font-size: 40px; line-height: 1.2; margin-bottom: 6px; }
     .n { display: inline-flex; width: 34px; height: 34px; border-radius: 50%; background: var(--or); color: white; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 18px; align-items: center; justify-content: center; }
-    .arrow { position: absolute; right: -17px; top: 50%; transform: translateY(-50%); color: #fdba74; font-size: 22px; font-weight: 800; }
+    .arrow { position: absolute; right: -17px; top: 50%; transform: translateY(-50%); color: #e3a92f; font-size: 22px; font-weight: 800; }
 
     ol.steps { padding-left: 30px; font-size: 21px; line-height: 1.55; } ol.steps li { margin-bottom: 8px; } ol.steps li::marker { color: var(--or); font-weight: 800; }
     ul.dots { list-style: none; font-size: 20px; line-height: 1.5; } ul.dots li { position: relative; padding-left: 26px; margin-bottom: 10px; }
@@ -51,33 +51,33 @@
     .muted { color: var(--muted); }
     code { background: var(--or-l); color: var(--or-d); padding: 1px 8px; border-radius: 6px; font-size: .9em; font-family: Consolas, 'Pretendard', monospace; }
 
-    .prompt { background: #1f2937; color: #f3f4f6; border-radius: 20px; padding: 22px 26px; font-size: 16.5px; line-height: 1.6; white-space: pre-wrap; font-family: 'Pretendard', sans-serif; }
-    .prompt .lb { display: block; color: #fdba74; font-weight: 800; font-size: 17px; margin-bottom: 6px; }
-    .prompt .ph { color: #7dd3fc; }
-    .prompt .hd { color: #fdba74; font-weight: 700; }
+    .prompt { background: #33291f; color: #f3f4f6; border-radius: 20px; padding: 22px 26px; font-size: 16.5px; line-height: 1.6; white-space: pre-wrap; font-family: 'Pretendard', sans-serif; }
+    .prompt .lb { display: block; color: #e3a92f; font-weight: 800; font-size: 17px; margin-bottom: 6px; }
+    .prompt .ph { color: #a9c7a6; }
+    .prompt .hd { color: #e3a92f; font-weight: 700; }
 
-    .tip { background: #fffbeb; border-left: 8px solid #fbbf24; color: #92400e; border-radius: 14px; padding: 14px 20px; font-size: 18.5px; }
-    .warn { background: #fef2f2; border-left: 8px solid #f87171; color: #991b1b; border-radius: 14px; padding: 14px 20px; font-size: 17.5px; }
+    .tip { background: #fbf1d9; border-left: 8px solid #e3a92f; color: #7a5410; border-radius: 14px; padding: 14px 20px; font-size: 18.5px; }
+    .warn { background: #f8e6e0; border-left: 8px solid #c8644c; color: #8a3524; border-radius: 14px; padding: 14px 20px; font-size: 17.5px; }
 
-    .chip { display: inline-block; background: var(--or-l); border: 1.5px solid var(--or-b); color: #9a3412; border-radius: 99px; padding: 13px 24px; font-size: 20.5px; font-weight: 700; margin: 0 12px 16px 0; }
+    .chip { display: inline-block; background: var(--or-l); border: 1.5px solid var(--or-b); color: #b04c1d; border-radius: 99px; padding: 13px 24px; font-size: 20.5px; font-weight: 700; margin: 0 12px 16px 0; }
     .chip b { color: var(--ink); margin-right: 6px; }
 
     table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 19px; border: 1.5px solid var(--or-b); border-radius: 18px; overflow: hidden; background: white; }
-    th, td { padding: 11px 18px; text-align: left; border-bottom: 1px solid #fde7d3; }
+    th, td { padding: 11px 18px; text-align: left; border-bottom: 1px solid #ece1d1; }
     tr:last-child td { border-bottom: none; }
-    th { background: var(--or-l); color: #9a3412; font-weight: 800; }
+    th { background: var(--or-l); color: #b04c1d; font-weight: 800; }
 
     /* cover */
     .cover { padding: 0; display: grid; grid-template-columns: 1fr 360px; }
     .cover .l { padding: 92px 0 60px 84px; }
-    .logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 34px; letter-spacing: .18em; color: #ea580c; }
+    .logo { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 34px; letter-spacing: .18em; color: #d9622b; }
     .logo small { font-size: 16px; letter-spacing: .1em; }
     .cover h1 { font-size: 60px; font-weight: 800; line-height: 1.22; letter-spacing: -.025em; margin: 20px 0 18px; }
     .cover .lead { font-size: 23px; color: var(--muted); margin-bottom: 34px; }
     .meta { font-size: 19px; line-height: 1.85; }
     .meta b { display: inline-block; width: 70px; color: var(--or-d); }
     .cover .r { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding-right: 60px; }
-    .qr { background: white; border-radius: 22px; padding: 16px; box-shadow: 0 14px 34px rgba(249,115,22,.15); border: 1.5px solid var(--or-b); line-height: 0; }
+    .qr { background: white; border-radius: 22px; padding: 16px; box-shadow: 0 14px 34px rgba(74,52,30,.08); border: 1.5px solid var(--or-b); line-height: 0; }
     .qr-cap { text-align: center; font-size: 17px; color: var(--muted); }
     .qr-cap b { display: block; font-family: 'Outfit', sans-serif; color: var(--sky-d); font-size: 17px; }
 </style>
@@ -134,11 +134,11 @@
         <div class="box c-pink" style="padding:18px 18px"><div class="t" style="font-size:21px">💡 개념 이해</div><ul class="dots" style="font-size:17.5px;margin-top:8px"><li><b>개념 카드</b></li><li>순서 맞추기</li><li>분류하기</li><li>개념 지도</li></ul></div>
         <div class="box c-sky" style="padding:18px 18px"><div class="t" style="font-size:21px">🔬 탐구·체험</div><ul class="dots" style="font-size:17.5px;margin-top:8px"><li><b>시뮬레이션</b></li><li>가상 실험실</li><li>데이터 그래프</li><li>클릭 탐험 지도·연표</li></ul></div>
         <div class="box c-mint" style="padding:18px 18px"><div class="t" style="font-size:21px">🏫 수업 운영</div><ul class="dots" style="font-size:17.5px;margin-top:8px"><li><b>활동 안내판</b></li><li>발표자·모둠 뽑기</li><li>토론 타이머</li><li>모둠 미션 스테이션</li></ul></div>
-        <div class="box" style="padding:18px 18px;background:#f5f3ff;border-color:#ddd6fe"><div class="t" style="font-size:21px;color:#6d28d9">🪞 성찰·표현</div><ul class="dots" style="font-size:17.5px;margin-top:8px"><li><b>출구티켓</b></li><li>평가 루브릭</li><li>글감 주사위</li><li>진로·성향 테스트</li></ul></div>
+        <div class="box" style="padding:18px 18px;background:#f3ece4;border-color:#e2d3c2"><div class="t" style="font-size:21px;color:#7a5230">🪞 성찰·표현</div><ul class="dots" style="font-size:17.5px;margin-top:8px"><li><b>출구티켓</b></li><li>평가 루브릭</li><li>글감 주사위</li><li>진로·성향 테스트</li></ul></div>
     </div>
     <div class="grid g2" style="margin-top:22px">
         <div class="tip">👍 처음이라면 내용이 분명한 <b>퀴즈</b>나 <b>개념 카드</b>부터 시작하세요.</div>
-        <div class="tip" style="background:#f0f9ff;border-color:#38bdf8;color:#075985">🔎 더 필요하면 2번 탭에서 <b>"내 교과 맞춤 아이디어 10개"</b> 요청문을 만들어 Gemini에 물어보세요.</div>
+        <div class="tip" style="background:#e8f0e6;border-color:#4f7f5f;color:#4f7f5f">🔎 더 필요하면 2번 탭에서 <b>"내 교과 맞춤 아이디어 10개"</b> 요청문을 만들어 Gemini에 물어보세요.</div>
     </div>
     <div class="pfoot">Gemini로 수업용 웹페이지 만들기</div><div class="pno">3 / 8</div>
 </section>
@@ -149,17 +149,17 @@
     <h2><span class="no">03</span>부탁문 만들기: 입력하고, 첨부하고, 설계 맡기기</h2>
     <p class="sub">실습 웹페이지 <b>3번 탭</b>에서 빈칸을 채우고 자료를 첨부하면 부탁문이 자동으로 완성됩니다.</p>
     <div class="grid g3" style="gap:18px">
-        <div class="box c-or"><span class="n">1</span><div class="t" style="margin-top:10px">✍️ 수업 정보 입력</div><p>교과·단원·웹페이지 유형·핵심 기능·디자인<br><b style="color:#1f2937">+ 꼭 넣을 학습 내용</b></p></div>
-        <div class="box c-sky"><span class="n">2</span><div class="t" style="margin-top:10px">📎 참고 자료 첨부</div><p><b style="color:#1f2937">PDF · 한글(HWP/HWPX) · 엑셀 · 워드 · PPT · 이미지</b><br>글자를 읽어 부탁문에 자동으로 넣어요<br><span style="font-size:15px">(파일은 브라우저 안에서만 읽고 업로드 안 됨)</span></p></div>
-        <div class="box c-mint"><span class="n">3</span><div class="t" style="margin-top:10px">🏗️ 프롬프트 아키텍트</div><p>Gemini가 먼저 <b style="color:#1f2937">'최고의 실행용 프롬프트'</b>를 설계 — 역할·맥락·과업·지침·제약·출력 형식까지</p></div>
+        <div class="box c-or"><span class="n">1</span><div class="t" style="margin-top:10px">✍️ 수업 정보 입력</div><p>교과·단원·웹페이지 유형·핵심 기능·디자인<br><b style="color:#33291f">+ 꼭 넣을 학습 내용</b></p></div>
+        <div class="box c-sky"><span class="n">2</span><div class="t" style="margin-top:10px">📎 참고 자료 첨부</div><p><b style="color:#33291f">PDF · 한글(HWP/HWPX) · 엑셀 · 워드 · PPT · 이미지</b><br>글자를 읽어 부탁문에 자동으로 넣어요<br><span style="font-size:15px">(파일은 브라우저 안에서만 읽고 업로드 안 됨)</span></p></div>
+        <div class="box c-mint"><span class="n">3</span><div class="t" style="margin-top:10px">🏗️ 프롬프트 아키텍트</div><p>Gemini가 먼저 <b style="color:#33291f">'최고의 실행용 프롬프트'</b>를 설계 — 역할·맥락·과업·지침·제약·출력 형식까지</p></div>
     </div>
     <div class="box" style="margin-top:18px;padding:16px 24px">
-        <div class="t" style="color:#c2410c;margin-bottom:12px">🏗️ 프롬프트 아키텍트 방식 — 두 번 붙여 넣기</div>
+        <div class="t" style="color:#b04c1d;margin-bottom:12px">🏗️ 프롬프트 아키텍트 방식 — 두 번 붙여 넣기</div>
         <div style="display:flex;align-items:center;gap:12px;font-size:19px;font-weight:700;flex-wrap:nowrap">
-            <span class="chip" style="margin:0">① 부탁문 복사</span><span style="color:#fdba74">▶</span>
-            <span class="chip" style="margin:0">② Gemini <u>일반 채팅</u>에 붙여 넣기</span><span style="color:#fdba74">▶</span>
-            <span class="chip" style="margin:0">③ [한국어 프롬프트] 복사</span><span style="color:#fdba74">▶</span>
-            <span class="chip" style="margin:0;background:#e0f2fe;border-color:#7dd3fc;color:#075985">④ 새 채팅 + Canvas에 붙여 넣기</span>
+            <span class="chip" style="margin:0">① 부탁문 복사</span><span style="color:#e3a92f">▶</span>
+            <span class="chip" style="margin:0">② Gemini <u>일반 채팅</u>에 붙여 넣기</span><span style="color:#e3a92f">▶</span>
+            <span class="chip" style="margin:0">③ [한국어 프롬프트] 복사</span><span style="color:#e3a92f">▶</span>
+            <span class="chip" style="margin:0;background:#e8f0e6;border-color:#a9c7a6;color:#4f7f5f">④ 새 채팅 + Canvas에 붙여 넣기</span>
         </div>
     </div>
     <div class="tip" style="margin-top:16px">💡 한글(HWP)도 OK — 글자를 뽑아 넣어 <b>교과서·학습지 내용이 그대로</b> 반영돼요. 학생 개인정보 파일은 첨부 금지!</div>
@@ -173,7 +173,7 @@
     <p class="sub">오른쪽 작업대에 코드가 써집니다. 읽지 않아도 돼요 — <b>미리보기</b>만 보세요.</p>
     <div class="grid g2" style="gap:26px">
         <div class="box">
-            <div class="t" style="color:#c2410c;margin-bottom:14px">🎨 만드는 순서</div>
+            <div class="t" style="color:#b04c1d;margin-bottom:14px">🎨 만드는 순서</div>
             <ol class="steps">
                 <li><b>gemini.google.com</b> 로그인</li>
                 <li>입력창 아래 <b>도구 → Canvas</b> 켜기<br><span class="muted" style="font-size:17px">(또는 부탁문 앞에 "Canvas에서"라고 쓰기)</span></li>
@@ -205,12 +205,12 @@
         <div class="box c-pink" style="padding:16px 20px"><div class="t" style="font-size:21px">📚 내용 8</div><p style="font-size:16.5px">문제 늘리기 · 해설 쉽게 · 난이도 3단계 · 힌트 · 내용 점검</p></div>
         <div class="box c-sky" style="padding:16px 20px"><div class="t" style="font-size:21px">⚙️ 기능 8</div><p style="font-size:16.5px">타이머 · 진행도 바 · 다시 하기 · 효과음 · 인쇄용 학습지</p></div>
         <div class="box c-mint" style="padding:16px 20px"><div class="t" style="font-size:21px">📱 모바일·접근성 5</div><p style="font-size:16.5px">휴대폰 잘림 · 터치 쉽게 · 글자 크기 버튼 · 색약 배려</p></div>
-        <div class="box" style="padding:16px 20px;background:#f5f3ff;border-color:#ddd6fe"><div class="t" style="font-size:21px;color:#6d28d9">🏫 수업 운영 7</div><p style="font-size:16.5px">학습 목표 화면 · 발표 모드 · 교사용 정답 · 모둠 대항</p></div>
-        <div class="box" style="padding:16px 20px;background:#fef2f2;border-color:#fecaca"><div class="t" style="font-size:21px;color:#b91c1c">🐞 오류 해결 6</div><p style="font-size:16.5px">오류 문구 붙여넣기 · 화면이 하얗게 · 코드 끊김 · 되돌리기</p></div>
+        <div class="box" style="padding:16px 20px;background:#f3ece4;border-color:#e2d3c2"><div class="t" style="font-size:21px;color:#7a5230">🏫 수업 운영 7</div><p style="font-size:16.5px">학습 목표 화면 · 발표 모드 · 교사용 정답 · 모둠 대항</p></div>
+        <div class="box" style="padding:16px 20px;background:#f8e6e0;border-color:#ebc8bd"><div class="t" style="font-size:21px;color:#a8432f">🐞 오류 해결 6</div><p style="font-size:16.5px">오류 문구 붙여넣기 · 화면이 하얗게 · 코드 끊김 · 되돌리기</p></div>
     </div>
     <div class="grid g2" style="margin-top:18px">
         <div class="tip">✍️ <b>나만의 고치기 공식:</b> [어디를] + [어떻게] + [왜] 칸을 채우면 부탁문이 만들어져요.</div>
-        <div class="tip" style="background:#f0f9ff;border-color:#38bdf8;color:#075985">💡 <b>하나 고치고 → 미리보기 확인</b>을 반복하세요. 나중엔 Gemini 대화 기록에서 이어서 고치면 돼요.</div>
+        <div class="tip" style="background:#e8f0e6;border-color:#4f7f5f;color:#4f7f5f">💡 <b>하나 고치고 → 미리보기 확인</b>을 반복하세요. 나중엔 Gemini 대화 기록에서 이어서 고치면 돼요.</div>
     </div>
     <div class="pfoot">Gemini로 수업용 웹페이지 만들기</div><div class="pno">6 / 8</div>
 </section>
@@ -223,7 +223,7 @@
     <div class="grid" style="grid-template-columns: 1fr 1fr; gap:26px">
         <div>
             <div class="box" style="margin-bottom:16px">
-                <div class="t" style="color:#c2410c">🔗 공유 링크 → QR</div>
+                <div class="t" style="color:#b04c1d">🔗 공유 링크 → QR</div>
                 <ol class="steps" style="font-size:19.5px">
                     <li>Canvas 오른쪽 위 <b>공유 → 링크 복사</b></li>
                     <li>실습 웹페이지 <b>5번 탭</b>에 붙여 넣고 <b>QR 만들기</b></li>
