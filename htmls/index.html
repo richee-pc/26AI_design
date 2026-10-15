@@ -371,7 +371,19 @@ pre.tree { background: #fff7ed; border-radius: 12px; padding: 0.8rem 1rem; font-
 
     <!-- 7. 심화 -->
     <section class="panel" id="t7">
-        <div class="now"><div class="ico">🚀</div><b>심화(연수 후 선택): GitHub + Streamlit으로 '내 주소' 만들기</b><p>학생 웹앱 수업에서 쓴 방법입니다. 공유 링크가 막혔거나, 오래 쓸 수업 자료를 한곳에 모으고 싶을 때 추천해요.</p></div>
+        <div class="now"><div class="ico">🚀</div><b>심화(연수 후 선택): GitHub로 '내 주소' 만들기</b><p>Canvas 공유가 막혔거나, 오래 쓸 수업 자료를 한곳에 모으고 싶을 때 추천해요. 선생님께는 <b>방법 1 (GitHub Pages)</b>이 가장 간단합니다.</p></div>
+        <div class="card" style="border-color:#a7f3d0;background:linear-gradient(135deg,#ecfdf5,#ffffff)">
+            <h3>⚡ 방법 1. GitHub Pages — 파일 하나 + 설정 한 번 <span class="time-chip">추천</span></h3>
+            <ol class="steps">
+                <li>Canvas 코드를 복사해 <code>index.html</code>로 저장</li>
+                <li><a href="https://github.com/new" target="_blank" rel="noopener">GitHub</a>에서 새 저장소 만들기 (<b>Public</b> 선택)</li>
+                <li><b>Add file → Upload files</b>로 <code>index.html</code> 올리기 → Commit</li>
+                <li>저장소의 <b>Settings → Pages</b> → Branch를 <code>main</code>, 폴더 <code>/ (root)</code>로 두고 <b>Save</b></li>
+                <li>1~2분 뒤 <code>https://아이디.github.io/저장소이름/</code> 주소 완성! → 5번 탭에서 QR 만들기</li>
+            </ol>
+            <div class="tip" style="margin-bottom:0">💡 이 연수 웹페이지도 이 방법으로 공개했어요 → <a href="https://richee-pc.github.io/26AI_design/" target="_blank" rel="noopener">richee-pc.github.io/26AI_design</a>. 단원별 페이지를 더 올리려면 <code>quiz1.html</code>처럼 이름을 바꿔 올리고 주소 끝에 파일 이름을 붙이면 됩니다.</div>
+        </div>
+        <div class="section-head"><span></span>방법 2. GitHub + Streamlit — 학생 웹앱 수업에서 쓴 방법</div>
         <div class="grid g2">
             <div class="card">
                 <h3>📦 폴더 구조</h3>
