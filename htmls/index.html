@@ -177,6 +177,108 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
 .fix.done { border-color: #10b981; background: #ecfdf5; }
 .fix.done b::before { content: '✅ '; }
 
+/* 아이디어: 고르는 법 · 카드 · 예시 창 */
+.how h3 { margin-bottom: 0.8rem; }
+.how-grid { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 1rem; }
+.how-grid > div { background: var(--bg); border-radius: 14px; padding: 0.9rem 1rem; }
+.how-grid b { display: block; margin-bottom: 0.3rem; color: var(--accent-d); }
+.how-grid p { margin: 0 0 0.4rem; font-size: 0.9rem; }
+.how-grid ul { list-style: none; padding: 0; margin: 0; font-size: 0.86rem; display: grid; gap: 0.3rem; }
+.how-grid li span { display: inline-block; min-width: 2.6rem; text-align: center; font-weight: 800; font-size: 0.75rem; color: white; background: var(--sage); border-radius: 999px; padding: 0.05rem 0.4rem; margin-right: 0.35rem; }
+.idea { cursor: pointer; }
+.idea:focus-visible { outline: 3px solid var(--mustard); outline-offset: 2px; }
+.idea-btns { display: grid; grid-template-columns: 1fr 1.3fr; gap: 0.4rem; margin-top: auto; }
+.idea-btns .btn { padding: 0.55rem 0.5rem; font-size: 0.85rem; }
+.pv-modal { position: fixed; inset: 0; background: rgba(47, 42, 37, 0.55); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.pv-modal[hidden] { display: none; }
+.pv-box { position: relative; background: var(--card); border-radius: 22px; width: min(860px, 100%); max-height: calc(100vh - 2rem); overflow-y: auto; padding: 1.4rem 1.5rem; border-top: 6px solid var(--accent); }
+.pv-close { position: absolute; top: 0.8rem; right: 0.8rem; width: 2.2rem; height: 2.2rem; border-radius: 50%; border: 1px solid var(--line); background: var(--bg); font-size: 1rem; cursor: pointer; }
+.pv-close:hover { background: var(--accent-soft); }
+.pv-head { padding-right: 2.5rem; margin-bottom: 1rem; }
+.pv-head .tag { display: inline-block; font-size: 0.72rem; font-weight: 800; color: var(--sage); background: var(--sage-soft); border-radius: 999px; padding: 0.1rem 0.55rem; }
+.pv-head h3 { margin: 0.35rem 0 0.2rem; font-size: 1.35rem; }
+.pv-head p { margin: 0; color: var(--muted); }
+.pv-body { display: grid; grid-template-columns: 260px 1fr; gap: 1.4rem; align-items: start; }
+.pv-phone { background: #33291f; border-radius: 30px; padding: 0.7rem 0.6rem 0.9rem; }
+.pv-notch { width: 70px; height: 6px; border-radius: 99px; background: #5a4a3b; margin: 0 auto 0.55rem; }
+.pv-screen { background: var(--bg); border-radius: 20px; padding: 0.75rem; min-height: 360px; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.78rem; }
+.pv-cap { margin: 0.5rem 0 0; text-align: center; color: #e9dccb; font-size: 0.72rem; }
+.pv-h { background: white; border-top: 4px solid var(--accent); border-radius: 10px; padding: 0.45rem 0.6rem; font-weight: 800; font-size: 0.9rem; }
+.pv-goal { background: var(--mustard-soft); border-radius: 8px; padding: 0.35rem 0.5rem; font-size: 0.72rem; }
+.pv-top { display: flex; justify-content: space-between; font-weight: 800; color: var(--sage); font-size: 0.74rem; }
+.pv-bar { height: 7px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.pv-bar i { display: block; height: 100%; background: var(--mustard); }
+.pv-q { font-weight: 800; font-size: 0.86rem; background: white; border-radius: 10px; padding: 0.5rem 0.6rem; }
+.pv-q u { text-decoration: none; background: var(--accent-soft); color: var(--accent-d); border-bottom: 2px solid var(--accent); padding: 0 0.25rem; }
+.pv-opts { display: grid; gap: 0.3rem; }
+.pv-opt { background: white; border: 1.5px solid var(--line); border-radius: 8px; padding: 0.35rem 0.5rem; font-weight: 700; }
+.pv-opt.ok { border-color: var(--sage); background: var(--sage-soft); }
+.pv-fb { background: var(--sage-soft); color: #2f5a3d; border-radius: 8px; padding: 0.4rem 0.5rem; font-size: 0.72rem; }
+.pv-btn { background: var(--accent); color: white; border-radius: 9px; padding: 0.45rem; text-align: center; font-weight: 800; }
+.pv-ox { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; }
+.pv-ox div { background: white; border: 2px solid var(--sage); border-radius: 12px; text-align: center; font-size: 1.8rem; padding: 0.4rem 0; }
+.pv-ox div.no { border-color: var(--line); }
+.pv-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.pv-chips span { background: white; border: 1.5px solid var(--line); border-radius: 99px; padding: 0.15rem 0.55rem; font-weight: 700; }
+.pv-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.3rem; }
+.pv-grid span { aspect-ratio: 3 / 4; background: var(--accent); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+.pv-grid span.on { background: white; color: var(--text); border: 1.5px solid var(--sage); }
+.pv-steps { display: grid; gap: 0.3rem; }
+.pv-steps div { background: white; border: 1px solid var(--line); border-radius: 8px; padding: 0.35rem 0.5rem; }
+.pv-dots { letter-spacing: 0.4rem; }
+.pv-flip { background: white; border: 2px solid var(--mustard); border-radius: 14px; padding: 1rem 0.6rem; text-align: center; display: grid; gap: 0.25rem; }
+.pv-flip b { font-size: 1.15rem; }
+.pv-flip small { color: var(--muted); font-size: 0.65rem; }
+.pv-flip span { background: var(--mustard-soft); border-radius: 8px; padding: 0.3rem; font-size: 0.72rem; }
+.pv-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.3rem; }
+.pv-row span { background: white; border: 1.5px solid var(--line); border-radius: 8px; padding: 0.3rem 0.2rem; text-align: center; font-weight: 700; font-size: 0.7rem; }
+.pv-bins { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; }
+.pv-bins div { background: white; border: 2px dashed var(--line); border-radius: 10px; padding: 0.4rem; min-height: 90px; display: flex; flex-wrap: wrap; gap: 0.25rem; align-content: flex-start; }
+.pv-bins b { width: 100%; color: var(--accent-d); }
+.pv-bins span { background: var(--sage-soft); border-radius: 6px; padding: 0.1rem 0.4rem; font-weight: 700; }
+.pv-tree { background: white; border-radius: 12px; padding: 0.6rem; text-align: center; }
+.pv-tree b { display: inline-block; background: var(--accent); color: white; border-radius: 99px; padding: 0.2rem 0.7rem; margin-bottom: 0.5rem; }
+.pv-tree div { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem; }
+.pv-tree span { border: 1.5px solid var(--sage); border-radius: 8px; padding: 0.25rem; font-weight: 700; }
+.pv-slider { display: grid; grid-template-columns: 2.6rem 1fr 2.6rem; align-items: center; gap: 0.35rem; font-weight: 700; font-size: 0.7rem; }
+.pv-slider div { position: relative; height: 6px; background: var(--line); border-radius: 99px; }
+.pv-slider i { position: absolute; top: 50%; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); transform: translate(-50%, -50%); }
+.pv-road { background: white; border-radius: 10px; padding: 0.6rem; text-align: center; font-size: 0.9rem; letter-spacing: -0.05em; }
+.pv-table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; font-size: 0.72rem; }
+.pv-table th, .pv-table td { border: 1px solid var(--line); padding: 0.25rem; text-align: center; }
+.pv-table th { background: var(--accent-soft); color: var(--accent-d); }
+.pv-chart { height: 130px; background: white; border-radius: 10px; padding: 0.6rem 0.6rem 0.3rem; display: flex; align-items: flex-end; gap: 0.4rem; border-bottom: 2px solid var(--line); }
+.pv-chart i { flex: 1; background: var(--mustard); border-radius: 5px 5px 0 0; }
+.pv-chart i:nth-child(2n) { background: var(--sage); }
+.pv-map { position: relative; height: 150px; border-radius: 12px; background: var(--sage-soft); border: 1.5px solid var(--line); overflow: hidden; }
+.pv-map::before { content: ''; position: absolute; left: 22%; top: 12%; width: 56%; height: 78%; background: #cfe0c9; border-radius: 40% 55% 45% 50%; }
+.pv-map span { position: absolute; font-size: 1.1rem; transform: translate(-50%, -100%); }
+.pv-big { text-align: center; font-size: 2.6rem; font-weight: 900; color: var(--accent); background: white; border-radius: 14px; padding: 0.6rem 0; }
+.pv-vs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem; }
+.pv-vs div { background: white; border: 2px solid var(--line); border-radius: 12px; text-align: center; padding: 0.5rem 0.2rem; }
+.pv-vs div.on { border-color: var(--accent); background: var(--accent-soft); }
+.pv-vs small { display: block; font-weight: 700; }
+.pv-vs b { font-size: 1.2rem; }
+.pv-input { background: white; border: 1.5px dashed var(--line); border-radius: 8px; padding: 0.45rem 0.5rem; color: var(--muted); }
+.pv-info { display: grid; gap: 0.75rem; }
+.pv-info b { display: block; margin-bottom: 0.15rem; }
+.pv-info p { margin: 0; color: var(--text); font-size: 0.93rem; }
+.pv-tip { background: var(--mustard-soft); border-radius: 12px; padding: 0.7rem 0.85rem; }
+.pv-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.3rem; }
+.pv-actions .btn { text-decoration: none; text-align: center; flex: 1 1 10rem; }
+@media (max-width: 860px) { .how-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+    .pv-body { grid-template-columns: 1fr; }
+    .pv-phone { max-width: 260px; margin: 0 auto; }
+    .pv-box { padding: 1.1rem; }
+}
+
+/* 완성 예시 카드 */
+.demo-card { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: center; background: var(--mustard-soft); border-color: var(--mustard-soft); }
+.demo-card .tag { display: inline-block; font-size: 0.72rem; font-weight: 800; color: var(--sage); background: white; border-radius: 999px; padding: 0.1rem 0.55rem; }
+.demo-qr { background: white; padding: 0.6rem; border-radius: 14px; line-height: 0; }
+@media (max-width: 600px) { .demo-card { grid-template-columns: 1fr; text-align: center; } .demo-qr { justify-self: center; } }
+
 /* 구글 설문지 자동 생성 */
 .forms-pre { background: #33291f; color: #fbf6ee; border-radius: 20px; padding: 1.4rem 1.5rem; margin-bottom: 1rem; }
 .forms-pre-title { margin: 0 0 0.4rem; font-weight: 800; font-size: 1.1rem; color: var(--mustard); }
@@ -312,6 +414,17 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
             <div class="flow-step"><span class="n">5</span><span class="e">🔗</span><b>공유</b><small>링크·QR로 학생에게</small></div>
         </div>
 
+        <div class="section-head"><span></span>🎯 완성 예시 먼저 보기</div>
+        <div class="card demo-card">
+            <div class="demo-qr" id="demoQR"></div>
+            <div>
+                <span class="tag">퀴즈 게임 예시</span>
+                <h3 style="margin:0.35rem 0 0.3rem">🍁 우리 학교 조대부중 알아보기 퀴즈</h3>
+                <p class="muted-sm" style="margin:0 0 0.8rem">교훈·교화·교목·연혁으로 만든 10문항 퀴즈예요. 휴대폰 카메라로 QR을 찍어 직접 풀어 보세요. 오늘 이런 웹페이지를 만들어 갑니다!</p>
+                <a class="btn btn-main" href="../examples/jodae-quiz.html" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">▶ 예시 퀴즈 열어 보기</a>
+            </div>
+        </div>
+
         <div class="section-head"><span></span>📂 연수 자료</div>
         <div class="grid g3">
             <a class="link-btn" href="../materials/AI_lesson_slides.pdf" target="_blank" rel="noopener">🖥️ 강의 슬라이드 (PDF)</a>
@@ -334,7 +447,23 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
 
     <!-- 2. 아이디어 -->
     <section class="panel" id="t2">
-        <div class="now"><div class="ico">💡</div><b>지금 할 일: 다음 주 수업에 쓸 웹페이지 하나 고르기 <span class="time-chip">5분</span></b><p>카드의 <b>[이걸로 만들기]</b>를 누르면 3번 프롬프트 탭에 내용이 자동으로 채워집니다.</p></div>
+        <div class="now"><div class="ico">💡</div><b>지금 할 일: 다음 주 수업에 쓸 웹페이지 하나 고르기 <span class="time-chip">5분</span></b><p>카드를 누르면 <b>예시 화면</b>이 열려요. 마음에 들면 <b>[이걸로 만들기]</b>를 눌러 3번 탭으로 가세요.</p></div>
+        <div class="card how">
+            <h3>🧭 어떻게 고를까요?</h3>
+            <div class="how-grid">
+                <div><b>1. 언제 쓸지 정하기</b><p>수업의 <u>어느 단계</u>에서 쓸지 먼저 떠올려요.</p>
+                    <ul>
+                        <li><span>도입</span> 퀴즈 · OX 스피드 퀴즈 · 출발 미션</li>
+                        <li><span>전개</span> 시뮬레이션 · 분류하기 · 순서 맞추기 · 토론 타이머</li>
+                        <li><span>정리</span> 개념 카드 · 빈칸 채우기 · 출구티켓</li>
+                        <li><span>가정</span> 오답 클리닉 · 짝 맞추기 게임</li>
+                    </ul></div>
+                <div><b>2. 학생이 할 일 정하기</b><p>"학생이 이 화면에서 <u>무엇을 누르고, 무엇을 생각하나?</u>"가 한 문장으로 말해지면 좋은 선택이에요.</p>
+                    <p class="muted-sm">예) "원소 기호를 보고 이름을 고르며, 틀리면 해설을 읽는다."</p></div>
+                <div><b>3. 예시 화면 보고 고르기</b><p>카드를 누르면 <u>휴대폰 화면 예시</u>와 수업 장면, 만들 때 팁이 나와요.</p>
+                    <p class="muted-sm">🎯 퀴즈 게임에는 <b>조대부중 알아보기 퀴즈</b> 실제 예시가 있어요!</p></div>
+            </div>
+        </div>
         <div class="chips" id="catChips" style="margin-bottom:0.9rem"></div>
         <div class="grid g3" id="ideaGrid"></div>
         <div class="tip">💡 처음에는 <b>퀴즈</b>나 <b>개념 카드</b>처럼 내용이 분명한 것이 가장 잘 만들어집니다. 시뮬레이션·가상 실험실은 2~3번 고칠 각오로!</div>
@@ -697,6 +826,25 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
 
 ---
 </script>
+<div class="pv-modal" id="pvModal" hidden role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+    <div class="pv-box">
+        <button class="pv-close" id="pvClose" type="button" aria-label="닫기">✕</button>
+        <div class="pv-head"><span class="tag" id="pvTag"></span><h3 id="pvTitle"></h3><p id="pvDesc"></p></div>
+        <div class="pv-body">
+            <div class="pv-phone"><div class="pv-notch"></div><div class="pv-screen" id="pvScreen"></div><p class="pv-cap">이런 화면이 만들어져요 (예시)</p></div>
+            <div class="pv-info">
+                <div><b>🏫 수업 장면</b><p id="pvScene"></p></div>
+                <div><b>⚙️ 들어가는 기능</b><p id="pvFeat"></p></div>
+                <div><b>📚 교과 예시</b><p id="pvEx"></p></div>
+                <div class="pv-tip"><b>💡 만들 때 팁</b><p id="pvTip"></p></div>
+                <div class="pv-actions">
+                    <a class="btn btn-sub" id="pvLive" target="_blank" rel="noopener" hidden>▶ 실제 예시 열어 보기</a>
+                    <button class="btn btn-main" id="pvMake" type="button">이걸로 만들기 →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div id="toast">복사되었습니다 ✨</div>
 
 <script>
@@ -834,7 +982,7 @@ const grid = document.getElementById('ideaGrid'), sel = document.getElementById(
 function renderIdeas(cat) {
     grid.innerHTML = '';
     Object.entries(TYPES).filter(([, t]) => cat === 'all' || t.cat === cat).forEach(([k, t]) => {
-        grid.insertAdjacentHTML('beforeend', `<div class="idea"><div class="em">${t.em}</div><span class="tag">${CATS[t.cat]}</span><h4>${t.name}</h4><p>${t.desc}</p><div class="feat">${t.features}</div><div class="ex">예) ${t.ex}</div><button class="btn btn-sub" data-k="${k}">이걸로 만들기 →</button></div>`);
+        grid.insertAdjacentHTML('beforeend', `<div class="idea" data-p="${k}" tabindex="0" role="button" aria-label="${t.name} 예시 화면 보기"><div class="em">${t.em}</div><span class="tag">${CATS[t.cat]}</span><h4>${t.name}</h4><p>${t.desc}</p><div class="feat">${t.features}</div><div class="ex">예) ${t.ex}</div><div class="idea-btns"><button class="btn btn-sub" data-p="${k}">👀 예시 화면</button><button class="btn btn-main" data-k="${k}">이걸로 만들기 →</button></div></div>`);
     });
     catChips.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.dataset.c === cat));
 }
@@ -850,10 +998,123 @@ Object.entries(CATS).filter(([k]) => k !== 'all').forEach(([k, n]) => {
 });
 renderIdeas('all');
 grid.addEventListener('click', e => {
-    const b = e.target.closest('button[data-k]'); if (!b) return;
-    sel.value = b.dataset.k; document.getElementById('f-features').value = TYPES[b.dataset.k].features;
-    save(); go('t3'); toast('좋아요! 교과·단원만 채우면 됩니다 ✨');
+    const make = e.target.closest('button[data-k]');
+    if (make) { chooseType(make.dataset.k); return; }
+    const pv = e.target.closest('[data-p]'); if (pv) openPreview(pv.dataset.p);
 });
+grid.addEventListener('keydown', e => {
+    const card = e.target.closest('.idea[data-p]');
+    if (card && e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openPreview(card.dataset.p); }
+});
+// ---------- 아이디어 예시 화면(미리보기) ----------
+// demo: 휴대폰 화면 모양으로 그릴 요소 목록 [종류, 내용…], scene: 수업 장면, tip: 만들 때 팁, live: 실제 예시 링크
+const PREVIEWS = {
+    quiz: { scene: '도입 3분, 지난 시간 내용을 QR로 접속해 퀴즈로 복습해요. 틀린 문제는 집에서 다시 풀게 해요.', tip: '교과서 문제·정답·해설을 "꼭 넣을 학습 내용"에 붙여 넣으면 정확도가 가장 높아요.',
+        live: '../examples/jodae-quiz.html',
+        demo: [['h', '원소 기호 퀴즈'], ['top', '3 / 10', '점수 2'], ['bar', 30], ['q', 'H는 어떤 원소일까요?'], ['opts', ['수소', '헬륨', '산소', '탄소'], 0, 1], ['fb', '✔ 정답! H는 수소(Hydrogen)예요.'], ['btn', '다음 문제 →']] },
+    ox: { scene: '수업 시작 전 오개념 점검! 결과를 보고 오늘 어디에 힘을 줄지 정해요.', tip: '헷갈리기 쉬운 문장을 O/X로 만들면 토론거리가 생겨요.',
+        demo: [['h', 'OX 스피드 퀴즈'], ['top', '⏱ 00:07', '🔥 콤보 3'], ['q', '공기는 질량이 없다.'], ['ox'], ['fb', '✖ 공기도 질량이 있어요! 풍선 실험을 떠올려 봐요.']] },
+    blank: { scene: '개념 설명 직후 핵심 문장을 스스로 채워 보며 정리해요.', tip: '빈칸 정답을 [ ]로 표시한 문장을 붙여 넣으면 그대로 만들어 줘요.',
+        demo: [['h', '빈칸 채우기'], ['blank', '물은 [수소]와 [산소]로 이루어진 화합물이다.'], ['chips', ['수소', '산소', '질소', '탄소']], ['btn', '채점하기']] },
+    match: { scene: '모둠별로 시간 기록을 겨루며 용어와 뜻을 짝지어요.', tip: '짝은 8쌍 정도가 휴대폰 화면에 알맞아요.',
+        demo: [['h', '짝 맞추기'], ['top', '시도 6번', '⏱ 0:42'], ['grid', ['H', '?', '수소', '?', '?', 'O', '?', '산소'], [0, 2, 5, 7]]] },
+    wrong: { scene: '수행평가 전, 자주 틀리는 서술형을 힌트 단계로 스스로 풀어 봐요.', tip: '힌트는 "정답을 알려 주지 말고 생각할 방향만"이라고 부탁하세요.',
+        demo: [['h', '오답 클리닉'], ['q', '2x + 3 = 11일 때 x의 값은?'], ['steps', ['💡 힌트 1: 3을 오른쪽으로 옮기면?', '💡 힌트 2: 양변을 2로 나누면?', '📖 풀이 보기']], ['btn', '스스로 풀었어요 ✔']] },
+    card: { scene: '단원 마무리나 시험 전, 각자 휴대폰으로 개념을 반복해서 외워요.', tip: '용어·설명 표를 엑셀로 첨부하면 카드가 그대로 만들어져요.',
+        demo: [['h', '개념 카드'], ['top', '남은 카드 7', '외웠어요 3'], ['flip', '광합성', '빛에너지로 포도당을 만드는 과정'], ['row', ['◀ 이전', '🔀 섞기', '다음 ▶']]] },
+    order: { scene: '사건·과정의 흐름을 직접 배열하며 인과 관계를 이해해요.', tip: '휴대폰에서는 끌기가 어려우니 "위/아래 버튼으로도"라고 꼭 넣어 주세요.',
+        demo: [['h', '순서 맞추기'], ['list', ['① 가설 설정', '② 실험 설계', '③ 실험 수행', '④ 결론 도출']], ['btn', '정답 확인']] },
+    sort: { scene: '모둠이 함께 카드를 분류하고, 틀린 카드는 이유를 토의해요.', tip: '분류 기준(바구니)을 2~3개로 정해 주면 화면이 깔끔해요.',
+        demo: [['h', '분류하기'], ['bins', [['원소', ['H', 'O', 'Fe']], ['화합물', ['H₂O', 'CO₂']]]], ['chips', ['NaCl', 'N']], ['btn', '채점하기']] },
+    mindmap: { scene: '단원 도입에서 전체 그림을 보여 주고, 정리 단계에서 다시 펼쳐 봐요.', tip: '단원 목차(소단원 제목)를 붙여 넣으면 가지가 정확해져요.',
+        demo: [['h', '개념 지도'], ['tree', '물질의 구성', ['원소', '원자', '분자', '이온']], ['fb', '👆 "원자"를 누르면 설명과 예시가 열려요.']] },
+    sim: { scene: '값을 바꿔 보며 "만약 ~라면?"을 예측하고 확인해요.', tip: '변수는 2개 이하로, 식과 단위를 함께 적어 주세요.',
+        demo: [['h', '속력 시뮬레이션'], ['slider', '속력', 60, 'km/h'], ['slider', '시간', 40, '시간'], ['road'], ['fb', '거리 = 속력 × 시간 = 120 km']] },
+    lab: { scene: '실제 실험이 어렵거나 위험할 때 가상으로 변인을 바꿔 보며 탐구해요.', tip: '"조작 변인·통제 변인·종속 변인"을 적어 주면 실험 설계가 정확해져요.',
+        demo: [['h', '가상 실험실: 용해도'], ['row', ['온도 20℃', '온도 40℃', '온도 60℃']], ['table', [['온도', '녹은 양'], ['20℃', '36g'], ['40℃', '?']]], ['btn', '🧪 실험하기']] },
+    chart: { scene: '모둠이 조사한 자료를 넣고 그래프를 바꿔 가며 해석해요.', tip: '예시 데이터를 엑셀로 첨부하면 표에 미리 채워 줘요.',
+        demo: [['h', '데이터 그래프 탐구'], ['chart', [4, 7, 5, 9, 6]], ['row', ['막대', '꺾은선', '평균 6.2']]] },
+    hotspot: { scene: '지도·연표·작품 위 지점을 눌러 보며 스스로 탐험해요.', tip: '지점마다 이름과 설명을 표로 정리해 붙여 넣으세요.',
+        demo: [['h', '클릭 탐험 지도'], ['map'], ['fb', '📍 경주: 신라의 수도, 불국사와 석굴암이 있어요.']] },
+    guide: { scene: '모둠 활동 시작 때 화면에 띄워 두고 단계별로 체크하며 진행해요.', tip: '활동 단계와 단계별 시간을 적어 주면 타이머도 맞춰 줘요.',
+        demo: [['h', '오늘의 모둠 활동'], ['goal', '🎯 생활 속 산과 염기를 찾아 분류할 수 있다.'], ['steps', ['✅ 1단계: 자료 조사 (10분)', '⬜ 2단계: 분류표 만들기 (10분)', '⬜ 3단계: 발표 (5분)']], ['top', '⏱ 남은 시간', '07:32']] },
+    tool: { scene: '발표자 뽑기와 모둠 편성을 공정하고 재미있게 해요.', tip: '이름 대신 번호만 쓰도록 하면 개인정보 걱정이 없어요.',
+        demo: [['h', '발표자 뽑기'], ['big', '17번'], ['row', ['🎲 다시 뽑기', '👥 모둠 편성']], ['fb', '이미 뽑힌 번호: 3, 9, 21']] },
+    debate: { scene: '찬반 토론에서 발언 순서와 시간을 공정하게 관리해요.', tip: '논제와 단계(입론·반론·최종 발언)별 시간을 적어 주세요.',
+        demo: [['h', '토론 타이머'], ['goal', '논제: 학교에서 휴대폰 사용을 허용해야 한다'], ['vs', '찬성 입론', '01:24', '반대 대기', '02:00'], ['btn', '다음 단계 ▶']] },
+    station: { scene: '단원 마무리로 모둠이 미션을 풀며 교실 방탈출을 해요.', tip: '미션별 정답 암호를 미리 정해서 알려 주세요.',
+        demo: [['h', '모둠 미션 스테이션'], ['row', ['미션1 ✅', '미션2 🔓', '미션3 🔒', '미션4 🔒']], ['q', '미션 2: 암호를 입력하세요'], ['input', '정답 암호 4자리'], ['btn', '열기 🔑']] },
+    reflect: { scene: '수업 마지막 3분, 이해도와 배운 점을 남기고 캡처해서 제출해요.', tip: '"서버에 저장하지 않고 화면 캡처로 제출"이라고 꼭 넣어 주세요.',
+        demo: [['h', '출구 티켓'], ['scale', ['목표 1 이해했나요?', '목표 2 이해했나요?']], ['input', '오늘 새로 알게 된 것'], ['btn', '요약 카드 만들기']] },
+    rubric: { scene: '수행평가 전 스스로 점검하거나, 모둠 발표를 서로 평가해요.', tip: '평가 기준과 수준별 설명을 표로 붙여 넣으세요.',
+        demo: [['h', '자기평가 루브릭'], ['table', [['기준', '잘함', '보통', '노력'], ['내용', '●', '○', '○'], ['표현', '○', '●', '○']]], ['big', '7 / 9점']] },
+    story: { scene: '글쓰기·말하기 시작 전 아이디어가 막힐 때 주사위로 글감을 정해요.', tip: '인물·장소·사건 목록을 각각 6개 이상 넣어 주세요.',
+        demo: [['h', '글감 주사위'], ['row', ['👧 탐험가', '🏝️ 무인도', '⚡ 폭풍']], ['btn', '🎲 굴리기'], ['top', '✍️ 3분 쓰기', '02:41']] },
+    career: { scene: '진로 수업에서 성향을 탐색하고 관련 교과·직업을 살펴봐요.', tip: '결과 유형과 추천 직업을 미리 정해 두면 결과가 일정해요.',
+        demo: [['h', '나의 진로 성향'], ['top', '질문 5 / 12', ''], ['q', '새로운 것을 만들 때 가장 즐겁다.'], ['row', ['그렇다', '보통', '아니다']], ['fb', '결과 예) 🔬 탐구형: 과학자, 개발자 …']] }
+};
+
+// 요소 하나를 작은 화면 조각(HTML)으로 바꾼다
+function demoPart([kind, a, b, c, d]) {
+    const e = esc;
+    switch (kind) {
+        case 'h': return `<div class="pv-h">${e(a)}</div>`;
+        case 'goal': return `<div class="pv-goal">${e(a)}</div>`;
+        case 'top': return `<div class="pv-top"><span>${e(a)}</span><span>${e(b)}</span></div>`;
+        case 'bar': return `<div class="pv-bar"><i style="width:${a}%"></i></div>`;
+        case 'q': return `<div class="pv-q">${e(a)}</div>`;
+        case 'opts': return `<div class="pv-opts">${a.map((t, i) => `<div class="pv-opt${i === b ? ' ok' : ''}">${'ABCD'[i]}. ${e(t)}</div>`).join('')}</div>`;
+        case 'fb': return `<div class="pv-fb">${e(a)}</div>`;
+        case 'btn': return `<div class="pv-btn">${e(a)}</div>`;
+        case 'ox': return `<div class="pv-ox"><div>⭕</div><div class="no">❌</div></div>`;
+        case 'blank': return `<div class="pv-q">${e(a).replace(/\[([^\]]+)\]/g, '<u>$1</u>')}</div>`;
+        case 'chips': return `<div class="pv-chips">${a.map(t => `<span>${e(t)}</span>`).join('')}</div>`;
+        case 'grid': return `<div class="pv-grid">${a.map((t, i) => `<span class="${b.includes(i) ? 'on' : ''}">${e(t)}</span>`).join('')}</div>`;
+        case 'steps': return `<div class="pv-steps">${a.map(t => `<div>${e(t)}</div>`).join('')}</div>`;
+        case 'flip': return `<div class="pv-flip"><b>${e(a)}</b><small>↻ 누르면 뒤집혀요</small><span>${e(b)}</span></div>`;
+        case 'row': return `<div class="pv-row">${a.map(t => `<span>${e(t)}</span>`).join('')}</div>`;
+        case 'list': return `<div class="pv-steps">${a.map(t => `<div>☰ ${e(t)}</div>`).join('')}</div>`;
+        case 'bins': return `<div class="pv-bins">${a.map(([n, items]) => `<div><b>${e(n)}</b>${items.map(t => `<span>${e(t)}</span>`).join('')}</div>`).join('')}</div>`;
+        case 'tree': return `<div class="pv-tree"><b>${e(a)}</b><div>${b.map(t => `<span>${e(t)}</span>`).join('')}</div></div>`;
+        case 'slider': return `<div class="pv-slider"><span>${e(a)}</span><div><i style="left:${b}%"></i></div><span>${e(c)}</span></div>`;
+        case 'road': return `<div class="pv-road">🚗 ─────────▶ 🏁</div>`;
+        case 'table': return `<table class="pv-table">${a.map((r, i) => `<tr>${r.map(t => i ? `<td>${e(t)}</td>` : `<th>${e(t)}</th>`).join('')}</tr>`).join('')}</table>`;
+        case 'chart': { const m = Math.max(...a); return `<div class="pv-chart">${a.map(v => `<i style="height:${(v / m) * 100}%"></i>`).join('')}</div>`; }
+        case 'map': return `<div class="pv-map"><span style="left:62%;top:58%">📍</span><span style="left:30%;top:30%">📍</span><span style="left:45%;top:78%">📍</span><span style="left:75%;top:25%">📍</span></div>`;
+        case 'big': return `<div class="pv-big">${e(a)}</div>`;
+        case 'vs': return `<div class="pv-vs"><div class="on"><small>${e(a)}</small><b>${e(b)}</b></div><div><small>${e(c)}</small><b>${e(d)}</b></div></div>`;
+        case 'input': return `<div class="pv-input">${e(a)}</div>`;
+        case 'scale': return `<div class="pv-steps">${a.map(t => `<div>${e(t)}<br><span class="pv-dots">😕 🙂 😄</span></div>`).join('')}</div>`;
+        default: return '';
+    }
+}
+function openPreview(k) {
+    const t = TYPES[k], p = PREVIEWS[k]; if (!t || !p) return;
+    document.getElementById('pvTitle').textContent = `${t.em} ${t.name}`;
+    document.getElementById('pvTag').textContent = CATS[t.cat];
+    document.getElementById('pvDesc').textContent = t.desc;
+    document.getElementById('pvScreen').innerHTML = p.demo.map(demoPart).join('');
+    document.getElementById('pvScene').textContent = p.scene;
+    document.getElementById('pvFeat').textContent = t.features;
+    document.getElementById('pvEx').textContent = t.ex;
+    document.getElementById('pvTip').textContent = p.tip;
+    const live = document.getElementById('pvLive');
+    live.hidden = !p.live; if (p.live) live.href = p.live;
+    document.getElementById('pvMake').dataset.k = k;
+    const m = document.getElementById('pvModal');
+    m.hidden = false; document.body.style.overflow = 'hidden';
+    document.getElementById('pvClose').focus();
+}
+function closePreview() { document.getElementById('pvModal').hidden = true; document.body.style.overflow = ''; }
+function chooseType(k) {
+    sel.value = k; document.getElementById('f-features').value = TYPES[k].features;
+    save(); go('t3'); toast('좋아요! 교과·단원만 채우면 됩니다 ✨');
+}
+document.getElementById('pvModal').addEventListener('click', e => { if (e.target.id === 'pvModal') closePreview(); });
+document.getElementById('pvClose').addEventListener('click', closePreview);
+document.getElementById('pvMake').addEventListener('click', e => { closePreview(); chooseType(e.currentTarget.dataset.k); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('pvModal').hidden) closePreview(); });
+
 sel.addEventListener('change', () => { document.getElementById('f-features').value = TYPES[sel.value].features; save(); });
 
 function buildIdeaPrompt() {
@@ -1302,6 +1563,13 @@ async function deleteWork(id) {
     } catch (err) { toast('지우지 못했어요: ' + (err.message || '')); }
 }
 loadGallery();
+
+// 1번 탭 완성 예시 QR (현재 주소 기준으로 예시 퀴즈 주소를 만든다)
+(function () {
+    const box = document.getElementById('demoQR');
+    if (!box || !window.QRCode) return;
+    new QRCode(box, { text: new URL('../examples/jodae-quiz.html', location.href).href, width: 132, height: 132, correctLevel: QRCode.CorrectLevel.M });
+})();
 
 try { const t = localStorage.getItem('lfTab'); if (t && document.getElementById(t)) { document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.t === t)); document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === t)); } } catch (e) {}
 </script>
