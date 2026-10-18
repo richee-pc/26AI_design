@@ -132,7 +132,7 @@ h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
         <div class="modes">
             <button class="mode" onclick="startSolo()"><span class="ico">🙋</span><b>혼자 풀기</b><small>10문제 · 바로 정답과 해설 · 틀린 문제만 다시 풀기</small></button>
             <button class="mode" onclick="show('teamSetup')"><span class="ico">⚔️</span><b>팀 대전 (한 화면)</b><small>교실 TV 하나로 두 팀이 번갈아 도전 · 틀리면 상대 팀이 뺏을 기회!</small></button>
-            <button class="mode" onclick="show('liveMenu')"><span class="ico">🏆</span><b>실시간 대결 (각자 휴대폰)</b><small>방 코드로 접속 · 같은 문제를 동시에 · 빨리 맞힐수록 높은 점수 · 실시간 순위판</small></button>
+            <button class="mode" onclick="show('liveMenu')"><span class="ico">🏆</span><b>실시간 대결 (각자 휴대폰)</b><small>방 코드로 접속 · 같은 문제를 각자 속도로 · 빨리 맞힐수록 높은 점수 · 실시간 순위판</small></button>
         </div>
     </section>
 
@@ -412,8 +412,8 @@ function joinRoom() {
     if (!nick) { alert('닉네임을 적어 주세요.'); return; }
     live = { room, nick, pid: myPid() };
     try { localStorage.setItem('jqNick', nick); } catch (e) {}
-    push();
     begin('live', QUESTIONS, rng(Number(room)));
+    push(); // begin()이 점수를 0으로 초기화한 뒤 입장 기록을 보낸다
 }
 function push() {
     if (!live) return;
@@ -455,8 +455,11 @@ async function liveEnd() {
     try {
         await api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done: list.length });
         const d = await api('GET', null, 'room=' + live.room);
+        if (!d.ok || !Array.isArray(d.players)) throw new Error(d.error || 'board');
         const rank = d.players.findIndex(p => p.pid === 'p' + live.pid) + 1;
-        $('rsub').textContent = `${list.length}문제 중 ${correct}개 정답 · 지금 ${d.players.length}명 중 ${rank}등!`;
+        $('rsub').textContent = rank
+            ? `${list.length}문제 중 ${correct}개 정답 · 지금 ${d.players.length}명 중 ${rank}등!`
+            : `${list.length}문제 중 ${correct}개 정답 · 순위는 진행자 화면에서 확인해요.`;
         renderRank($('myRank'), d.players.slice(0, 5), 'p' + live.pid);
         $('myRank').classList.remove('hidden');
     } catch (e) { $('rsub').textContent = `${list.length}문제 중 ${correct}개 정답 · 순위는 진행자 화면에서 확인해요.`; }
@@ -478,11 +481,14 @@ function hostRoom() {
     $('hostCode').textContent = room;
     $('hostUrl').textContent = url.href;
     $('hostQR').innerHTML = '';
+    $('hostCount').textContent = '';
+    $('hostRank').innerHTML = '<li class="muted" style="display:block">참가자를 기다리는 중… QR을 찍어 들어오세요!</li>';
     if (window.QRCode) new QRCode($('hostQR'), { text: url.href, width: 220, height: 220, correctLevel: QRCode.CorrectLevel.M });
     show('liveHost');
     const poll = async () => {
         try {
             const d = await api('GET', null, 'room=' + room);
+            if (!d.ok) throw new Error(d.error);
             $('hostCount').textContent = `참가 ${d.players.length}명`;
             if (d.players.length) renderRank($('hostRank'), d.players, '');
         } catch (e) { $('hostCount').textContent = '(연결 확인 중…)'; }

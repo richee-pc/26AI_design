@@ -87,7 +87,8 @@ function battleUpsert_(d) {
   for (let i = 1; i < values.length; i++) {
     if (values[i][0] === key && values[i][1] === pid) {
       // 늦게 도착한 예전 기록이 최신 점수를 덮어쓰지 않도록 푼 문제 수가 줄어드는 갱신은 무시한다
-      if (done < (Number(values[i][5]) || 0)) return out_({ ok: true, skipped: true });
+      // 단, 푼 문제 0(다시 입장)은 새 게임 시작이므로 덮어쓴다
+      if (done > 0 && done < (Number(values[i][5]) || 0)) return out_({ ok: true, skipped: true });
       sh.getRange(i + 1, 3, 1, 5).setValues([[nick, score, correct, done, new Date()]]);
       return out_({ ok: true });
     }
@@ -110,7 +111,7 @@ function doGet(e) {
 
 function doPost(e) {
   const lock = LockService.getScriptLock();
-  lock.waitLock(10000);
+  if (!lock.tryLock(10000)) return out_({ ok: false, error: '접속이 많아요. 잠시 후 다시 시도해 주세요.' });
   try {
     const d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
     if (d.action === 'battle') return battleUpsert_(d);
