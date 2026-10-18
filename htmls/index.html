@@ -285,6 +285,27 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
     .pv-box { padding: 1.1rem; }
 }
 
+/* 첫 화면 입장 QR */
+.hero-body { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+.hero:has(.hero-join)::after { display: none; }
+.hero-join { position: relative; z-index: 1; background: var(--bg); border: 1px solid var(--line); border-radius: 18px; padding: 0.9rem; width: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; }
+.join-qr { background: white; padding: 0.5rem; border-radius: 12px; line-height: 0; }
+.hero-join b { font-size: 0.9rem; }
+.join-url { font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--sage); text-decoration: none; word-break: break-all; }
+.join-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; justify-content: center; }
+.join-btns .btn { padding: 0.45rem 0.7rem; font-size: 0.82rem; text-decoration: none; }
+.join-full { position: fixed; inset: 0; z-index: 300; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; padding: 1.5rem; text-align: center; border-top: 10px solid var(--accent); }
+.join-full[hidden] { display: none; }
+.join-full .pv-close { top: 1.2rem; right: 1.2rem; }
+.join-full-logo { margin: 0; font-family: var(--font-display); font-weight: 800; letter-spacing: 0.16em; font-size: clamp(1.4rem, 3vw, 2.2rem); color: var(--accent); }
+.join-full-logo small { font-size: 0.45em; letter-spacing: 0.1em; }
+.join-full h2 { margin: 0; font-size: clamp(1.4rem, 3.6vw, 2.6rem); }
+.join-full-qr { background: white; padding: 1rem; border-radius: 22px; border: 1px solid var(--line); line-height: 0; }
+.join-full-qr img, .join-full-qr canvas { width: min(56vh, 80vw) !important; height: auto !important; image-rendering: pixelated; }
+.join-full-url { margin: 0; font-family: var(--font-display); font-weight: 800; font-size: clamp(1.3rem, 3.4vw, 2.4rem); color: var(--sage); }
+.join-full .join-btns .btn { padding: 0.75rem 1.2rem; font-size: 1rem; }
+@media (max-width: 760px) { .hero-body { grid-template-columns: 1fr; } .hero-join { display: none; } .hero:has(.hero-join)::after { display: none; } }
+
 /* 완성 예시 카드 */
 .demo-card { display: grid; grid-template-columns: auto 1fr; gap: 1.2rem; align-items: center; background: var(--mustard-soft); border-color: var(--mustard-soft); }
 .demo-card .tag { display: inline-block; font-size: 0.72rem; font-weight: 800; color: var(--sage); background: white; border-radius: 999px; padding: 0.1rem 0.55rem; }
@@ -379,6 +400,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
                 <button type="button" onclick="setFs('fs-xl')" style="font-size:16px" aria-label="글자 크게">가</button>
             </div>
         </div>
+        <div class="hero-body"><div class="hero-main">
         <div class="hero-badge">2026학년도 AI중점학교 교원역량 강화 연수 · 코딩 몰라도 따라갈 수 있어요</div>
         <h1 class="hero-title">오늘 할 일: 내 수업을 <span class="hero-accent">LINK</span>로 만들기</h1>
         <p class="hero-sub">Gemini에게 부탁하면 수업용 웹페이지가 나옵니다. 아래 탭을 <em>1번부터 순서대로</em> 누르면 됩니다.<br>연수가 끝난 뒤에도 <b>언제든 다시 와서</b> 새 수업 웹페이지를 만들 수 있어요. 📌 즐겨찾기 해 두세요!</p>
@@ -386,6 +408,17 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
             <span>📅 2026. 10. 19.(월) 15:30~</span>
             <span>📍 조선대학교부속중학교 1층 온나누리실</span>
             <span>👩‍🏫 조선대학교부속고등학교 정보 교사 김다은</span>
+        </div>
+        </div>
+        <aside class="hero-join" aria-label="연수 페이지 입장 QR">
+            <div class="join-qr" id="heroQR"></div>
+            <b>📱 휴대폰으로 들어오기</b>
+            <a class="join-url" id="heroUrl" href="https://richee-pc.github.io/26AI_design/">richee-pc.github.io/26AI_design</a>
+            <div class="join-btns">
+                <button type="button" class="btn btn-main" onclick="openJoin()">📺 크게 띄우기</button>
+                <a class="btn btn-sub" href="../examples/jodae-quiz.html?host=1" target="_blank" rel="noopener">🏆 개인전 퀴즈</a>
+            </div>
+        </aside>
         </div>
     </div>
 
@@ -853,6 +886,18 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
 
 ---
 </script>
+<div class="join-full" id="joinFull" hidden role="dialog" aria-modal="true" aria-label="연수 페이지 입장 화면">
+    <button type="button" class="pv-close" onclick="closeJoin()" aria-label="닫기">✕</button>
+    <p class="join-full-logo">LINKFORGE <small>for Teachers</small></p>
+    <h2>휴대폰 카메라로 QR을 찍어 들어오세요 📱</h2>
+    <div class="join-full-qr" id="joinFullQR"></div>
+    <p class="join-full-url">richee-pc.github.io/26AI_design</p>
+    <p class="muted-sm">Gemini로 수업용 웹페이지 만들기 · 2026학년도 AI중점학교 교원역량 강화 연수</p>
+    <div class="join-btns" style="justify-content:center">
+        <a class="btn btn-main" href="../examples/jodae-quiz.html?host=1" target="_blank" rel="noopener">🏆 개인전 퀴즈 방 열기</a>
+        <button type="button" class="btn btn-sub" onclick="closeJoin()">닫기 (Esc)</button>
+    </div>
+</div>
 <div class="pv-modal" id="pvModal" hidden role="dialog" aria-modal="true" aria-labelledby="pvTitle">
     <div class="pv-box">
         <button class="pv-close" id="pvClose" type="button" aria-label="닫기">✕</button>
@@ -1702,6 +1747,17 @@ async function deleteWork(id) {
     } catch (err) { toast('지우지 못했어요: ' + (err.message || '')); }
 }
 loadGallery();
+
+// 첫 화면 입장 QR (공개 주소 고정)
+const SITE_URL = 'https://richee-pc.github.io/26AI_design/';
+(function () {
+    if (!window.QRCode) return;
+    new QRCode(document.getElementById('heroQR'), { text: SITE_URL, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M });
+    new QRCode(document.getElementById('joinFullQR'), { text: SITE_URL, width: 512, height: 512, correctLevel: QRCode.CorrectLevel.M });
+})();
+function openJoin() { document.getElementById('joinFull').hidden = false; document.body.style.overflow = 'hidden'; }
+function closeJoin() { document.getElementById('joinFull').hidden = true; document.body.style.overflow = ''; }
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !document.getElementById('joinFull').hidden) closeJoin(); });
 
 // 1번 탭 완성 예시 QR (현재 주소 기준으로 예시 퀴즈 주소를 만든다)
 (function () {

@@ -181,6 +181,7 @@ h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
             </div>
             <div>
                 <h2>📊 실시간 순위 <small class="muted" id="hostCount"></small></h2>
+                <p class="muted" style="margin:-0.3rem 0 0.7rem">QR을 찍고 닉네임을 넣으면 바로 시작! 문제마다 15초, 빨리 맞힐수록 높은 점수예요.</p>
                 <ol class="rank" id="hostRank"><li class="muted" style="display:block">참가자를 기다리는 중… QR을 찍어 들어오세요!</li></ol>
             </div>
         </div>
@@ -497,9 +498,11 @@ function hostRoom() {
 }
 function stopHost() { clearInterval(hostTimer); show('liveMenu'); }
 
-// QR로 들어오면(?room=1234) 바로 참가 화면
+// QR로 들어오면(?room=1234) 바로 참가 화면, 연수 페이지에서 ?host=1로 열면 바로 진행자 방 만들기
 (function () {
-    const room = new URLSearchParams(location.search).get('room');
+    const params = new URLSearchParams(location.search);
+    if (params.get('host') === '1') { hostRoom(); return; }
+    const room = params.get('room');
     if (room) {
         $('joinRoom').value = room.replace(/\D/g, '').slice(0, 6);
         try { $('joinNick').value = localStorage.getItem('jqNick') || ''; } catch (e) {}
