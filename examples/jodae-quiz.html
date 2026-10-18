@@ -498,7 +498,11 @@ function hostRoom() {
             const d = await api('GET', null, 'room=' + room);
             if (!d.ok) throw new Error(d.error);
             $('hostCount').textContent = `참가 ${d.players.length}명`;
-            if (d.players.length) renderRank($('hostRank'), d.players, '');
+            if (d.players.length) {
+                // 교실 화면에 한눈에 보이도록 상위 10명만, 나머지는 인원수로
+                renderRank($('hostRank'), d.players.slice(0, 10), '');
+                if (d.players.length > 10) $('hostRank').insertAdjacentHTML('beforeend', `<li class="muted" style="display:block;text-align:center">… 외 ${d.players.length - 10}명 도전 중</li>`);
+            }
         } catch (e) { $('hostCount').textContent = '(연결 확인 중…)'; }
     };
     poll(); clearInterval(hostTimer); hostTimer = setInterval(poll, 3000);
