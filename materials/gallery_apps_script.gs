@@ -67,9 +67,15 @@ function roomKey_(v) {
 function battleBoard_(room) {
   const key = roomKey_(room);
   if (!key) return out_({ ok: false, error: '방 코드는 숫자 4~6자리예요.' });
-  const players = battleSheet_().getDataRange().getValues().slice(1)
+  const best = {};
+  battleSheet_().getDataRange().getValues().slice(1)
     .filter(function (r) { return r[0] === key; })
-    .map(function (r) { return { pid: r[1], nick: r[2], score: Number(r[3]) || 0, correct: Number(r[4]) || 0, done: Number(r[5]) || 0, at: r[6] }; })
+    .forEach(function (r) {
+      const p = { pid: r[1], nick: r[2], score: Number(r[3]) || 0, correct: Number(r[4]) || 0, done: Number(r[5]) || 0, at: r[6] };
+      const old = best[p.pid];
+      if (!old || p.done > old.done || (p.done === old.done && p.score > old.score)) best[p.pid] = p;
+    });
+  const players = Object.keys(best).map(function (k) { return best[k]; })
     .sort(function (a, b) { return b.score - a.score || b.correct - a.correct; });
   return out_({ ok: true, room: key.slice(1), players: players });
 }
@@ -83,13 +89,14 @@ function battleUpsert_(d) {
   const correct = Math.max(0, Math.min(100, Math.round(Number(d.correct) || 0)));
   const done = Math.max(0, Math.min(100, Math.round(Number(d.done) || 0)));
   const sh = battleSheet_();
-  const values = sh.getDataRange().getValues();
-  for (let i = 1; i < values.length; i++) {
+  const last = sh.getLastRow();
+  const values = last > 1 ? sh.getRange(2, 1, last - 1, 6).getValues() : [];
+  for (let i = values.length - 1; i >= 0; i--) {
     if (values[i][0] === key && values[i][1] === pid) {
       // 늦게 도착한 예전 기록이 최신 점수를 덮어쓰지 않도록 푼 문제 수가 줄어드는 갱신은 무시한다
       // 단, 푼 문제 0(다시 입장)은 새 게임 시작이므로 덮어쓴다
       if (done > 0 && done < (Number(values[i][5]) || 0)) return out_({ ok: true, skipped: true });
-      sh.getRange(i + 1, 3, 1, 5).setValues([[nick, score, correct, done, new Date()]]);
+      sh.getRange(i + 2, 3, 1, 5).setValues([[nick, score, correct, done, new Date()]]);
       return out_({ ok: true });
     }
   }
@@ -110,11 +117,16 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  let body;
+  try { body = JSON.parse((e && e.postData && e.postData.contents) || '{}'); }
+  catch (err) { return out_({ ok: false, error: '잘못된 요청이에요.' }); }
+  if (body.action === 'battle') {
+    try { return battleUpsert_(body); } catch (err) { return out_({ ok: false, error: String(err) }); }
+  }
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(10000)) return out_({ ok: false, error: '접속이 많아요. 잠시 후 다시 시도해 주세요.' });
   try {
-    const d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    if (d.action === 'battle') return battleUpsert_(d);
+    const d = body;
     const sh = sheet_();
 
     if (d.action === 'delete') {

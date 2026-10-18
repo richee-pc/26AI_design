@@ -454,9 +454,16 @@ async function liveEnd() {
     $('retryWrong').classList.add('hidden');
     show('result'); leaves(20);
     try {
-        await api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done: list.length });
-        const d = await api('GET', null, 'room=' + live.room);
-        if (!d.ok || !Array.isArray(d.players)) throw new Error(d.error || 'board');
+        // 최종 점수를 보내고, 순위판에 제대로 들어갔는지 확인해 다르면 다시 보낸다 (최대 3번)
+        let d = null;
+        for (let tryNo = 0; tryNo < 3; tryNo++) {
+            await api('POST', { action: 'battle', room: live.room, pid: live.pid, nick: live.nick, score, correct, done: list.length }).catch(() => null);
+            d = await api('GET', null, 'room=' + live.room).catch(() => null);
+            const me = d && d.ok && Array.isArray(d.players) ? d.players.find(p => p.pid === 'p' + live.pid) : null;
+            if (me && me.score === score && me.done === list.length) break;
+            await new Promise(r => setTimeout(r, 1500));
+        }
+        if (!d || !d.ok || !Array.isArray(d.players)) throw new Error((d && d.error) || 'board');
         const rank = d.players.findIndex(p => p.pid === 'p' + live.pid) + 1;
         $('rsub').textContent = rank
             ? `${list.length}문제 중 ${correct}개 정답 · 지금 ${d.players.length}명 중 ${rank}등!`
