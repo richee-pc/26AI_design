@@ -100,8 +100,23 @@ function battleUpsert_(d) {
       return out_({ ok: true });
     }
   }
-  sh.appendRow([key, pid, nick, score, correct, done, new Date()]);
-  return out_({ ok: true });
+  // 새 참가자 줄 추가만 짧게 잠근다 (동시에 들어온 두 사람이 같은 줄에 쓰지 않도록)
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(8000)) return out_({ ok: false, error: '입장하는 사람이 많아요. 잠시 후 다시 시도해 주세요.' });
+  try {
+    const n = sh.getLastRow();
+    const again = n > 1 ? sh.getRange(2, 1, n - 1, 2).getValues() : [];
+    for (let j = again.length - 1; j >= 0; j--) {
+      if (again[j][0] === key && again[j][1] === pid) {
+        sh.getRange(j + 2, 3, 1, 5).setValues([[nick, score, correct, done, new Date()]]);
+        return out_({ ok: true });
+      }
+    }
+    sh.appendRow([key, pid, nick, score, correct, done, new Date()]);
+    return out_({ ok: true });
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 function doGet(e) {
