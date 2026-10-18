@@ -398,6 +398,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         <button class="tab" data-t="t5">5. 공유하기</button>
         <button class="tab" data-t="tg">6. 작품 갤러리</button>
         <button class="tab" data-t="t6">7. 수업 적용·주의</button>
+        <button class="tab" data-t="ta">+ 업무용 웹페이지</button>
         <button class="tab" data-t="tf">+ 구글 설문지 자동 생성</button>
         <button class="tab" data-t="t7">+ 심화: 내 주소로 배포</button>
     </div>
@@ -454,6 +455,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
                 <div><b>1. 언제 쓸지 정하기</b><p>수업의 <u>어느 단계</u>에서 쓸지 먼저 떠올려요.</p>
                     <ul>
                         <li><span>도입</span> 퀴즈 · OX 스피드 퀴즈 · 출발 미션</li>
+                        <li><span>마무리</span> ⚔️ 팀 대전 퀴즈 · 모둠 미션 스테이션</li>
                         <li><span>전개</span> 시뮬레이션 · 분류하기 · 순서 맞추기 · 토론 타이머</li>
                         <li><span>정리</span> 개념 카드 · 빈칸 채우기 · 출구티켓</li>
                         <li><span>가정</span> 오답 클리닉 · 짝 맞추기 게임</li>
@@ -653,6 +655,18 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         <div class="card" style="text-align:center;background:var(--mustard-soft);border-color:var(--mustard-soft)">
             <p style="font-size:1.25rem;font-weight:800;margin:0 0 0.3rem">오늘 만든 링크 1개가 <span class="hero-accent">다음 주 수업</span>이 됩니다 🌱</p>
             <p style="margin:0;color:var(--muted)">작게 시작하고, 학생 반응을 보며 Gemini에게 계속 고쳐 달라고 하세요.</p>
+        </div>
+    </section>
+
+    <!-- + 업무용 웹페이지 (수업 외 학급·행정 업무) -->
+    <section class="panel" id="ta">
+        <div class="now"><div class="ico">🗂️</div><b>수업 밖에서도: 학급·행정 업무용 웹페이지</b><p>같은 방법으로 학급 운영, 학교 행사 안내, 업무 정리 도구도 만들 수 있어요. 마음에 드는 카드의 <b>[프롬프트 복사]</b>를 눌러 [대괄호]만 바꿔 Gemini Canvas에 붙여 넣으세요.</p></div>
+        <div class="chips" id="adminCats" style="margin-bottom:0.9rem"></div>
+        <div class="grid g3" id="adminGrid"></div>
+        <div class="warn">🔒 업무용 페이지일수록 <b>개인정보</b>에 주의하세요. 학생·학부모 이름, 연락처, 상담 내용은 웹페이지에 넣지 말고, 신청·회신이 필요하면 <b>구글 설문지(Forms)</b>로 받도록 링크만 연결하세요.</div>
+        <div class="card" id="adminOut" style="display:none">
+            <h3 id="adminOutTitle"></h3>
+            <div class="prompt"><span class="lb">업무용 웹페이지 프롬프트 · Canvas에 붙여 넣기</span><button class="copy">복사</button><span id="adminPrompt"></span></div>
         </div>
     </section>
 
@@ -857,6 +871,8 @@ const TYPES = {
         features: 'O/X 문항 15개, 문항당 10초 타이머, 누르면 즉시 정답과 한 줄 해설, 연속 정답 콤보 표시, 결과 화면과 틀린 문제 다시 보기' },
     blank: { cat: 'review', name: '빈칸 채우기', em: '✏️', desc: '핵심 문장의 빈칸을 채우는 개념 확인', ex: '국어 문법 용어 · 영어 문장 완성',
         features: '핵심 문장 10개, 빈칸에 직접 입력하거나 보기 단어를 눌러 채우기, 채점 버튼, 틀린 칸은 빨간색 표시와 힌트, 다시 하기' },
+    battle: { cat: 'review', name: '팀 대전 퀴즈', em: '⚔️', desc: '두 팀이 번갈아 도전하고 뺏기 기회까지!', ex: '모든 교과 단원 마무리 · 학급 퀴즈 대회',
+        features: '팀 이름 2개 입력, 두 팀이 번갈아 한 문제씩 도전, 맞히면 +100점·틀리면 상대 팀 뺏기 기회(+50점), 상단 팀 점수판과 현재 차례 강조, 끝나면 승리 팀 발표와 축하 효과 (교실 TV 한 화면용)' },
     match: { cat: 'review', name: '짝 맞추기 메모리 게임', em: '🧩', desc: '용어와 뜻 카드를 뒤집어 짝 찾기', ex: '영어 단어-뜻 · 과학 원소 기호-이름',
         features: '8쌍 16장 카드 뒤집기, 짝이 맞으면 카드 고정과 효과, 시도 횟수와 걸린 시간 기록, 카드 다시 섞기' },
     wrong: { cat: 'review', name: '오답 클리닉', em: '📒', desc: '자주 틀리는 문제를 단계별 힌트로', ex: '수학 서술형 · 과학 계산 문제',
@@ -1014,6 +1030,10 @@ const PREVIEWS = {
         demo: [['h', '원소 기호 퀴즈'], ['top', '3 / 10', '점수 2'], ['bar', 30], ['q', 'H는 어떤 원소일까요?'], ['opts', ['수소', '헬륨', '산소', '탄소'], 0, 1], ['fb', '✔ 정답! H는 수소(Hydrogen)예요.'], ['btn', '다음 문제 →']] },
     ox: { scene: '수업 시작 전 오개념 점검! 결과를 보고 오늘 어디에 힘을 줄지 정해요.', tip: '헷갈리기 쉬운 문장을 O/X로 만들면 토론거리가 생겨요.',
         demo: [['h', 'OX 스피드 퀴즈'], ['top', '⏱ 00:07', '🔥 콤보 3'], ['q', '공기는 질량이 없다.'], ['ox'], ['fb', '✖ 공기도 질량이 있어요! 풍선 실험을 떠올려 봐요.']] },
+    battle: { scene: '단원 마무리 10분, 교실 TV에 띄우고 모둠(팀)끼리 번갈아 맞히며 대결해요. 틀리면 상대 팀이 뺏을 수 있어 끝까지 집중해요.',
+        tip: '한 화면 팀 대전은 Gemini Canvas로 바로 만들 수 있어요. 각자 휴대폰으로 하는 "실시간 대결"은 점수를 모을 서버가 필요해서, 예시처럼 구글 시트(Apps Script)를 연결해야 해요.',
+        live: '../examples/jodae-quiz.html',
+        demo: [['h', '⚔️ 팀 대전 퀴즈'], ['vs', '🍁 단풍팀 · 차례!', '300', '🍂 은행팀', '250'], ['q', '교훈 "숭미"의 뜻은?'], ['opts', ['참되게', '새롭게', '부지런하게', '아름답게'], 3], ['fb', '🔥 틀리면 은행팀이 뺏을 기회!']] },
     blank: { scene: '개념 설명 직후 핵심 문장을 스스로 채워 보며 정리해요.', tip: '빈칸 정답을 [ ]로 표시한 문장을 붙여 넣으면 그대로 만들어 줘요.',
         demo: [['h', '빈칸 채우기'], ['blank', '물은 [수소]와 [산소]로 이루어진 화합물이다.'], ['chips', ['수소', '산소', '질소', '탄소']], ['btn', '채점하기']] },
     match: { scene: '모둠별로 시간 기록을 겨루며 용어와 뜻을 짝지어요.', tip: '짝은 8쌍 정도가 휴대폰 화면에 알맞아요.',
@@ -1467,6 +1487,95 @@ function makeQR() {
     else box.textContent = 'QR 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인해 주세요.';
 }
 function openLink() { const u = document.getElementById('qrUrl').value.trim(); if (validUrl(u)) window.open(u, '_blank', 'noopener'); else toast('링크를 먼저 붙여 넣어 주세요'); }
+
+
+// ---------- 업무용 웹페이지 아이디어 ----------
+const ADMIN_CATS = { all: '전체', class: '🧑‍🏫 학급 운영', event: '🎉 학교 행사·안내', work: '📁 업무 효율' };
+const ADMIN = [
+    { cat: 'class', em: '📌', name: '우리 반 알림판', desc: '오늘 일정·준비물·과제 마감을 한눈에', ex: '아침 조회 때 TV에 띄우기',
+      req: '오늘 날짜와 요일 자동 표시, 오늘의 시간표, 준비물 체크리스트, 과제·수행평가 마감 D-day 카드, 학급 공지 3줄, 큰 글씨' ,
+      info: '[학년·반], [요일별 시간표], [이번 주 준비물], [과제·수행평가 마감일]' },
+    { cat: 'class', em: '🪑', name: '자리 배치 도우미', desc: '번호로 무작위 자리 바꾸기', ex: '월초 자리 바꾸기',
+      req: '줄·열 수 입력, 번호 범위 입력, 무작위 배치 버튼, 배치도 크게 보기, 함께 앉지 않을 번호 쌍 설정, 결과 인쇄 버튼 (이름 대신 번호만 사용)',
+      info: '[학생 수], [교실 줄 수와 열 수]' },
+    { cat: 'class', em: '🧹', name: '1인 1역 · 청소 당번표', desc: '역할을 주마다 자동으로 돌리기', ex: '학급 역할 분담',
+      req: '역할 목록, 번호 범위, 이번 주 담당 자동 회전(주차 기준), 지난주·다음 주 미리보기, 역할별 할 일 설명 펼치기',
+      info: '[역할 목록과 할 일], [학생 번호 범위]' },
+    { cat: 'class', em: '🌈', name: '학급 규칙 · 칭찬 보드', desc: '우리 반 약속과 칭찬 도장을 시각적으로', ex: '학기 초 학급 세우기',
+      req: '학급 규칙 카드 5개, 모둠별 칭찬 도장 버튼(이 기기 브라우저에 저장), 목표 도장 수 도달 시 축하 효과, 초기화 버튼',
+      info: '[우리 반 약속 5가지], [모둠 수], [목표 도장 수]' },
+    { cat: 'event', em: '🏃', name: '체육대회 · 축제 안내 페이지', desc: '일정·장소·종목·FAQ를 한 페이지에', ex: '가정통신문에 QR로 넣기',
+      req: '행사 개요, 시간대별 일정 타임라인, 장소 안내, 종목·부스 카드, 준비물, 자주 묻는 질문 펼치기, 참가 신청은 구글 설문지 링크 버튼으로 연결',
+      info: '[행사명], [날짜·시간], [장소], [일정표], [종목 또는 부스 목록], [신청 구글 설문지 링크]' },
+    { cat: 'event', em: '🏫', name: '신입생 · 전입생 학교 안내', desc: '하루 일과·시설 위치·학교 상징 소개', ex: '입학식·전입 첫날 안내',
+      req: '학교 소개(교훈·상징), 하루 일과표, 층별 시설 안내(층 버튼을 누르면 해당 층 교실 목록), 첫날 체크리스트, 자주 묻는 질문, 확인 퀴즈 5문항',
+      info: '[학교 소개 문구], [일과 시간표], [층별 교실·시설], [첫날 안내 사항]' },
+    { cat: 'event', em: '🎨', name: '동아리 소개 · 모집 페이지', desc: '동아리별 카드와 모집 안내', ex: '동아리 박람회',
+      req: '동아리 카드(이름·활동·모집 인원·담당 교사), 분야별 필터, 동아리 검색, 카드를 누르면 상세 설명, 지원은 구글 설문지 링크로 연결',
+      info: '[동아리 목록과 소개], [모집 기간], [지원 구글 설문지 링크]' },
+    { cat: 'event', em: '📅', name: '학년 행사 · 수행평가 달력', desc: '한 달 일정을 달력과 D-day로', ex: '학년 협의회 공유',
+      req: '월별 달력 보기, 행사·수행평가·시험을 색으로 구분, 날짜를 누르면 상세 내용, 가장 가까운 일정 D-day 3개, 이전/다음 달 이동',
+      info: '[일정 목록: 날짜 | 구분 | 내용]' },
+    { cat: 'work', em: '📝', name: '회의록 자동 정리기', desc: '메모를 붙이면 회의록 양식으로', ex: '교과협의회 · 학년 협의회',
+      req: '회의명·일시·참석자 입력, 자유 메모 입력 칸, [정리하기]를 누르면 안건·논의 내용·결정 사항·할 일(담당·기한) 양식으로 배치, 결과 복사 버튼과 인쇄 버튼 (AI 없이 규칙 기반으로 줄을 나눠 배치)',
+      info: '[회의록 양식 항목], [우리 학교 회의록 예시 1개]' },
+    { cat: 'work', em: '🔎', name: '생기부 문장 점검기', desc: '기재 유의어·글자 수를 바로 확인', ex: '학기말 생활기록부 점검',
+      req: '문장 붙여 넣기 칸, 바이트·글자 수 실시간 표시(한글 3바이트 기준), 선생님이 입력한 점검 단어 목록에 해당하는 단어를 노란색으로 표시, 점검 단어 목록 편집, 결과 복사 버튼 (입력 내용은 저장하지 않음)',
+      info: '[학교에서 안내한 기재 유의 단어 목록], [영역별 글자 수 제한]' },
+    { cat: 'work', em: '✅', name: '학기 업무 체크리스트', desc: '학기 초·말 할 일을 놓치지 않게', ex: '담임 · 업무 담당자',
+      req: '시기별(3월·7월·12월 등) 할 일 체크리스트, 완료 체크는 이 기기 브라우저에 저장, 진행률 표시, 항목별 메모, 마감일 지난 항목 강조',
+      info: '[시기별 업무 목록과 마감일]' },
+    { cat: 'work', em: '📚', name: '교실 · 기자재 예약 안내판', desc: '예약 현황을 보여 주고 신청은 폼으로', ex: 'AI 스마트교실 · 태블릿 대여',
+      req: '주간 시간표 형태의 예약 현황표(내가 입력한 데이터로 표시), 빈 시간 강조, 이용 수칙, [예약 신청] 버튼은 구글 설문지 링크로 연결',
+      info: '[교실 또는 기자재 이름], [이번 주 예약 현황 표], [이용 수칙], [예약 신청 구글 설문지 링크]' }
+];
+function adminPromptOf(a) {
+    return `# 역할
+너는 중학교 선생님의 학교 업무를 돕는 웹페이지를 만드는 교육 전문 프론트엔드 개발자야.
+
+# 목표
+'${a.name}' 웹페이지를 Canvas에 단일 HTML 파일로 만들어 줘. (${a.desc})
+
+# 사용 장면
+${a.ex}
+
+# 꼭 넣을 기능
+${a.req}
+
+# 우리 학교 정보 (내가 채울 부분)
+${a.info}
+
+# 반드시 지킬 것
+1) HTML/CSS/JavaScript를 한 파일에 모두 넣고, 로그인·서버·API 키 없이 동작하게 한다.
+2) 학생·학부모 이름, 연락처, 상담 내용 같은 개인정보를 입력받거나 저장하지 않는다. 신청·회신이 필요하면 구글 설문지 링크 버튼으로 연결한다.
+3) 한국어, 깔끔한 카드형 레이아웃, 큰 글씨와 큰 버튼, 휴대폰·교실 TV 모두에서 보기 좋게(반응형).
+4) 화면 맨 위에 제목과 한 줄 설명, 마지막 수정 날짜를 표시한다.
+5) 인쇄할 때는 버튼을 숨기고 내용만 깔끔하게 나오게 한다.`;
+}
+let adminCat = 'all';
+function renderAdmin() {
+    const g = document.getElementById('adminGrid');
+    g.innerHTML = ADMIN.map((a, i) => (adminCat === 'all' || a.cat === adminCat) ? `<div class="idea"><div class="em">${a.em}</div><span class="tag">${ADMIN_CATS[a.cat]}</span><h4>${esc(a.name)}</h4><p>${esc(a.desc)}</p><div class="feat">${esc(a.req)}</div><div class="ex">예) ${esc(a.ex)}</div><div class="idea-btns"><button class="btn btn-sub" data-av="${i}">👀 프롬프트 보기</button><button class="btn btn-main" data-ac="${i}">📋 프롬프트 복사</button></div></div>` : '').join('');
+    document.querySelectorAll('#adminCats .chip').forEach(c => c.classList.toggle('active', c.dataset.c === adminCat));
+}
+Object.entries(ADMIN_CATS).forEach(([k, n]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chip cat'; b.dataset.c = k;
+    b.textContent = k === 'all' ? `${n} ${ADMIN.length}` : n;
+    b.onclick = () => { adminCat = k; renderAdmin(); };
+    document.getElementById('adminCats').appendChild(b);
+});
+document.getElementById('adminGrid').addEventListener('click', e => {
+    const v = e.target.closest('[data-av]'), c = e.target.closest('[data-ac]');
+    const a = ADMIN[(v || c || {}).dataset ? Number((v || c).dataset.av ?? (v || c).dataset.ac) : -1];
+    if (!a) return;
+    const text = adminPromptOf(a);
+    document.getElementById('adminOutTitle').textContent = `${a.em} ${a.name}`;
+    document.getElementById('adminPrompt').textContent = text;
+    document.getElementById('adminOut').style.display = 'block';
+    if (c) copyText(text).then(() => toast('복사됨! [ ] 부분을 우리 학교 정보로 바꿔 주세요'));
+    else document.getElementById('adminOut').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+renderAdmin();
 
 // ---------- 작품 갤러리 (Google Apps Script 웹 앱에 저장) ----------
 // materials/gallery_apps_script.gs 를 배포한 뒤 웹 앱 URL(…/exec)을 아래에 넣으세요.

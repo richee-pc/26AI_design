@@ -13,6 +13,10 @@
  * 관리
  * - 시트의 '숨김' 열에 아무 글자(예: x)나 적으면 그 작품은 갤러리에 보이지 않는다.
  * - 코드를 고친 뒤에는 [배포 → 배포 관리 → 수정 → 새 버전]으로 다시 배포해야 반영된다.
+ *
+ * 실시간 대결 점수판 (examples/jodae-quiz.html 의 '각자 휴대폰 대결')
+ * - '대전' 시트에 방 코드별 참가자 점수를 저장한다. GET ?room=1234 로 순위를 읽는다.
+ * - 연수가 끝난 뒤 '대전' 시트의 행은 지워도 된다.
  */
 const SHEET_NAME = '갤러리';
 const HEADERS = ['id', '등록시각', '이름', '교과', '제목', '소개', '유형', '링크', '삭제키', '숨김'];
@@ -40,7 +44,60 @@ function clean_(v, max) {
   return s;
 }
 
-function doGet() {
+const BATTLE_SHEET = '대전';
+const BATTLE_HEADERS = ['방', '참가자id', '닉네임', '점수', '맞힌 수', '푼 문제', '갱신시각'];
+
+function battleSheet_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(BATTLE_SHEET);
+  if (!sh) {
+    sh = ss.insertSheet(BATTLE_SHEET);
+    sh.appendRow(BATTLE_HEADERS);
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+// 방 코드는 숫자 4~6자리. 시트에서 숫자로 바뀌지 않도록 'r'을 붙여 저장한다
+function roomKey_(v) {
+  const digits = String(v || '').replace(/\D/g, '').slice(0, 6);
+  return digits.length >= 4 ? 'r' + digits : '';
+}
+
+function battleBoard_(room) {
+  const key = roomKey_(room);
+  if (!key) return out_({ ok: false, error: '방 코드는 숫자 4~6자리예요.' });
+  const players = battleSheet_().getDataRange().getValues().slice(1)
+    .filter(function (r) { return r[0] === key; })
+    .map(function (r) { return { pid: r[1], nick: r[2], score: Number(r[3]) || 0, correct: Number(r[4]) || 0, done: Number(r[5]) || 0, at: r[6] }; })
+    .sort(function (a, b) { return b.score - a.score || b.correct - a.correct; });
+  return out_({ ok: true, room: key.slice(1), players: players });
+}
+
+function battleUpsert_(d) {
+  const key = roomKey_(d.room);
+  if (!key) return out_({ ok: false, error: '방 코드는 숫자 4~6자리예요.' });
+  const pid = 'p' + String(d.pid || '').replace(/[^a-zA-Z0-9]/g, '').slice(0, 24);
+  const nick = clean_(d.nick, 12) || '익명';
+  const score = Math.max(0, Math.min(100000, Math.round(Number(d.score) || 0)));
+  const correct = Math.max(0, Math.min(100, Math.round(Number(d.correct) || 0)));
+  const done = Math.max(0, Math.min(100, Math.round(Number(d.done) || 0)));
+  const sh = battleSheet_();
+  const values = sh.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === key && values[i][1] === pid) {
+      // 늦게 도착한 예전 기록이 최신 점수를 덮어쓰지 않도록 푼 문제 수가 줄어드는 갱신은 무시한다
+      if (done < (Number(values[i][5]) || 0)) return out_({ ok: true, skipped: true });
+      sh.getRange(i + 1, 3, 1, 5).setValues([[nick, score, correct, done, new Date()]]);
+      return out_({ ok: true });
+    }
+  }
+  sh.appendRow([key, pid, nick, score, correct, done, new Date()]);
+  return out_({ ok: true });
+}
+
+function doGet(e) {
+  if (e && e.parameter && e.parameter.room) return battleBoard_(e.parameter.room);
   const rows = sheet_().getDataRange().getValues().slice(1);
   const items = rows
     .filter(function (r) { return r[0] && !String(r[9]).trim(); })
@@ -56,6 +113,7 @@ function doPost(e) {
   lock.waitLock(10000);
   try {
     const d = JSON.parse((e && e.postData && e.postData.contents) || '{}');
+    if (d.action === 'battle') return battleUpsert_(d);
     const sh = sheet_();
 
     if (d.action === 'delete') {
