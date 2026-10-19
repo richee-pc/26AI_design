@@ -404,6 +404,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         <div class="hero-badge">2026학년도 AI중점학교 교원역량 강화 연수 · 코딩 몰라도 따라갈 수 있어요</div>
         <h1 class="hero-title">오늘 할 일: 내 수업을 <span class="hero-accent">LINK</span>로 만들기</h1>
         <p class="hero-sub">Gemini에게 부탁하면 수업용 웹페이지가 나옵니다. 아래 탭을 <em>1번부터 순서대로</em> 누르면 됩니다.<br>연수가 끝난 뒤에도 <b>언제든 다시 와서</b> 새 수업 웹페이지를 만들 수 있어요. 📌 즐겨찾기 해 두세요!</p>
+        <!-- ✏️ [사본 만들기] 연수 정보(날짜·장소·강사)는 아래 세 줄을 고치세요 -->
         <div class="hero-meta">
             <span>📅 2026. 10. 19.(월) 15:30~</span>
             <span>📍 조선대학교부속중학교 1층 온나누리실</span>
@@ -413,7 +414,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         <aside class="hero-join" aria-label="연수 페이지 입장 QR">
             <div class="join-qr" id="heroQR"></div>
             <b>📱 휴대폰으로 들어오기</b>
-            <a class="join-url" id="heroUrl" href="https://richee-pc.github.io/26AI_design/">richee-pc.github.io/26AI_design</a>
+            <a class="join-url" id="heroUrl" href="https://richee-pc.github.io/26AI_design/">richee-pc.github.io/26AI_design</a><!-- 주소는 스크립트가 현재 페이지 주소로 자동 표시 -->
             <div class="join-btns">
                 <button type="button" class="btn btn-main" onclick="openJoin()">📺 크게 띄우기</button>
             </div>
@@ -473,10 +474,12 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
         </div>
 
         <div class="section-head"><span></span>📂 연수 자료</div>
-        <div class="grid g3">
+        <!-- ✏️ [사본 만들기] 아래 슬라이드·원고 PDF는 원본 연수 자료예요. 내 자료 링크로 바꾸거나 지우세요 -->
+        <div class="grid g4">
             <a class="link-btn" href="../materials/AI_lesson_slides.pdf" target="_blank" rel="noopener">🖥️ 강의 슬라이드 (PDF)</a>
             <a class="link-btn" href="../materials/AI_lesson_design_script.pdf" target="_blank" rel="noopener">📄 강의 원고 (PDF)</a>
             <a class="link-btn" href="#" onclick="go('tg');return false;">🖼️ 선생님들 작품 갤러리</a>
+            <a class="link-btn" href="../copy-guide.html" target="_blank" rel="noopener">📦 이 페이지 사본 만들기</a>
         </div>
 
         <div class="section-head"><span></span>어려운 말, 쉽게 보기</div>
@@ -890,7 +893,7 @@ pre.tree { background: var(--accent-soft); border-radius: 12px; padding: 0.8rem 
     <p class="join-full-logo">LINKFORGE <small>for Teachers</small></p>
     <h2>휴대폰 카메라로 QR을 찍어 들어오세요 📱</h2>
     <div class="join-full-qr" id="joinFullQR"></div>
-    <p class="join-full-url">richee-pc.github.io/26AI_design</p>
+    <p class="join-full-url" id="joinFullUrl">richee-pc.github.io/26AI_design</p>
     <p class="muted-sm">Gemini로 수업용 웹페이지 만들기 · 2026학년도 AI중점학교 교원역량 강화 연수</p>
     <div class="join-btns" style="justify-content:center">
         <button type="button" class="btn btn-sub" onclick="closeJoin()">닫기 (Esc)</button>
@@ -1647,8 +1650,12 @@ document.getElementById('adminGrid').addEventListener('click', e => {
 renderAdmin();
 
 // ---------- 작품 갤러리 (Google Apps Script 웹 앱에 저장) ----------
-// materials/gallery_apps_script.gs 를 배포한 뒤 웹 앱 URL(…/exec)을 아래에 넣으세요.
-const GALLERY_API = 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec';
+// ✏️ [사본 만들기] 내 갤러리를 쓰려면 materials/gallery_apps_script.gs 를 내 구글 시트에 배포한 뒤
+//    웹 앱 URL(…/exec)을 MY_GALLERY_API 에 넣으세요. 비워 두면 갤러리는 '준비 중'으로 보여요.
+const MY_GALLERY_API = '';
+// 원본(richee-pc.github.io/26AI_design)에서만 원작자의 갤러리를 쓴다. 사본이 원작자 시트에 글을 올리지 않도록
+const IS_ORIGINAL_SITE = location.hostname === 'richee-pc.github.io' && location.pathname.startsWith('/26AI_design/');
+const GALLERY_API = MY_GALLERY_API || (IS_ORIGINAL_SITE ? 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec' : '');
 let gItems = [], gSubject = '전체';
 const typeName = k => (TYPES[k] ? `${TYPES[k].em} ${TYPES[k].name}` : (k || '수업용 웹페이지'));
 const gType = document.getElementById('g-type');
@@ -1747,7 +1754,12 @@ async function deleteWork(id) {
 loadGallery();
 
 // 첫 화면 입장 QR (공개 주소 고정)
-const SITE_URL = 'https://richee-pc.github.io/26AI_design/';
+const SITE_URL = IS_ORIGINAL_SITE ? 'https://richee-pc.github.io/26AI_design/' : new URL('../', location.href).href;
+(function () {
+    const shown = SITE_URL.replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const a = document.getElementById('heroUrl'); a.href = SITE_URL; a.textContent = shown;
+    document.getElementById('joinFullUrl').textContent = shown;
+})();
 (function () {
     if (!window.QRCode) return;
     new QRCode(document.getElementById('heroQR'), { text: SITE_URL, width: 120, height: 120, correctLevel: QRCode.CorrectLevel.M });

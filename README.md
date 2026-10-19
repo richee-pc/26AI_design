@@ -5,6 +5,8 @@ Gemini Canvas로 수업용 웹페이지를 만들고 링크로 공유하는 35�
 
 👉 **공개 주소 (GitHub Pages):** https://richee-pc.github.io/26AI_design/
 
+📦 **내 연수용 사본 만들기:** [사본 만들기 안내](https://richee-pc.github.io/26AI_design/copy-guide.html) · 이 저장소는 템플릿이라 **Use this template → Create a new repository**로 바로 복사할 수 있어요. 고칠 곳은 파일에서 `✏️ [사본 만들기]`를 찾으세요.
+
 ## 연수 흐름 (35분)
 
 1. 오늘 할 일 — 완성 예시, 왜 수업용 웹페이지인가 (5분)

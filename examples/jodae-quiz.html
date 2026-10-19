@@ -132,7 +132,7 @@ h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
         <div class="modes">
             <button class="mode" onclick="startSolo()"><span class="ico">🙋</span><b>혼자 풀기</b><small>10문제 · 바로 정답과 해설 · 틀린 문제만 다시 풀기</small></button>
             <button class="mode" onclick="show('teamSetup')"><span class="ico">⚔️</span><b>팀 대전 (한 화면)</b><small>교실 TV 하나로 두 팀이 번갈아 도전 · 틀리면 상대 팀이 뺏을 기회!</small></button>
-            <button class="mode" onclick="show('liveMenu')"><span class="ico">🏆</span><b>실시간 대결 (각자 휴대폰)</b><small>방 코드로 접속 · 같은 문제를 각자 속도로 · 빨리 맞힐수록 높은 점수 · 실시간 순위판</small></button>
+            <button class="mode" id="liveModeBtn" onclick="show('liveMenu')"><span class="ico">🏆</span><b>실시간 대결 (각자 휴대폰)</b><small>방 코드로 접속 · 같은 문제를 각자 속도로 · 빨리 맞힐수록 높은 점수 · 실시간 순위판</small></button>
         </div>
     </section>
 
@@ -225,9 +225,14 @@ h2 { font-size: 1.2rem; margin: 0 0 0.6rem; }
 
 <script>
 // 실시간 대결 점수판 주소 (연수 웹페이지의 작품 갤러리와 같은 Apps Script 웹 앱)
-const API = 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec';
+// ✏️ [사본 만들기] 내 점수판을 쓰려면 내 Apps Script 웹 앱 URL을 MY_API 에 넣으세요.
+//    비워 두면 '실시간 대결'만 꺼지고, 혼자 풀기·팀 대전은 그대로 쓸 수 있어요.
+const MY_API = '';
+const IS_ORIGINAL_SITE = location.hostname === 'richee-pc.github.io' && location.pathname.startsWith('/26AI_design/');
+const API = MY_API || (IS_ORIGINAL_SITE ? 'https://script.google.com/macros/s/AKfycbxokum72etBCOe8i1dDm-gwF5sqGV0ju_HOboKZm6lWtUiaEt9znFxXNJ-QU02a3FzB/exec' : '');
 const LIVE_SECONDS = 15;
 
+// ✏️ [사본 만들기] 우리 학교·교과 문제로 바꾸려면 아래 QUESTIONS 만 고치세요.
 // 문제: q 질문, o 보기, a 정답 번호(0부터), e 해설 — 모두 학교 홈페이지 학교소개 내용
 const QUESTIONS = [
     { q: '조대부중의 교훈 네 가지에 들어가지 않는 것은?', o: ['성실(誠實)', '창조(創造)', '협동(協同)', '근면(勤勉)'], a: 2,
@@ -509,9 +514,16 @@ function hostRoom() {
 }
 function stopHost() { clearInterval(hostTimer); show('liveMenu'); }
 
+// 점수판(API)이 연결되지 않은 사본에서는 실시간 대결을 끄고 안내만 보여 준다
+if (!API) {
+    const b = $('liveModeBtn');
+    b.disabled = true; b.style.opacity = 0.55; b.style.cursor = 'default';
+    b.querySelector('small').textContent = '점수판(구글 시트) 연결 후 사용할 수 있어요 · 혼자 풀기와 팀 대전은 바로 가능!';
+}
 // QR로 들어오면(?room=1234) 바로 참가 화면, 연수 페이지에서 ?host=1로 열면 바로 진행자 방 만들기
 (function () {
     const params = new URLSearchParams(location.search);
+    if (!API) return;
     if (params.get('host') === '1') { hostRoom(); return; }
     const room = params.get('room');
     if (room) {
