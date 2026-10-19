@@ -48,14 +48,34 @@ footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top
     <header>
         <p class="logo">LINKFORGE <small>for Teachers</small></p>
         <h1>📦 이 연수 웹페이지, 내 연수용으로 사본 만들기</h1>
-        <p class="lead">"Gemini로 수업용 웹페이지 만들기" 연수 페이지를 그대로 복사해서 선생님의 연수·수업에 맞게 고쳐 쓰실 수 있어요. 코딩을 몰라도 GitHub 웹사이트에서 클릭만으로 됩니다.</p>
+        <p class="lead">"Gemini로 수업용 웹페이지 만들기" 연수 페이지를 그대로 복사해서 선생님의 연수·수업에 맞게 고쳐 쓰실 수 있어요. 코딩을 몰라도 <b>Gemini Canvas</b>나 GitHub 웹사이트에서 클릭만으로 됩니다.</p>
         <p style="margin:0.8rem 0 0">
             <a class="btn sub" href="./" target="_blank" rel="noopener">👀 원본 연수 페이지 보기</a>
         </p>
     </header>
 
+    <section class="card" style="border:2px solid var(--accent)">
+        <h2><span class="tag" style="background:var(--accent)">가장 쉬움</span> 방법 1. Gemini Canvas로 내 링크 만들기 (10분)</h2>
+        <p style="margin-top:0">GitHub 없이 <b>Gemini 계정만</b> 있으면 돼요. Canvas용으로 정리한 한 파일 코드를 Gemini에 붙여 넣고, 공유 링크를 만들면 끝!</p>
+        <ol class="steps">
+            <li><button type="button" class="btn" onclick="copyCanvasCode(this)">📋 ① Canvas용 코드 복사</button> 를 눌러 코드를 복사해요.</li>
+            <li><a href="https://gemini.google.com/app" target="_blank" rel="noopener">Gemini</a>를 열고 입력창 아래 <b>도구(+) → Canvas</b>를 켜요.</li>
+            <li>입력창에 <b>붙여 넣기(Ctrl+V)</b> 한 다음, 맨 아래에 이 부탁문을 이어서 붙여 넣고 보내요.
+                <button type="button" class="btn sub" onclick="copyAsk(this)">📋 ② 부탁문 복사</button>
+<pre id="askText">위 HTML 코드를 한 글자도 바꾸지 말고 그대로 Canvas에 열어 줘. 코드를 생략하거나 줄이지 말고 전체를 그대로 써 줘.</pre></li>
+            <li><b>3~5분</b> 기다리면 Canvas 오른쪽에 미리보기가 나와요. (코드가 길어서 시간이 걸려요)</li>
+            <li>내 연수 정보로 바꾸기: 아래 부탁문의 ○○을 채워서 보내요. <b>한 번에 모아서</b> 부탁하는 게 빨라요.
+<pre>맨 위 CONFIG만 이렇게 바꿔 줘. 다른 코드는 그대로 둬.
+연수명: ○○○ 연수 / 날짜: 2026. ○○. ○○.(○) ○○:○○~ / 장소: ○○학교 ○○실 / 강사: ○○학교 ○○ 교사 ○○○</pre></li>
+            <li>Canvas 오른쪽 위 <b>공유 → 링크 만들기/복사</b> → 이 링크를 선생님들께 보내면 돼요!</li>
+            <li>(선택) 첫 화면에 <b>입장 QR</b>을 띄우고 싶다면: "맨 위 CONFIG의 SHARE_URL을 <i>(복사한 공유 링크)</i>로 바꿔 줘" → 다시 공유.</li>
+        </ol>
+        <div class="tip">💡 Canvas판에는 구글 시트가 필요한 <b>작품 갤러리</b>가 빠져 있어요. 나머지 기능(아이디어 22가지·예시 화면, 부탁문 만들기·파일 첨부, 고치기 42가지, QR 만들기, 업무용·구글 설문지 탭)은 모두 들어 있어요. 예시 퀴즈는 원본 주소로 연결돼요.</div>
+        <div class="warn">⚠️ Gemini에게 "더 좋게 고쳐 줘"처럼 넓게 부탁하면 코드가 많이 바뀔 수 있어요. 꼭 <b>"○○만 바꿔 줘. 다른 코드는 그대로 둬."</b>처럼 범위를 정해서 부탁하세요. 학교(교육용) 계정은 공유가 막혀 있을 수 있어요.</div>
+    </section>
+
     <section class="card">
-        <h2><span class="tag">추천</span> 방법 1. GitHub에서 사본 만들고 내 주소로 공개하기 (10분)</h2>
+        <h2><span class="tag">고급</span> 방법 2. GitHub에서 사본 만들고 내 주소로 공개하기 (10분)</h2>
         <ol class="steps">
             <li><a href="https://github.com/signup" target="_blank" rel="noopener">GitHub</a>에 가입하거나 로그인해요. (무료)</li>
             <li>아래 버튼을 눌러요. → <b>Repository name</b>에 저장소 이름(예: <code>my-ai-training</code>)을 적고 <b>Public</b>을 고른 뒤 <b>Create repository</b>.
@@ -67,7 +87,7 @@ footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top
     </section>
 
     <section class="card">
-        <h2>✏️ 내 연수에 맞게 고칠 곳</h2>
+        <h2>✏️ (방법 2·3) 내 연수에 맞게 고칠 곳</h2>
         <p style="margin-top:0">GitHub 저장소에서 파일을 열고 오른쪽 위 <b>연필(✏️ Edit)</b> 버튼 → 내용 고치기 → <b>Commit changes</b>를 누르면 저장돼요. 파일 안에서 <b>Ctrl+F</b>로 <code>✏️ [사본 만들기]</code>를 찾으면 고칠 곳이 바로 나와요.</p>
         <div class="table-wrap"><table>
             <tr><th style="width:30%">파일</th><th>고칠 내용</th><th style="width:14%">필수</th></tr>
@@ -95,13 +115,33 @@ footer { text-align: center; color: var(--muted); font-size: 0.85rem; margin-top
     </section>
 
     <section class="card">
-        <h2>📁 방법 2. 파일로 받기 (GitHub 없이)</h2>
+        <h2>📁 방법 3. 파일로 받기</h2>
         <p style="margin-top:0">전체 파일을 압축(zip)으로 받아 컴퓨터에서 열어 볼 수 있어요. 다만 <b>학생·선생님께 링크로 공유하려면</b> 방법 1처럼 인터넷 주소로 공개해야 해요.</p>
         <a class="btn sub" href="https://github.com/richee-pc/26AI_design/archive/refs/heads/main.zip">⬇️ 전체 파일 zip 받기</a>
+        <a class="btn sub" href="canvas/linkforge_canvas.html" download>⬇️ Canvas용 한 파일 받기</a>
         <p style="margin:0.6rem 0 0;color:var(--muted);font-size:0.9rem">압축을 풀고 <code>htmls/index.html</code>을 크롬으로 열면 돼요. (인터넷 연결 필요)</p>
     </section>
 
     <footer>만든 사람: 조선대학교부속고등학교 정보 교사 김다은 · 자유롭게 고쳐 쓰세요 🍁</footer>
 </div>
+<script>
+async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch (e) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); const ok = document.execCommand('copy'); a.remove(); return ok; }
+}
+async function copyCanvasCode(btn) {
+    const old = btn.textContent; btn.textContent = '불러오는 중…';
+    try {
+        const code = await (await fetch('canvas/linkforge_canvas.html', { cache: 'no-store' })).text();
+        btn.textContent = (await copyText(code)) ? `✅ 복사 완료! (${code.length.toLocaleString()}자)` : '복사 실패: 아래 파일 받기를 이용해 주세요';
+    } catch (e) { btn.textContent = '불러오지 못했어요. 인터넷 연결을 확인해 주세요'; }
+    setTimeout(() => btn.textContent = old, 4000);
+}
+async function copyAsk(btn) {
+    const old = btn.textContent;
+    btn.textContent = (await copyText(document.getElementById('askText').textContent)) ? '✅ 복사 완료!' : '복사 실패';
+    setTimeout(() => btn.textContent = old, 2500);
+}
+</script>
 </body>
 </html>

@@ -85,7 +85,19 @@ const CONFIG = {
 };
 // ---------- 데이터 ----------""")
 
-# 7) 남은 갤러리 흔적·상대 경로 점검 (프롬프트 아키텍트 원문은 제외)
+# 7) Gemini에 붙여 넣을 때 줄 맨 앞의 '* '가 마크다운 글머리표(- )로 바뀌는 문제 피하기
+#    - CSS 전체 선택자는 공백 없이 시작
+#    - 프롬프트 아키텍트 원문은 한 줄짜리 JS 문자열로 보관
+rep("* { box-sizing: border-box; }", "*,*::before,*::after { box-sizing: border-box; }")
+m = re.search(r'<script type="text/plain" id="architectText">\n([\s\S]*?)\n</script>', s)
+assert m, "architectText"
+import json
+s = s[:m.start()] + "<script>\n// 프롬프트 아키텍트 원문 (줄바꿈은 \\n 으로 보관)\nconst ARCHITECT_TEXT = " + json.dumps(m.group(1), ensure_ascii=False) + ";\n</script>" + s[m.end():]
+rep("document.getElementById('architectText').textContent.trim()", "ARCHITECT_TEXT.trim()")
+_bul = [l[:40] for l in s.split("\n") if re.match(r"^\s*[*+] ", l)]
+assert not _bul, "글머리표로 바뀔 줄이 남아 있어요: " + " | ".join(_bul)
+
+# 8) 남은 갤러리 흔적·상대 경로 점검 (프롬프트 아키텍트 원문은 제외)
 for word in ["loadGallery", "GALLERY_API", "data-t=\"tg\"", "id=\"tg\"", "IS_ORIGINAL_SITE"]:
     assert word not in s, word
 _body = re.sub(r"<script type=\"text/plain\"[\s\S]*?</script>", "", s)
