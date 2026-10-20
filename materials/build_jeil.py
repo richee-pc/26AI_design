@@ -53,7 +53,9 @@ rep("padding: 0.3rem 0.85rem; border-radius: 999px; margin-bottom: 0.85rem; }",
 # ---------- 화면에 보이는 원본 주소 → 제일고 주소 ----------
 JEIL_URL = "https://richee-pc.github.io/26AI_jeil/"
 rep('href="https://richee-pc.github.io/26AI_design/">richee-pc.github.io/26AI_design</a>',
-    f'href="{JEIL_URL}">richee-pc.github.io/26AI_jeil</a>', 2)  # 첫 화면 QR 주소, 7번 탭 공개 예시
+    f'href="{JEIL_URL}">richee-pc.github.io/26AI_jeil</a>')  # 첫 화면 QR 주소
+rep('<a href="https://richee-pc.github.io/26AI_design/" target="_blank" rel="noopener">richee-pc.github.io/26AI_design</a>',
+    f'<a href="{JEIL_URL}" target="_blank" rel="noopener">richee-pc.github.io/26AI_jeil</a>')  # 7번 탭 공개 예시
 rep('id="joinFullUrl">richee-pc.github.io/26AI_design</p>', 'id="joinFullUrl">richee-pc.github.io/26AI_jeil</p>')
 
 # ---------- 완성 예시: 광주제일고 퀴즈 ----------
