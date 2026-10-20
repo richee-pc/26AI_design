@@ -1,7 +1,7 @@
 """원본 연수 웹페이지로 '광주제일고등학교' 버전을 만든다.
 
 - 대상: 고등학교 선생님 (중학교·중학생 표현을 고등학교로)
-- 첫 화면: 날짜·장소 없이 '광주제일고등학교 교원 연수'
+- 첫 화면: 연수명·주제·1기/2기 일시·장소(박종오실)·강사(김효진)
 - 예시 퀴즈: examples/jeil-quiz.html (광주제일고 홈페이지 학교소개 기반)
 - 작품 갤러리: 같은 Apps Script를 쓰되 board='jeil' 로 구분해 원본 갤러리와 섞이지 않게
 
@@ -37,11 +37,18 @@ def cut(start, end):
 rep("<title>LINKFORGE for Teachers — Gemini로 수업용 웹페이지 만들기</title>",
     "<title>LINKFORGE for Teachers · 광주제일고 — Gemini로 수업용 웹페이지 만들기</title>")
 rep('<div class="hero-badge">2026학년도 AI중점학교 교원역량 강화 연수 · 코딩 몰라도 따라갈 수 있어요</div>',
-    '<div class="hero-badge">광주제일고등학교 교원 연수 · 코딩 몰라도 따라갈 수 있어요</div>')
+    '<div class="hero-badge">2026 AI·디지털 기반 교육혁신 거점학교 교원연수_광주제일고 · 코딩 몰라도 따라갈 수 있어요</div>')
 rep("""            <span>📅 2026. 10. 19.(월) 15:30~</span>
             <span>📍 조선대학교부속중학교 1층 온나누리실</span>
             <span>👩‍🏫 조선대학교부속고등학교 정보 교사 김다은</span>""",
-    """            <span>🏫 광주제일고등학교</span>""")
+    """            <span>📚 생성형 AI를 활용한 수업자료 제작 실습</span>
+            <span>📅 1기 2026. 10. 21.(수) 15:40~18:30</span>
+            <span>📅 2기 2026. 10. 24.(토) 9:30~12:20</span>
+            <span>📍 광주제일고등학교 박종오실</span>
+            <span>🧑‍🏫 조선대학교부속중학교 수학 교사 김효진</span>""")
+# 연수명이 길어 휴대폰에서 두 줄이 되므로 배지 모서리를 덜 둥글게
+rep("padding: 0.3rem 0.85rem; border-radius: 999px; margin-bottom: 0.85rem; }",
+    "padding: 0.3rem 0.85rem; border-radius: 12px; margin-bottom: 0.85rem; line-height: 1.5; }")
 
 # ---------- 완성 예시: 광주제일고 퀴즈 ----------
 rep("🍁 우리 학교 조대부중 알아보기 퀴즈", "🍁 우리 학교 광주제일고 알아보기 퀴즈")
