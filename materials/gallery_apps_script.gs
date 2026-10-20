@@ -19,7 +19,7 @@
  * - 연수가 끝난 뒤 '대전' 시트의 행은 지워도 된다.
  */
 const SHEET_NAME = '갤러리';
-const HEADERS = ['id', '등록시각', '이름', '교과', '제목', '소개', '유형', '링크', '삭제키', '숨김'];
+const HEADERS = ['id', '등록시각', '이름', '교과', '제목', '소개', '유형', '링크', '삭제키', '숨김', '게시판'];
 const LIMITS = { name: 30, subject: 30, title: 60, desc: 200, type: 30, url: 500 };
 
 function sheet_() {
@@ -30,7 +30,14 @@ function sheet_() {
     sh.appendRow(HEADERS);
     sh.setFrozenRows(1);
   }
+  // 예전에 만든 시트에는 '게시판' 머리글이 없으므로 채워 둔다 (빈 칸 = 원본 연수 갤러리)
+  if (!sh.getRange(1, 11).getValue()) sh.getRange(1, 11).setValue('게시판');
   return sh;
+}
+
+// 게시판 이름: 영문·숫자만 (예: jeil). 비어 있으면 원본 연수 갤러리
+function board_(v) {
+  return String(v || '').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 20);
 }
 
 function out_(obj) {
@@ -121,9 +128,10 @@ function battleUpsert_(d) {
 
 function doGet(e) {
   if (e && e.parameter && e.parameter.room) return battleBoard_(e.parameter.room);
+  const board = board_(e && e.parameter && e.parameter.board);
   const rows = sheet_().getDataRange().getValues().slice(1);
   const items = rows
-    .filter(function (r) { return r[0] && !String(r[9]).trim(); })
+    .filter(function (r) { return r[0] && !String(r[9]).trim() && board_(r[10]) === board; })
     .map(function (r) {
       return { id: r[0], at: r[1], name: r[2], subject: r[3], title: r[4], desc: r[5], type: r[6], url: r[7] };
     })
@@ -166,7 +174,7 @@ function doPost(e) {
       id, new Date(),
       clean_(d.name, LIMITS.name), clean_(d.subject, LIMITS.subject), clean_(d.title, LIMITS.title),
       clean_(d.desc, LIMITS.desc), clean_(d.type, LIMITS.type), clean_(url, LIMITS.url),
-      key, ''
+      key, '', board_(d.board)
     ]);
     return out_({ ok: true, id: id });
   } catch (err) {
