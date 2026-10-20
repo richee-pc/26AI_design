@@ -50,6 +50,12 @@ rep("""            <span>📅 2026. 10. 19.(월) 15:30~</span>
 rep("padding: 0.3rem 0.85rem; border-radius: 999px; margin-bottom: 0.85rem; }",
     "padding: 0.3rem 0.85rem; border-radius: 12px; margin-bottom: 0.85rem; line-height: 1.5; }")
 
+# ---------- 화면에 보이는 원본 주소 → 제일고 주소 ----------
+JEIL_URL = "https://richee-pc.github.io/26AI_jeil/"
+rep('href="https://richee-pc.github.io/26AI_design/">richee-pc.github.io/26AI_design</a>',
+    f'href="{JEIL_URL}">richee-pc.github.io/26AI_jeil</a>', 2)  # 첫 화면 QR 주소, 7번 탭 공개 예시
+rep('id="joinFullUrl">richee-pc.github.io/26AI_design</p>', 'id="joinFullUrl">richee-pc.github.io/26AI_jeil</p>')
+
 # ---------- 완성 예시: 광주제일고 퀴즈 ----------
 rep("🍁 우리 학교 조대부중 알아보기 퀴즈", "🍁 우리 학교 광주제일고 알아보기 퀴즈")
 rep("교훈·교화·교목·연혁으로 만든 10문항 퀴즈예요.", "교훈·교목·교화·연혁으로 만든 10문항 퀴즈예요.")
