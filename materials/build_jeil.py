@@ -84,7 +84,7 @@ for a, b in [
 
 # 남은 중학교 표현 점검 (학교 이름의 '중학교' 제외 없음 — 모두 바뀌어야 함)
 import re
-_body = re.sub(r"<script type=\"text/plain\"[\s\S]*?</script>", "", s)
+_body = re.sub(r"<script type=\"text/plain\"[\s\S]*?</script>", "", s).replace("조선대학교부속중학교", "")  # 강사 소속은 제외
 _left = sorted(set(m.group(0) for m in re.finditer(r"[가-힣]{0,6}중(?:학교|학생|[123] )", _body)))
 assert not _left, "중학교 표현이 남아 있어요: " + ", ".join(_left)
 
